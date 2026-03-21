@@ -173,8 +173,8 @@ check_http "/events/2026-uruguay/assets/eleventy-extra.css"
 check_http "/events/2026-uruguay/favicon.svg"
 check_http "/events/2026-uruguay/pagefind/pagefind-ui.js"
 check_http "/events/2026-uruguay/pagefind/pagefind-ui.css"
-check_http "/events/2026-uruguay/20260223-koshas-piriopolis/resources/"
-check_http "/events/2026-uruguay/20260218-tantroktam-devi-suktam-la-paloma/resources/"
+check_http "/events/2026-uruguay/20260223-koshas-piriopolis/resources/cover-art-yoga-nidra.png"
+check_http "/events/2026-uruguay/20260218-tantroktam-devi-suktam-la-paloma/resources/cover-tantroktam-devi-suktam.jpg"
 
 # ── 5. Bad URLs → 404 ────────────────────────────────────────────────────────
 section "5. INVALID URLs → 404"
