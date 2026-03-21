@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = function (eleventyConfig) {
+  eleventyConfig.addGlobalData("siteRoot", "/events");
+
   // ── Markdown renderer ────────────────────────────────────────────────────
   const md = markdownIt({
     html: true,       // allow raw HTML in markdown (needed for <a> tags in transcripts)
@@ -119,10 +121,10 @@ module.exports = function (eleventyConfig) {
       let html = md.render(content);
       if (lang) {
         html = html
-          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/2026-uruguay/${lang}/$1/"`)
-          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/2026-uruguay/${lang}/$1/"`)
-          .replace(/href="(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?"/g, `href="/2026-uruguay/${lang}/glossary/"`)
-          .replace(/href='(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?'/g, `href="/2026-uruguay/${lang}/glossary/"`);
+          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/events/2026-uruguay/${lang}/$1/"`)
+          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/events/2026-uruguay/${lang}/$1/"`)
+          .replace(/href="(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?"/g, `href="/events/2026-uruguay/${lang}/glossary/"`)
+          .replace(/href='(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?'/g, `href="/events/2026-uruguay/${lang}/glossary/"`);
       }
       return html;
     } catch (e) {
@@ -169,8 +171,7 @@ module.exports = function (eleventyConfig) {
     },
     templateFormats: ["njk", "html", "md"],
     markdownTemplateEngine: "njk",
-    htmlTemplateEngine:     "njk"
-    // pathPrefix intentionally omitted: all permalinks already hardcode /2026-uruguay/
-    // so Eleventy's pathPrefix remapping would conflict with the dev server's file lookup.
+    htmlTemplateEngine:     "njk",
+    pathPrefix: "/events/"
   };
 };

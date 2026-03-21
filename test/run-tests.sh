@@ -8,6 +8,7 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PORT=8083
 BASE="http://localhost:$PORT"
 SITE="$REPO/_site"
+SERVE_DIR="$REPO/_serve"   # temp dir: serves _site/ contents under /events/
 PASS=0; FAIL=0; WARN=0
 PYTHON=$(which python 2>/dev/null || which python3 2>/dev/null || echo "python")
 
@@ -35,19 +36,26 @@ section "SERVER"
 taskkill //F //IM python.exe 2>/dev/null || true
 sleep 1
 
-cd "$SITE"
+# Build a serve directory that mirrors GitHub Pages path structure:
+# GitHub Pages serves yogicapproach/events repo at /events/, so _site/ contents
+# must be accessible at /events/... for absolute paths in HTML to resolve.
+rm -rf "$SERVE_DIR"
+mkdir -p "$SERVE_DIR/events"
+cp -r "$SITE"/. "$SERVE_DIR/events/"
+
+cd "$SERVE_DIR"
 $PYTHON -m http.server $PORT > /tmp/yogaval-test-server.log 2>&1 &
 SERVER_PID=$!
 sleep 2
+cd "$REPO"
 
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/2026-uruguay/es/" 2>/dev/null || echo "000")
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/events/2026-uruguay/es/" 2>/dev/null || echo "000")
 if [ "$STATUS" = "200" ]; then
-  pass "Server up at $BASE (PID $SERVER_PID)"
+  pass "Server up at $BASE/events/ (PID $SERVER_PID)"
 else
   fail "Server not responding (status $STATUS) — aborting"
   exit 1
 fi
-cd "$REPO"
 
 # ── Helper ───────────────────────────────────────────────────────────────────
 check_http() {
@@ -91,52 +99,55 @@ FOLDERS=(
 )
 for lang in en es ne; do
   for folder in "${FOLDERS[@]}"; do
-    check_http "/2026-uruguay/$lang/$folder/"
+    check_http "/events/2026-uruguay/$lang/$folder/"
   done
 done
 
 # ── 2. Listing, synthesis, glossary, search ─────────────────────────────────
 section "2. LISTING / SYNTHESIS / GLOSSARY / SEARCH"
 for lang in en es ne; do
-  check_http "/2026-uruguay/$lang/"
-  check_http "/2026-uruguay/$lang/"
-  check_http "/2026-uruguay/$lang/glossary/"
+  check_http "/events/2026-uruguay/$lang/"
+  check_http "/events/2026-uruguay/$lang/"
+  check_http "/events/2026-uruguay/$lang/glossary/"
 done
-check_http "/2026-uruguay/search/"
+check_http "/events/2026-uruguay/search/"
+  for lang in en es ne; do
+    check_http "/events/2026-uruguay/$lang/search/"
+  done
 
 # ── 3. Redirect stubs ────────────────────────────────────────────────────────
 section "3. REDIRECT STUBS"
-check_http "/2026-uruguay/"
-check_http "/2026-uruguay/"
+check_http "/events/2026-uruguay/"
+check_http "/events/2026-uruguay/"
 for folder in "${FOLDERS[@]}"; do
-  check_http "/2026-uruguay/$folder/"
+  check_http "/events/2026-uruguay/$folder/"
 done
-check_http "/2026-uruguay/glossary/"
-check_http "/2026-uruguay/glossary.html"
+check_http "/events/2026-uruguay/glossary/"
+check_http "/events/2026-uruguay/glossary.html"
 
 # ── 4. Static assets ─────────────────────────────────────────────────────────
 section "4. STATIC ASSETS"
-check_http "/2026-uruguay/events/shared.css"
-check_http "/2026-uruguay/events/shared.js"
-check_http "/2026-uruguay/assets/eleventy-extra.css"
-check_http "/2026-uruguay/favicon.svg"
-check_http "/2026-uruguay/pagefind/pagefind-ui.js"
-check_http "/2026-uruguay/pagefind/pagefind-ui.css"
-check_http "/2026-uruguay/20260223-koshas-piriopolis/resources/"
-check_http "/2026-uruguay/20260218-tantroktam-devi-suktam-la-paloma/resources/"
+check_http "/events/2026-uruguay/events/shared.css"
+check_http "/events/2026-uruguay/events/shared.js"
+check_http "/events/2026-uruguay/assets/eleventy-extra.css"
+check_http "/events/2026-uruguay/favicon.svg"
+check_http "/events/2026-uruguay/pagefind/pagefind-ui.js"
+check_http "/events/2026-uruguay/pagefind/pagefind-ui.css"
+check_http "/events/2026-uruguay/20260223-koshas-piriopolis/resources/"
+check_http "/events/2026-uruguay/20260218-tantroktam-devi-suktam-la-paloma/resources/"
 
 # ── 5. Bad URLs → 404 ────────────────────────────────────────────────────────
 section "5. INVALID URLs → 404"
-check_http "/2026-uruguay/es/nonexistent-talk/" 404
-check_http "/2026-uruguay/bad-path/" 404
-check_http "/2026-uruguay/en/20260223-koshas-piriopolis-xyz/" 404
+check_http "/events/2026-uruguay/es/nonexistent-talk/" 404
+check_http "/events/2026-uruguay/bad-path/" 404
+check_http "/events/2026-uruguay/en/20260223-koshas-piriopolis-xyz/" 404
 check_http "/this-does-not-exist/" 404
-check_http "/2026-uruguay/en/20260223/" 404
+check_http "/events/2026-uruguay/en/20260223/" 404
 
 # ── 6. Title and OG tags — all 5 EN talks ───────────────────────────────────
 section "6. TITLE & OG:URL — all 5 EN talks (no generic title, no double path)"
 for folder in "${FOLDERS[@]}"; do
-  BODY=$(curl -s "$BASE/2026-uruguay/en/$folder/")
+  BODY=$(curl -s "$BASE/events/2026-uruguay/en/$folder/")
   TITLE=$(echo "$BODY" | grep -o '<title>[^<]*</title>')
   OGURL=$(echo "$BODY" | grep -o 'og:url[^>]*content="[^"]*"')
 
@@ -159,7 +170,7 @@ done
 section "7. GLOSSARY LINKS — absolute paths in transcripts (no ../../)"
 for lang in en es ne; do
   for folder in "${FOLDERS[@]}"; do
-    BODY=$(curl -s "$BASE/2026-uruguay/$lang/$folder/")
+    BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/$folder/")
     if echo "$BODY" | grep -q '\.\./.*glossary'; then
       fail "Relative glossary link found: $lang/$folder"
     elif echo "$BODY" | grep -q "2026-uruguay/$lang/glossary/"; then
@@ -173,7 +184,7 @@ done
 # ── 8. HTML lang attribute ───────────────────────────────────────────────────
 section "8. HTML LANG ATTRIBUTE"
 for lang in en es ne; do
-  ACTUAL=$(curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep -o '<html lang="[^"]*"' | head -1)
+  ACTUAL=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep -o '<html lang="[^"]*"' | head -1)
   if [ "$ACTUAL" = "<html lang=\"$lang\"" ]; then
     pass "html lang=\"$lang\" on $lang page"
   else
@@ -185,7 +196,7 @@ done
 # aria-pressed appears BEFORE id="btn-XX" in the element — grep the whole toggle div
 section "9. LANG TOGGLE — aria-pressed"
 for lang in en es ne; do
-  BODY=$(curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/")
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
   TOGGLE=$(echo "$BODY" | grep -A30 'lang-toggle')
   # Active button: aria-pressed="true" followed (within same <a>) by id="btn-$lang"
   if echo "$TOGGLE" | grep -B5 "id=\"btn-$lang\"" | grep -q 'aria-pressed="true"'; then
@@ -197,14 +208,14 @@ done
 
 # ── 10. Transcript content rendered ─────────────────────────────────────────
 section "10. TRANSCRIPT CONTENT — pre-rendered in HTML"
-check_content "/2026-uruguay/en/20260223-koshas-piriopolis/" "data-pagefind-body" "EN: data-pagefind-body present"
-check_content "/2026-uruguay/en/20260223-koshas-piriopolis/" "Namaste" "EN: transcript text present"
-check_content "/2026-uruguay/es/20260218-tantroktam-devi-suktam-la-paloma/" "Charla de Satchidananda" "ES: h2 'Charla de Satchidananda'"
-check_content "/2026-uruguay/ne/20260209-koshas-escuela-de-yoga-satyam/" "कोश" "NE: Nepali content present"
+check_content "/events/2026-uruguay/en/20260223-koshas-piriopolis/" "data-pagefind-body" "EN: data-pagefind-body present"
+check_content "/events/2026-uruguay/en/20260223-koshas-piriopolis/" "Namaste" "EN: transcript text present"
+check_content "/events/2026-uruguay/es/20260218-tantroktam-devi-suktam-la-paloma/" "Charla de Satchidananda" "ES: h2 'Charla de Satchidananda'"
+check_content "/events/2026-uruguay/ne/20260209-koshas-escuela-de-yoga-satyam/" "कोश" "NE: Nepali content present"
 
 # ── 11. Talk selector completeness ──────────────────────────────────────────
 section "11. TALK SELECTOR"
-BODY=$(curl -s "$BASE/2026-uruguay/en/20260223-koshas-piriopolis/")
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
 OPTION_COUNT=$(echo "$BODY" | grep -c '<option value=')
 # Expect: 1 placeholder + 1 synthesis + 4 other talks + 1 glossary = 7
 if [ "$OPTION_COUNT" -ge 7 ]; then
@@ -218,17 +229,17 @@ if echo "$BODY" | grep 'option.*20260223-koshas-piriopolis' | grep -qv 'talk-sel
 else
   pass "Current talk excluded from selector"
 fi
-check_content "/2026-uruguay/en/20260223-koshas-piriopolis/" 'option.*glossary' "Glossary option in selector"
+check_content "/events/2026-uruguay/en/20260223-koshas-piriopolis/" 'option.*glossary' "Glossary option in selector"
 
 # ── 12. Resources section ────────────────────────────────────────────────────
 section "12. RESOURCES SECTION"
 # All talk pages start with resources-section hidden (JS reveals when resources exist).
 # Check: section element is present, loadResources is called with absolute basePath.
-check_content "/2026-uruguay/en/20260223-koshas-piriopolis/" 'id="resources-section"' "resources-section element present (Piriápolis)"
-check_content "/2026-uruguay/en/20260223-koshas-piriopolis/" 'loadResources.*20260223-koshas-piriopolis.*resources' "loadResources called with absolute basePath (Piriápolis)"
-check_content "/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/" 'loadResources.*20260218-tantroktam-devi-suktam-la-paloma.*resources' "loadResources called with absolute basePath (La Paloma)"
+check_content "/events/2026-uruguay/en/20260223-koshas-piriopolis/" 'id="resources-section"' "resources-section element present (Piriápolis)"
+check_content "/events/2026-uruguay/en/20260223-koshas-piriopolis/" 'loadResources.*20260223-koshas-piriopolis.*resources' "loadResources called with absolute basePath (Piriápolis)"
+check_content "/events/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/" 'loadResources.*20260218-tantroktam-devi-suktam-la-paloma.*resources' "loadResources called with absolute basePath (La Paloma)"
 # No-resources talk: inline display:none head style present (JS won't reveal it)
-BODY=$(curl -s "$BASE/2026-uruguay/en/20260209-koshas-escuela-de-yoga-satyam/")
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260209-koshas-escuela-de-yoga-satyam/")
 if echo "$BODY" | grep -q 'resources-section { display: none'; then
   pass "resources-section hidden via inline style on no-resources talk (Satyam)"
 else
@@ -250,7 +261,7 @@ check_file "$SITE/2026-uruguay/20260223-koshas-piriopolis/resources" "Piriápoli
 
 # ── 15. Redirect stub JS logic ───────────────────────────────────────────────
 section "15. REDIRECT STUBS — contain location.replace logic"
-for url in "/2026-uruguay/" "/2026-uruguay/20260223-koshas-piriopolis/" "/2026-uruguay/glossary/"; do
+for url in "/events/2026-uruguay/" "/events/2026-uruguay/20260223-koshas-piriopolis/" "/events/2026-uruguay/glossary/"; do
   COUNT=$(curl -s "$BASE$url" | grep -c 'location.replace')
   if [ "$COUNT" -ge 1 ]; then
     pass "location.replace found in $url"
@@ -262,7 +273,7 @@ done
 # ── 16. Synthesis content ────────────────────────────────────────────────────
 section "16. SYNTHESIS PAGES"
 for lang in en es ne; do
-  BODY=$(curl -s "$BASE/2026-uruguay/$lang/")
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/")
   LEN=$(echo "$BODY" | wc -c)
   if [ "$LEN" -gt 10000 ]; then
     pass "Synthesis $lang: $LEN chars (content present)"
@@ -270,29 +281,29 @@ for lang in en es ne; do
     fail "Synthesis $lang: only $LEN chars (too short)"
   fi
 done
-check_content "/2026-uruguay/es/" "Última actualización" "ES synthesis: 'Última actualización' label"
+check_content "/events/2026-uruguay/es/" "Última actualización" "ES synthesis: 'Última actualización' label"
 
 # ── 17. Glossary content ─────────────────────────────────────────────────────
 section "17. GLOSSARY PAGES"
-check_content "/2026-uruguay/en/glossary/" "\[1\]" "EN glossary: citation [1] present"
-check_content "/2026-uruguay/es/glossary/" "\[1\]" "ES glossary: citation [1] present"
-check_content "/2026-uruguay/ne/glossary/" "\[१\]" "NE glossary: citation [१] present (Devanagari)"
-check_content "/2026-uruguay/en/glossary/" '/2026-uruguay/en/' "EN glossary: links use new URL format"
+check_content "/events/2026-uruguay/en/glossary/" "\[1\]" "EN glossary: citation [1] present"
+check_content "/events/2026-uruguay/es/glossary/" "\[1\]" "ES glossary: citation [1] present"
+check_content "/events/2026-uruguay/ne/glossary/" "\[१\]" "NE glossary: citation [१] present (Devanagari)"
+check_content "/events/2026-uruguay/en/glossary/" '/events/2026-uruguay/en/' "EN glossary: links use new URL format"
 
 # ── 18. Search page ──────────────────────────────────────────────────────────
 section "18. SEARCH PAGE — Pagefind UI"
-check_content "/2026-uruguay/search/" "pagefind/pagefind-ui.css" "Pagefind CSS linked"
-check_content "/2026-uruguay/search/" "pagefind/pagefind-ui.js" "Pagefind JS linked"
-check_content "/2026-uruguay/search/" "new PagefindUI" "PagefindUI initialized"
-check_content "/2026-uruguay/search/" 'id="search"' "Search target div present"
-check_content "/2026-uruguay/search/" "baseUrl.*2026-uruguay" "baseUrl set correctly"
+check_content "/events/2026-uruguay/en/search/" "pagefind/pagefind-ui.css" "Pagefind CSS linked"
+check_content "/events/2026-uruguay/en/search/" "pagefind/pagefind-ui.js" "Pagefind JS linked"
+check_content "/events/2026-uruguay/en/search/" "new PagefindUI" "PagefindUI initialized"
+check_content "/events/2026-uruguay/en/search/" 'id="search"' "Search target div present"
+check_content "/events/2026-uruguay/en/search/" "baseUrl.*events" "baseUrl set correctly"
 check_file "$SITE/2026-uruguay/pagefind/pagefind.en_"* "Pagefind EN index"
 check_file "$SITE/2026-uruguay/pagefind/pagefind.es_"* "Pagefind ES index"
 check_file "$SITE/2026-uruguay/pagefind/pagefind.ne_"* "Pagefind NE index"
 
 # ── 19. Shared.js content ────────────────────────────────────────────────────
 section "19. SHARED.JS — resourcesBasePath param present"
-JS=$(curl -s "$BASE/2026-uruguay/events/shared.js")
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
 if echo "$JS" | grep -q "resourcesBasePath"; then
   pass "shared.js: resourcesBasePath parameter present"
 else
@@ -310,7 +321,7 @@ while IFS= read -r href; do
     fail "Broken internal link: $href"
     LINK_FAIL=$((LINK_FAIL+1))
   fi
-done < <(grep -roh 'href="/2026-uruguay/[^"#?]*"' "$SITE/2026-uruguay/" 2>/dev/null | sed 's/href="//;s/"//' | sort -u)
+done < <(grep -roh 'href="/events/2026-uruguay/[^"#?]*"' "$SITE/2026-uruguay/" 2>/dev/null | sed 's/href="\/events//;s/"//' | sort -u)
 
 if [ "$LINK_FAIL" -eq 0 ]; then
   pass "All $LINK_PASS internal links resolve"
@@ -341,7 +352,7 @@ fi
 section "22. ES + NE TITLES — all 5 talks"
 for lang in es ne; do
   for folder in "${FOLDERS[@]}"; do
-    TITLE=$(curl -s "$BASE/2026-uruguay/$lang/$folder/" | grep -o '<title>[^<]*</title>')
+    TITLE=$(curl -s "$BASE/events/2026-uruguay/$lang/$folder/" | grep -o '<title>[^<]*</title>')
     if echo "$TITLE" | grep -q "^<title>Yogaval 2026</title>$" || [ -z "$TITLE" ]; then
       fail "Generic/missing title on $lang/$folder: $TITLE"
     else
@@ -353,7 +364,7 @@ done
 # ── 23. Meta description — populated, no raw HTML ────────────────────────────
 section "23. META DESCRIPTION — populated on all lang variants of one talk"
 for lang in en es ne; do
-  DESC=$(curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep -o 'name="description"[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+  DESC=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep -o 'name="description"[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
   if [ -z "$DESC" ]; then
     fail "$lang: meta description empty"
   elif echo "$DESC" | grep -q '<'; then
@@ -366,7 +377,7 @@ done
 # ── 24. ES header h2 = 'Charla de Satchidananda' ────────────────────────────
 section "24. ES HEADER — 'Charla de Satchidananda' (not 'Talk by')"
 for folder in "${FOLDERS[@]}"; do
-  curl -s "$BASE/2026-uruguay/es/$folder/" | grep -q 'Charla de Satchidananda' \
+  curl -s "$BASE/events/2026-uruguay/es/$folder/" | grep -q 'Charla de Satchidananda' \
     && pass "ES/$folder: Charla de Satchidananda present" \
     || fail "ES/$folder: 'Charla de Satchidananda' missing"
 done
@@ -398,7 +409,7 @@ done
 # ── 26. Talk selector URLs — correct lang prefix ─────────────────────────────
 section "26. TALK SELECTOR — correct lang prefix on each page"
 for lang in en es ne; do
-  BODY=$(curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/")
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
   BAD=$(echo "$BODY" | grep '<option' | grep '2026-uruguay' | grep -v "/$lang/" | grep -v 'Choose\|Elegir\|छान')
   [ -z "$BAD" ] && pass "$lang: all selector options use /$lang/ prefix" \
                 || fail "$lang: selector has wrong-lang options: $BAD"
@@ -407,15 +418,15 @@ done
 # ── 27. Lang toggle hrefs — correct per folder (file-based, handles multiline) ─
 section "27. LANG TOGGLE HREFS — cross-links correct"
 TMP_HTML=$(mktemp /tmp/yogaval-test-XXXX.html)
-curl -s "$BASE/2026-uruguay/es/20260218-tantroktam-devi-suktam-la-paloma/" > "$TMP_HTML"
+curl -s "$BASE/events/2026-uruguay/es/20260218-tantroktam-devi-suktam-la-paloma/" > "$TMP_HTML"
 for check_lang in en ne; do
   HREF=$(python -c "
 import re, sys
 with open(sys.argv[1], encoding='utf-8') as f: body = f.read()
-m = re.search(r'href=\"(/2026-uruguay/$check_lang/20260218[^\"]+)\"[^>]*id=\"btn-$check_lang\"', body, re.DOTALL)
+m = re.search(r'href=\"(/events/2026-uruguay/$check_lang/20260218[^\"]+)\"[^>]*id=\"btn-$check_lang\"', body, re.DOTALL)
 print(m.group(1) if m else 'NOT FOUND')
 " "$TMP_HTML" 2>/dev/null || echo "NOT FOUND")
-  EXPECTED="/2026-uruguay/$check_lang/20260218-tantroktam-devi-suktam-la-paloma/"
+  EXPECTED="/events/2026-uruguay/$check_lang/20260218-tantroktam-devi-suktam-la-paloma/"
   [ "$HREF" = "$EXPECTED" ] \
     && pass "ES/Tantroktam: btn-$check_lang href correct" \
     || fail "ES/Tantroktam: btn-$check_lang href wrong (got: $HREF)"
@@ -425,14 +436,14 @@ rm -f "$TMP_HTML"
 # ── 28. Footer nav — correct lang on all talk pages ──────────────────────────
 section "28. FOOTER NAV — lang-correct href"
 for lang in en es ne; do
-  curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep 'footer-nav' | grep -q "href=\"/2026-uruguay/$lang/\"" \
+  curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" | grep 'footer-nav' | grep -q "href=\"/events/2026-uruguay/$lang/\"" \
     && pass "$lang: footer-nav href correct" \
     || fail "$lang: footer-nav href wrong"
 done
 
 # ── 29. Synthesis selector — all talks + correct lang ────────────────────────
 section "29. SYNTHESIS SELECTOR — all talks + glossary"
-BODY=$(curl -s "$BASE/2026-uruguay/es/")
+BODY=$(curl -s "$BASE/events/2026-uruguay/es/")
 OPT_COUNT=$(echo "$BODY" | grep -c '<option value=')
 [ "$OPT_COUNT" -ge 6 ] && pass "ES synthesis: $OPT_COUNT options" || fail "ES synthesis: only $OPT_COUNT options"
 BAD_OPT=$(echo "$BODY" | grep '<option' | grep '2026-uruguay' | grep -v '/es/')
@@ -455,7 +466,7 @@ done
 # ── 31. Devanagari in all NE talk pages ──────────────────────────────────────
 section "31. NE PAGES — Devanagari content (not EN fallback)"
 for folder in "${FOLDERS[@]}"; do
-  curl -s "$BASE/2026-uruguay/ne/$folder/" | grep -q 'कोश\|योग\|नेपाल\|सत्\|चर्चा\|वार्ता' \
+  curl -s "$BASE/events/2026-uruguay/ne/$folder/" | grep -q 'कोश\|योग\|नेपाल\|सत्\|चर्चा\|वार्ता' \
     && pass "NE/$folder: Devanagari confirmed" \
     || fail "NE/$folder: no Devanagari found"
 done
@@ -463,7 +474,7 @@ done
 # ── 32. Image modal and skip nav ─────────────────────────────────────────────
 section "32. IMAGE MODAL + SKIP NAV"
 for lang in en es ne; do
-  BODY=$(curl -s "$BASE/2026-uruguay/$lang/20260223-koshas-piriopolis/")
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
   echo "$BODY" | grep -q 'id="img-modal"' \
     && pass "$lang: img-modal present" || fail "$lang: img-modal missing"
   echo "$BODY" | grep -q 'skip-nav' \
@@ -485,7 +496,7 @@ fi
 
 # ── 33. CDN preconnects + marked.js ──────────────────────────────────────────
 section "33. CDN PRECONNECTS + MARKED.JS"
-BODY=$(curl -s "$BASE/2026-uruguay/en/20260223-koshas-piriopolis/")
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
 echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdelivr" || fail "preconnect: cdn.jsdelivr missing"
 echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
 echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
@@ -517,5 +528,6 @@ else
   echo "  RESULT:  ✗ $FAIL FAILURE(S) — fix before committing"
 fi
 
-# Stop server
+# Stop server and clean up temp serve dir
 taskkill //F //IM python.exe 2>/dev/null || true
+rm -rf "$SERVE_DIR"

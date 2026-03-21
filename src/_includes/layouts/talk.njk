@@ -10,10 +10,10 @@
 {% block body %}
   {# ── Other-talks selector ─────────────────────────────────────────────── #}
   <div id="other-talks">
-    <span id="other-talks-label" data-href="/2026-uruguay/{{ lang }}/">
-      {%- if lang == "ne" -%}अर्को चर्चा <a href="/2026-uruguay/{{ lang }}/">छान्नुहोस्</a>:
-      {%- elif lang == "es" -%}Ver <a href="/2026-uruguay/{{ lang }}/">otra charla</a>:
-      {%- else -%}Select <a href="/2026-uruguay/{{ lang }}/">another talk</a>:
+    <span id="other-talks-label" data-href="{{ siteRoot }}/2026-uruguay/{{ lang }}/">
+      {%- if lang == "ne" -%}अर्को चर्चा <a href="{{ siteRoot }}/2026-uruguay/{{ lang }}/">छान्नुहोस्</a>:
+      {%- elif lang == "es" -%}Ver <a href="{{ siteRoot }}/2026-uruguay/{{ lang }}/">otra charla</a>:
+      {%- else -%}Select <a href="{{ siteRoot }}/2026-uruguay/{{ lang }}/">another talk</a>:
       {%- endif -%}
     </span>
     <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
@@ -21,7 +21,7 @@
         {%- if lang == "ne" %}-- छान्नुहोस् --{%- elif lang == "es" %}-- Elegir --{%- else %}-- Choose --{%- endif -%}
       </option>
       {# Synthesis option #}
-      <option value="/2026-uruguay/{{ lang }}/">
+      <option value="{{ siteRoot }}/2026-uruguay/{{ lang }}/">
         {%- if lang == "ne" -%}सबै कुराहरूको सारांश — सबै चर्चाका मुख्य विचार
         {%- elif lang == "es" -%}Resumen de Charlas — Informe IA de ideas principales de todas las charlas
         {%- else -%}Summary of Talks — AI-generated report of main ideas from all the talks
@@ -30,11 +30,11 @@
       {# Other talks, excluding the current one #}
       {% for ev in events %}
         {% if ev.folder !== talkFolder %}
-        <option value="/2026-uruguay/{{ lang }}/{{ ev.folder }}/">{% eventLabel ev, lang %}</option>
+        <option value="{{ siteRoot }}/2026-uruguay/{{ lang }}/{{ ev.folder }}/">{% eventLabel ev, lang %}</option>
         {% endif %}
       {% endfor %}
       {# Glossary — opens in new tab via handleTalkSelect() #}
-      <option value="/2026-uruguay/{{ lang }}/glossary/" data-newtab="true">
+      <option value="{{ siteRoot }}/2026-uruguay/{{ lang }}/glossary/" data-newtab="true">
         {%- if lang == "ne" -%}शब्दावली — योग र संस्कृत शब्दहरूको परिभाषा
         {%- elif lang == "es" -%}Glosario de Términos — Definiciones de términos del yoga y sánscrito
         {%- else -%}Glossary of Terms — Definitions of yoga and Sanskrit terms
@@ -45,17 +45,17 @@
 
   {# ── Language toggle — hard <a> links, no JS required ───────────────── #}
   <div class="lang-toggle">
-    <a href="/2026-uruguay/en/{{ talkFolder }}/"
+    <a href="{{ siteRoot }}/2026-uruguay/en/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'en' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'en' else 'false' }}"
        id="btn-en">English<span class="lang-sublabel">Original</span></a>
-    <a href="/2026-uruguay/es/{{ talkFolder }}/"
+    <a href="{{ siteRoot }}/2026-uruguay/es/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'es' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'es' else 'false' }}"
        id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-    <a href="/2026-uruguay/ne/{{ talkFolder }}/"
+    <a href="{{ siteRoot }}/2026-uruguay/ne/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'ne' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'ne' else 'false' }}"

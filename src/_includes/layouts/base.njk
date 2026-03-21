@@ -18,15 +18,15 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://docs.google.com">
   <link rel="preconnect" href="https://gc.zgo.at">
-  <link rel="icon" type="image/x-icon" href="/2026-uruguay/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/2026-uruguay/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/2026-uruguay/apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon" href="{{ '/2026-uruguay/favicon.ico' | url }}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ '/2026-uruguay/favicon.png' | url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ '/2026-uruguay/apple-touch-icon.png' | url }}">
   {# marked.js kept for runtime needs (loadResources audio players, etc.) #}
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.4/marked.min.js"></script>
   {# shared.css — same file as used by the legacy docs/ site #}
-  <link rel="stylesheet" href="/2026-uruguay/events/shared.css">
+  <link rel="stylesheet" href="{{ '/2026-uruguay/events/shared.css' | url }}">
   {# Supplemental styles for Eleventy-specific HTML (lang-btn <a> elements, etc.) #}
-  <link rel="stylesheet" href="/2026-uruguay/assets/eleventy-extra.css">
+  <link rel="stylesheet" href="{{ '/2026-uruguay/assets/eleventy-extra.css' | url }}">
   {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -44,7 +44,7 @@
 
   {% block footer %}
   <footer data-pagefind-ignore>
-    <a id="footer-nav" href="{{ footerNavHref | default('/2026-uruguay/' + (lang | default('es')) + '/') }}">{{ footerNavLabel | safe }}</a>
+    <a id="footer-nav" href="{{ footerNavHref | default(siteRoot + '/2026-uruguay/' + (lang | default('es')) + '/') }}">{{ footerNavLabel | safe }}</a>
     {# site-credit is also updated by shared.js updateTopbar() — static fallback below #}
     <div id="site-credit" class="site-credit">
       {%- if (lang | default('es')) == "ne" -%}
@@ -58,7 +58,7 @@
   </footer>
   {% endblock %}
 
-  <script src="/2026-uruguay/events/shared.js"></script>
+  <script src="{{ '/2026-uruguay/events/shared.js' | url }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -15,19 +15,19 @@
 {% block body %}
   {# ── Language toggle ──────────────────────────────────────────────────── #}
   <div class="lang-toggle">
-    <a href="/2026-uruguay/en/" class="lang-btn{% if lang == 'en' %} active{% endif %}" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
-    <a href="/2026-uruguay/es/" class="lang-btn{% if lang == 'es' %} active{% endif %}" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-    <a href="/2026-uruguay/ne/" class="lang-btn{% if lang == 'ne' %} active{% endif %}" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
+    <a href="{{ siteRoot }}/2026-uruguay/en/" class="lang-btn{% if lang == 'en' %} active{% endif %}" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
+    <a href="{{ siteRoot }}/2026-uruguay/es/" class="lang-btn{% if lang == 'es' %} active{% endif %}" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
+    <a href="{{ siteRoot }}/2026-uruguay/ne/" class="lang-btn{% if lang == 'ne' %} active{% endif %}" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
   </div>
 
   {# ── Search link ──────────────────────────────────────────────────────── #}
   <p data-pagefind-ignore>
     {%- if lang == "ne" -%}
-      <a href="/2026-uruguay/search/">सबै प्रतिलिपिहरूमा खोज्नुहोस्</a>
+      <a href="{{ siteRoot }}/2026-uruguay/search/">सबै प्रतिलिपिहरूमा खोज्नुहोस्</a>
     {%- elif lang == "es" -%}
-      <a href="/2026-uruguay/search/">Buscar en todas las transcripciones</a>
+      <a href="{{ siteRoot }}/2026-uruguay/search/">Buscar en todas las transcripciones</a>
     {%- else -%}
-      <a href="/2026-uruguay/search/">Search across all transcripts</a>
+      <a href="{{ siteRoot }}/2026-uruguay/search/">Search across all transcripts</a>
     {%- endif -%}
   </p>
 
@@ -36,7 +36,7 @@
     <ul>
       {% for ev in events %}
       <li>
-        <a href="/2026-uruguay/{{ lang }}/{{ ev.folder }}/">{% eventLabel ev, lang %}</a>
+        <a href="{{ siteRoot }}/2026-uruguay/{{ lang }}/{{ ev.folder }}/">{% eventLabel ev, lang %}</a>
       </li>
       {% endfor %}
     </ul>

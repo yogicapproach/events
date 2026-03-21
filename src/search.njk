@@ -1,40 +1,20 @@
 ---
-lang: es
-title: Buscar
-heading: Buscar en las charlas
 permalink: /2026-uruguay/search/
-description: "Buscar en las transcripciones de las charlas de Satchidananda — Uruguay, febrero 2026."
+eleventyExcludeFromCollections: true
 ---
-{% extends "layouts/base.njk" %}
-
-{% block head_extra %}
-<link href="/2026-uruguay/pagefind/pagefind-ui.css" rel="stylesheet">
-<style>
-  #search { max-width: 800px; margin: 1.5em auto; }
-  .search-lang-filters { max-width: 800px; margin: 0 auto 1em; display: flex; gap: 0.5em; flex-wrap: wrap; align-items: center; }
-  .search-lang-filters span { font-size: 0.9em; color: #555; margin-right: 0.25em; }
-</style>
-{% endblock %}
-
-{% block body %}
-  <div class="search-lang-filters" data-pagefind-ignore>
-    <span>Filtrar por idioma:</span>
-    <a class="lang-btn" href="/2026-uruguay/en/">English</a>
-    <a class="lang-btn active" href="/2026-uruguay/es/">Español</a>
-    <a class="lang-btn" href="/2026-uruguay/ne/">नेपाली</a>
-  </div>
-  <div id="search" data-pagefind-ignore></div>
-{% endblock %}
-
-{% block scripts %}
-<script src="/2026-uruguay/pagefind/pagefind-ui.js"></script>
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Search — Yogaval 2026</title></head>
+<body>
 <script>
-  window.addEventListener('DOMContentLoaded', function() {
-    new PagefindUI({
-      element: '#search',
-      baseUrl: '/2026-uruguay/',
-      showImages: false
-    });
-  });
+(function() {
+  var nl = (navigator.language || 'es').toLowerCase();
+  var lang = nl.startsWith('ne') ? 'ne' : nl.startsWith('en') ? 'en' : 'es';
+  var p = new URLSearchParams(location.search).get('lang');
+  if (p === 'en' || p === 'es' || p === 'ne') lang = p;
+  location.replace('/events/2026-uruguay/' + lang + '/search/');
+})();
 </script>
-{% endblock %}
+<p>Redirecting to search&hellip; <a href="/events/2026-uruguay/es/search/">Go now</a></p>
+</body>
+</html>

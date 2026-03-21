@@ -20,8 +20,8 @@ const puppeteer = require('puppeteer');
 
 const PORT = process.env.BROWSER_TEST_PORT || process.argv.find(a => /^\d+$/.test(a)) || '8083';
 const BASE = `http://localhost:${PORT}`;
-const PIRIOPOLIS = `${BASE}/2026-uruguay/en/20260223-koshas-piriopolis/`;
-const LA_PALOMA  = `${BASE}/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/`;
+const PIRIOPOLIS = `${BASE}/events/2026-uruguay/en/20260223-koshas-piriopolis/`;
+const LA_PALOMA  = `${BASE}/events/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/`;
 
 let pass = 0, fail = 0;
 function PASS(label) { console.log(`  PASS  ${label}`); pass++; }
@@ -71,7 +71,7 @@ async function waitVisible(page, selector, timeout = 6000) {
   console.log('  B2. PAGEFIND — search returns results');
   console.log('══════════════════════════════════════════');
 
-  await page.goto(`${BASE}/2026-uruguay/search/`, { waitUntil: 'networkidle0' });
+  await page.goto(`${BASE}/events/2026-uruguay/en/search/`, { waitUntil: 'networkidle0' });
   await check('Pagefind: search input present', async () => {
     await page.waitForSelector('.pagefind-ui__search-input, input[type="search"]', { timeout: 5000 });
   });
@@ -170,7 +170,7 @@ async function waitVisible(page, selector, timeout = 6000) {
   //   pathname = /2026-uruguay/404.html → no folder match → countdown to /2026-uruguay/en/
   // That destination IS a real page, so the redirect is fully exercisable.
   // 404.html lives at _site root, not inside /2026-uruguay/
-  await page.goto(`${BASE}/404.html`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE}/events/404.html`, { waitUntil: 'domcontentloaded' });
   await check('404: countdown text appears ("Taking you there in")', async () => {
     await page.waitForFunction(
       () => document.body.innerText.includes('Taking you there in') || document.body.innerText.includes('Redirigiendo en'),
@@ -226,7 +226,7 @@ async function waitVisible(page, selector, timeout = 6000) {
     ne: 'प्रतिक्रिया दिनुहोस्'
   };
   for (const lang of ['en', 'es', 'ne']) {
-    await page.goto(`${BASE}/2026-uruguay/${lang}/20260223-koshas-piriopolis/`, { waitUntil: 'networkidle0' });
+    await page.goto(`${BASE}/events/2026-uruguay/${lang}/20260223-koshas-piriopolis/`, { waitUntil: 'networkidle0' });
     await check(`Topbar ${lang}: feedback link text is "${topbarExpected[lang]}"`, async () => {
       await page.waitForFunction(
         (expected) => document.getElementById('topbar-feedback')?.textContent?.trim() === expected,
@@ -242,7 +242,7 @@ async function waitVisible(page, selector, timeout = 6000) {
   console.log('══════════════════════════════════════════');
 
   for (const lang of ['en', 'es', 'ne']) {
-    await page.goto(`${BASE}/2026-uruguay/${lang}/`, { waitUntil: 'networkidle0' });
+    await page.goto(`${BASE}/events/2026-uruguay/${lang}/`, { waitUntil: 'networkidle0' });
     await check(`Synthesis ${lang}: updateTopbar injects credit link`, async () => {
       await page.waitForFunction(
         () => document.querySelector('.topbar-credit a')?.href?.includes('yogicapproach.com'),

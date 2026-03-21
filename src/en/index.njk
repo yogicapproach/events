@@ -7,27 +7,27 @@ heading: "Yogaval 2026"
 subtitle: "Exploring the Koshas &mdash; Satchidananda &mdash; Uruguay, February 2026"
 description: "AI-generated synthesis of talks by Satchidananda on the five koshas — Uruguay, February 2026"
 ogUrl: /2026-uruguay/en/
-footerNavHref: /2026-uruguay/en/
+footerNavHref: /events/2026-uruguay/en/
 footerNavLabel: "&#8592; Browse Individual Talks"
 ---
 
 {# ── Other-talks selector ───────────────────────────────────────────────── #}
 <div id="other-talks">
-  <span id="other-talks-label" data-href="/2026-uruguay/en/">Select <a href="/2026-uruguay/en/">a talk</a>:</span>
+  <span id="other-talks-label" data-href="{{ siteRoot }}/2026-uruguay/en/">Select <a href="{{ siteRoot }}/2026-uruguay/en/">a talk</a>:</span>
   <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
     <option value="">-- Choose --</option>
     {% for ev in events %}
-    <option value="/2026-uruguay/en/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
+    <option value="{{ siteRoot }}/2026-uruguay/en/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
     {% endfor %}
-    <option value="/2026-uruguay/en/glossary/" data-newtab="true">Glossary of Terms — Definitions of yoga and Sanskrit terms</option>
+    <option value="{{ siteRoot }}/2026-uruguay/en/glossary/" data-newtab="true">Glossary of Terms — Definitions of yoga and Sanskrit terms</option>
   </select>
 </div>
 
 {# ── Language toggle ─────────────────────────────────────────────────────── #}
 <div class="lang-toggle">
-  <a href="/2026-uruguay/en/" class="lang-btn active" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
-  <a href="/2026-uruguay/es/" class="lang-btn" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-  <a href="/2026-uruguay/ne/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
+  <a href="{{ siteRoot }}/2026-uruguay/en/" class="lang-btn active" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
+  <a href="{{ siteRoot }}/2026-uruguay/es/" class="lang-btn" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
+  <a href="{{ siteRoot }}/2026-uruguay/ne/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
 </div>
 
 <style>

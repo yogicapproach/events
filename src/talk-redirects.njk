@@ -18,13 +18,13 @@ eleventyExcludeFromCollections: true
 (function() {
   var nl = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
   var lang = nl.startsWith('ne') ? 'ne' : nl.startsWith('en') ? 'en' : 'es';
-  var dest = '/2026-uruguay/' + lang + '/{{ ev.folder }}/';
+  var dest = '{{ siteRoot }}/2026-uruguay/' + lang + '/{{ ev.folder }}/';
   // honour legacy ?lang= param if present
   var p = new URLSearchParams(location.search).get('lang');
-  if (p === 'en' || p === 'es' || p === 'ne') { lang = p; dest = '/2026-uruguay/' + lang + '/{{ ev.folder }}/'; }
+  if (p === 'en' || p === 'es' || p === 'ne') { lang = p; dest = '{{ siteRoot }}/2026-uruguay/' + lang + '/{{ ev.folder }}/'; }
   location.replace(dest);
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0; url=/2026-uruguay/es/{{ ev.folder }}/"></noscript>
+<noscript><meta http-equiv="refresh" content="0; url={{ siteRoot }}/2026-uruguay/es/{{ ev.folder }}/"></noscript>
 </body>
 </html>
