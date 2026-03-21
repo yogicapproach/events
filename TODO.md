@@ -1,24 +1,25 @@
-# TODO — 2026-uruguay
+# TODO — yogicapproach/events
 
-Structured task list. Quick captures go in `TODO.txt` first; this file tracks issues and priorities.
+Structured task list. This file tracks issues and priorities.
 See `PROGRESS.md` for completed work and `PENDING-TASK.md` for in-progress session plan.
 
 ---
 
 ## Open Issues
 
-| # | Title | Status |
-|---|-------|--------|
-| #27 | Floating toolbar + Web Share API on text selection | Open |
-| #28 | Site audit: comprehensive review (parent) | Open |
-| #29 | Accessibility: focus, aria, lang attr, skip nav, alt text | Open — `audit-fixes` branch |
-| #30 | SEO & social meta tags | Open — `audit-fixes` branch |
-| #31 | Security: marked.js SRI, modal onclick refactor | Open — `audit-fixes` branch |
-| #32 | Responsiveness & mobile: media queries, touch targets | Open — `audit-fixes` branch |
-| #33 | Performance & caching: image reload bug, favicon | Open — `audit-fixes` branch |
-| #34 | Code cleanup: inline styles, dead code, error class | Open — `audit-fixes` branch |
-| #35 | Framework research: Eleventy + Pagefind migration | Open — research complete, ready to plan |
-| #37 | Regression test checklist | Open — run before merging audit-fixes |
+| # | Title | Notes |
+|---|-------|-------|
+| #3 | Research: audio diarization and isolation of bilingual talks | Backlog |
+| #4 | Add floating toolbar on text selection with Web Share API for mobile | Backlog |
+| #5 | Site audit: comprehensive HTML/JS/CSS review | Eleventy-era audit needed |
+| #6 | Research: static site framework evaluation (Eleventy) | Research done; Eleventy shipped — may be closeable |
+| #7 | Regression test checklist for audit-fixes branch | Keep open |
+| #9 | Migrate from npm to Bun | Backlog |
+| #10 | Auto-approve read-only Claude Code operations in VS Code | Settings task |
+| #12 | SEO: add sitemap.xml, robots.txt, and hreflang tags | Not started |
+| #13 | LLM/agentic discoverability: llms.txt, JSON-LD, crawler permissions | Not started |
+| #15 | Add voice-enabled AI Q&A over talk corpus (Cloudflare Workers AI + RAG) | Depends on #14 (done) |
+| #21 | Search: integrate search bar into page header (per-lang, browser-lang aware) | Search page exists; header integration pending |
 
 ---
 
@@ -26,7 +27,6 @@ See `PROGRESS.md` for completed work and `PENDING-TASK.md` for in-progress sessi
 
 - Glossary: add link-out pages for lineage figures (Swami Niranjanananda, Swami Satyananda, etc.)
 - Glossary: continue expanding as new talks are processed
-- Git LFS for audio files — deferred; using YouTube links for now
 - Automated transcription pipeline: audio → Whisper → raw/ → transcript generation
 - New talk intake: process any talks from Uruguay series not yet transcribed
 - GoatCounter: add to Das Mahavidya repo (see memory)
@@ -35,9 +35,8 @@ See `PROGRESS.md` for completed work and `PENDING-TASK.md` for in-progress sessi
 
 ## Workflow Reminders
 
-- New talk → create `raw/FOLDER/source.md` + `docs/events/FOLDER/` → use `prompts/transcript-en.md` → user confirms → `prompts/transcript-es.md` → `prompts/transcript-ne.md` → update `events.json`, glossary, synthesis
+- New talk → create `raw/FOLDER/source-meta.md` + event folder in `src/` → use `prompts/transcript-en.md` → user confirms → `prompts/transcript-es.md` → `prompts/transcript-ne.md` → update `events.json`, glossary, synthesis
 - Every task gets a GH issue before work begins
-- Scan `TODO.txt` at pause points → convert to GH issues → prepend `#N` and append URL to each line
 - After NE transcript: check `title_ne` and `title_short_ne` in events.json are in Devanagari
-- Audit fixes go on `audit-fixes` branch; merge to main only after regression checklist (#37) passes
+- Build: `npm run build` → Eleventy + Pagefind → `_site/`; deployed via GitHub Actions on push to main
 - Rollback point: `git checkout v1.0-stable`

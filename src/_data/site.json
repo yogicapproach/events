@@ -1,9 +1,9 @@
 {
-  "title": "Yogaval 2026",
-  "baseUrl": "https://yogic-approach.github.io",
+  "title": "Uruguay 2026 — Exploring the Koshas",
+  "baseUrl": "https://yogicapproach.com/events",
   "langs": ["en", "es", "ne"],
   "defaultLang": "es",
-  "ogImage": "https://yogic-approach.github.io/2026-uruguay/events/20260218-tantroktam-devi-suktam-la-paloma/resources/cover-tantroktam-devi-suktam.jpg",
+  "ogImage": "https://yogicapproach.com/events/2026-uruguay/favicon.png",
   "langLabels": {
     "en": { "label": "English",   "sublabel": "Original"     },
     "es": { "label": "Español",   "sublabel": "IA Traducido" },

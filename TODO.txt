@@ -1,7 +1,0 @@
-- #5 create glossary of terms (https://github.com/yogic-approach/yogaval-2026/issues/5)
-- #6 add Glossary to drop-down list. When selected, it should open in new window. (https://github.com/yogic-approach/yogaval-2026/issues/6)
-- #7 In intro to each event transcript, mention Glossary. Link should open in new window. (https://github.com/yogic-approach/yogaval-2026/issues/7)
-- #14 use the yoga nidra extracted audio as a resource to share (the audio file for offline use). sub issue: get a version on YouTube with visuals (https://github.com/yogic-approach/yogaval-2026/issues/14)
-- #15 process the La Paloma talk using our updated workflow and prompts (https://github.com/yogic-approach/yogaval-2026/issues/15)
-- #16 Update index.html transcript templates with way to list available resources. This should include any media available such as cover art or PDF page previews. (https://github.com/yogic-approach/yogaval-2026/issues/16)
-- #17 Inline audio playback for kirtan resources on event pages; page can still be viewed. (https://github.com/yogic-approach/yogaval-2026/issues/17)
