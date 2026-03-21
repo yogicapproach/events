@@ -18,7 +18,7 @@ footerNavLabel: "&#8592; Back to Synthesis"
     <option value="">-- Choose --</option>
     <option value="/2026-uruguay/en/">Summary of Talks — AI-generated report of main ideas from all the talks</option>
     {% for ev in events %}
-    <option value="/2026-uruguay/en/events/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
+    <option value="/2026-uruguay/en/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
     {% endfor %}
   </select>
 </div>

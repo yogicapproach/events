@@ -160,7 +160,7 @@ async function loadTranscript(lang) {
     loadResources(lang);
 }
 
-async function loadResources(lang) {
+async function loadResources(lang, resourcesBasePath) {
     var _lang = lang || 'en';
     var _strings = {
         en: {
@@ -183,6 +183,7 @@ async function loadResources(lang) {
         }
     };
     var s = _strings[_lang] || _strings.en;
+    var _basePath = resourcesBasePath || 'resources/';
 
     try {
         var res = await fetch('resources.json');
@@ -215,8 +216,8 @@ async function loadResources(lang) {
                         </div>
                     </div>`;
             } else {
-                var fileSrc    = 'resources/' + encodeURIComponent(r.file);
-                var coverSrc   = r.cover ? 'resources/' + encodeURIComponent(r.cover) + '?v=1' : '';
+                var fileSrc    = _basePath + encodeURIComponent(r.file);
+                var coverSrc   = r.cover ? _basePath + encodeURIComponent(r.cover) + '?v=1' : '';
                 var licenseStr = r.license_url
                     ? `<a class="resource-download" href="${r.license_url}" target="_blank" rel="noopener">${r.license}</a>`
                     : (r.license || '');
@@ -267,7 +268,7 @@ async function loadResources(lang) {
             if (pdfsEl) {
                 var pdfsHtml = '<div class="resources-heading">' + s.translationRef + '</div>';
                 fullPdfs.forEach(function(r) {
-                    var fileSrc = 'resources/' + encodeURIComponent(r.file);
+                    var fileSrc = _basePath + encodeURIComponent(r.file);
                     var badge   = r.lang ? `<span class="lang-badge">${r.lang.toUpperCase()}</span>` : '';
                     pdfsHtml += `
                         <div class="resource-pdf-item">
@@ -278,7 +279,7 @@ async function loadResources(lang) {
                 if (compactPdfs.length > 0) {
                     pdfsHtml += '<details class="compact-pdfs"><summary>Compact versions</summary><div class="compact-list">';
                     compactPdfs.forEach(function(r) {
-                        var fileSrc = 'resources/' + encodeURIComponent(r.file);
+                        var fileSrc = _basePath + encodeURIComponent(r.file);
                         var badge   = r.lang ? `<span class="lang-badge">${r.lang.toUpperCase()}</span>` : '';
                         pdfsHtml += `
                             <div class="resource-pdf-item">
@@ -399,7 +400,9 @@ if (typeof marked !== 'undefined') {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    var lang = new URLSearchParams(window.location.search).get('lang') || 'es';
+    var lang = new URLSearchParams(window.location.search).get('lang')
+               || (window.location.pathname.match(/\/(en|es|ne)\//) || [])[1]
+               || 'es';
     var s = _topbarStrings(lang);
     var tb = document.createElement('div');
     tb.id = 'topbar';

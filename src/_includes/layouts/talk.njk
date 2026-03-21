@@ -10,10 +10,10 @@
 {% block body %}
   {# ── Other-talks selector ─────────────────────────────────────────────── #}
   <div id="other-talks">
-    <span id="other-talks-label" data-href="/2026-uruguay/{{ lang }}/events/">
-      {%- if lang == "ne" -%}अर्को चर्चा <a href="/2026-uruguay/{{ lang }}/events/">छान्नुहोस्</a>:
-      {%- elif lang == "es" -%}Ver <a href="/2026-uruguay/{{ lang }}/events/">otra charla</a>:
-      {%- else -%}Select <a href="/2026-uruguay/{{ lang }}/events/">another talk</a>:
+    <span id="other-talks-label" data-href="/2026-uruguay/{{ lang }}/">
+      {%- if lang == "ne" -%}अर्को चर्चा <a href="/2026-uruguay/{{ lang }}/">छान्नुहोस्</a>:
+      {%- elif lang == "es" -%}Ver <a href="/2026-uruguay/{{ lang }}/">otra charla</a>:
+      {%- else -%}Select <a href="/2026-uruguay/{{ lang }}/">another talk</a>:
       {%- endif -%}
     </span>
     <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
@@ -30,7 +30,7 @@
       {# Other talks, excluding the current one #}
       {% for ev in events %}
         {% if ev.folder !== talkFolder %}
-        <option value="/2026-uruguay/{{ lang }}/events/{{ ev.folder }}/">{% eventLabel ev, lang %}</option>
+        <option value="/2026-uruguay/{{ lang }}/{{ ev.folder }}/">{% eventLabel ev, lang %}</option>
         {% endif %}
       {% endfor %}
       {# Glossary — opens in new tab via handleTalkSelect() #}
@@ -45,17 +45,17 @@
 
   {# ── Language toggle — hard <a> links, no JS required ───────────────── #}
   <div class="lang-toggle">
-    <a href="/2026-uruguay/en/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/en/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'en' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'en' else 'false' }}"
        id="btn-en">English<span class="lang-sublabel">Original</span></a>
-    <a href="/2026-uruguay/es/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/es/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'es' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'es' else 'false' }}"
        id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-    <a href="/2026-uruguay/ne/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/ne/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'ne' %} active{% endif %}"
        role="button"
        aria-pressed="{{ 'true' if lang == 'ne' else 'false' }}"

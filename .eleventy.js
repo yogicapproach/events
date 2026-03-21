@@ -85,7 +85,7 @@ module.exports = function (eleventyConfig) {
 
       // Write resources.json to each lang path under 2026-uruguay/
       for (const lang of LANGS) {
-        const destDir = path.join(dir.output, "2026-uruguay", lang, "events", ev.folder);
+        const destDir = path.join(dir.output, "2026-uruguay", lang, ev.folder);
         fs.mkdirSync(destDir, { recursive: true });
         fs.copyFileSync(srcPath, path.join(destDir, "resources.json"));
       }
@@ -93,7 +93,7 @@ module.exports = function (eleventyConfig) {
       // Copy binary resources dir to 2026-uruguay/events/[folder]/resources/
       const srcResDir = path.join(__dirname, "docs", "events", ev.folder, "resources");
       if (fs.existsSync(srcResDir)) {
-        const destResDir = path.join(dir.output, "2026-uruguay", "events", ev.folder, "resources");
+        const destResDir = path.join(dir.output, "2026-uruguay", ev.folder, "resources");
         fs.mkdirSync(destResDir, { recursive: true });
         for (const file of fs.readdirSync(srcResDir)) {
           fs.copyFileSync(path.join(srcResDir, file), path.join(destResDir, file));
@@ -116,8 +116,8 @@ module.exports = function (eleventyConfig) {
       let html = md.render(content);
       if (lang) {
         html = html
-          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/2026-uruguay/${lang}/events/$1/"`)
-          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/2026-uruguay/${lang}/events/$1/"`)
+          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/2026-uruguay/${lang}/$1/"`)
+          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/2026-uruguay/${lang}/$1/"`)
           .replace(/href="(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?"/g, `href="/2026-uruguay/${lang}/glossary/"`)
           .replace(/href='(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?'/g, `href="/2026-uruguay/${lang}/glossary/"`);
       }

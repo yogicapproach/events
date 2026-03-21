@@ -8,7 +8,7 @@ pagination:
   size: 1
   alias: item
 
-permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
+permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
 ---
 {% extends "layouts/base.njk" %}
 {#
@@ -59,10 +59,10 @@ permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
 {% block body %}
   {# ── Other-talks selector ─────────────────────────────────────────────── #}
   <div id="other-talks" data-pagefind-ignore>
-    <span id="other-talks-label" data-href="/2026-uruguay/{{ lang }}/events/">
-      {%- if lang == "ne" -%}अर्को चर्चा <a href="/2026-uruguay/{{ lang }}/events/">छान्नुहोस्</a>:
-      {%- elif lang == "es" -%}Ver <a href="/2026-uruguay/{{ lang }}/events/">otra charla</a>:
-      {%- else -%}Select <a href="/2026-uruguay/{{ lang }}/events/">another talk</a>:
+    <span id="other-talks-label" data-href="/2026-uruguay/{{ lang }}/">
+      {%- if lang == "ne" -%}अर्को चर्चा <a href="/2026-uruguay/{{ lang }}/">छान्नुहोस्</a>:
+      {%- elif lang == "es" -%}Ver <a href="/2026-uruguay/{{ lang }}/">otra charla</a>:
+      {%- else -%}Select <a href="/2026-uruguay/{{ lang }}/">another talk</a>:
       {%- endif -%}
     </span>
     <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
@@ -77,7 +77,7 @@ permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
       </option>
       {% for other in events %}
         {% if other.folder !== talkFolder %}
-        <option value="/2026-uruguay/{{ lang }}/events/{{ other.folder }}/">{% eventLabel other, lang %}</option>
+        <option value="/2026-uruguay/{{ lang }}/{{ other.folder }}/">{% eventLabel other, lang %}</option>
         {% endif %}
       {% endfor %}
       <option value="/2026-uruguay/{{ lang }}/glossary/" data-newtab="true">
@@ -91,15 +91,15 @@ permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
 
   {# ── Language toggle — hard <a> links, works without JavaScript ─────── #}
   <div class="lang-toggle" data-pagefind-ignore>
-    <a href="/2026-uruguay/en/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/en/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'en' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'en' else 'false' }}"
        id="btn-en">English<span class="lang-sublabel">Original</span></a>
-    <a href="/2026-uruguay/es/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/es/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'es' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'es' else 'false' }}"
        id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-    <a href="/2026-uruguay/ne/events/{{ talkFolder }}/"
+    <a href="/2026-uruguay/ne/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'ne' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'ne' else 'false' }}"
        id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
@@ -125,7 +125,7 @@ permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
 
 {% block footer %}
 <footer data-pagefind-ignore>
-  <a id="footer-nav" href="/2026-uruguay/{{ lang }}/events/">
+  <a id="footer-nav" href="/2026-uruguay/{{ lang }}/">
     {%- if lang == "ne" -%}&#8592; कार्यक्रमहरूमा फर्कनुहोस्
     {%- elif lang == "es" -%}&#8592; Volver a los eventos
     {%- else -%}&#8592; Back to Events
@@ -156,7 +156,7 @@ permalink: "/2026-uruguay/{{ item.lang }}/events/{{ item.event.folder }}/"
       window._currentProgram = evDate + " \u2014 " + evLocation + " \u2014 " + evTitle;
       updateTopbar(lang);
     }
-    if (typeof loadResources === "function") loadResources(lang, "/2026-uruguay/events/{{ talkFolder }}/resources/");
+    if (typeof loadResources === "function") loadResources(lang, "/2026-uruguay/{{ talkFolder }}/resources/");
   });
 })();
 </script>

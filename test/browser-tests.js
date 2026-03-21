@@ -20,8 +20,8 @@ const puppeteer = require('puppeteer');
 
 const PORT = process.env.BROWSER_TEST_PORT || process.argv.find(a => /^\d+$/.test(a)) || '8083';
 const BASE = `http://localhost:${PORT}`;
-const PIRIOPOLIS = `${BASE}/2026-uruguay/en/events/20260223-koshas-piriopolis/`;
-const LA_PALOMA  = `${BASE}/2026-uruguay/en/events/20260218-tantroktam-devi-suktam-la-paloma/`;
+const PIRIOPOLIS = `${BASE}/2026-uruguay/en/20260223-koshas-piriopolis/`;
+const LA_PALOMA  = `${BASE}/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/`;
 
 let pass = 0, fail = 0;
 function PASS(label) { console.log(`  PASS  ${label}`); pass++; }
@@ -226,7 +226,7 @@ async function waitVisible(page, selector, timeout = 6000) {
     ne: 'प्रतिक्रिया दिनुहोस्'
   };
   for (const lang of ['en', 'es', 'ne']) {
-    await page.goto(`${BASE}/2026-uruguay/${lang}/events/20260223-koshas-piriopolis/`, { waitUntil: 'networkidle0' });
+    await page.goto(`${BASE}/2026-uruguay/${lang}/20260223-koshas-piriopolis/`, { waitUntil: 'networkidle0' });
     await check(`Topbar ${lang}: feedback link text is "${topbarExpected[lang]}"`, async () => {
       await page.waitForFunction(
         (expected) => document.getElementById('topbar-feedback')?.textContent?.trim() === expected,

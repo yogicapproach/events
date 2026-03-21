@@ -1,1 +1,10 @@
 .claude/
+
+# Eleventy build output
+_site/
+
+# Node dependencies
+node_modules/
+
+# npm lock file (committed only if you want reproducible CI installs)
+# package-lock.json

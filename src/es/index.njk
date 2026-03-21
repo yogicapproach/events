@@ -7,17 +7,17 @@ heading: "Yogaval 2026"
 subtitle: "Explorando los Koshas &mdash; Satchidananda &mdash; Uruguay, febrero 2026"
 description: "Síntesis generada por IA de las charlas de Satchidananda sobre los cinco koshas — Uruguay, febrero 2026"
 ogUrl: /2026-uruguay/es/
-footerNavHref: /2026-uruguay/es/events/
+footerNavHref: /2026-uruguay/es/
 footerNavLabel: "&#8592; Ver charlas individuales"
 ---
 
 {# ── Other-talks selector ───────────────────────────────────────────────── #}
 <div id="other-talks">
-  <span id="other-talks-label" data-href="/2026-uruguay/es/events/">Ver <a href="/2026-uruguay/es/events/">una charla</a>:</span>
+  <span id="other-talks-label" data-href="/2026-uruguay/es/">Ver <a href="/2026-uruguay/es/">una charla</a>:</span>
   <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
     <option value="">-- Elegir --</option>
     {% for ev in events %}
-    <option value="/2026-uruguay/es/events/{{ ev.folder }}/">{% eventLabel ev, "es" %}</option>
+    <option value="/2026-uruguay/es/{{ ev.folder }}/">{% eventLabel ev, "es" %}</option>
     {% endfor %}
     <option value="/2026-uruguay/es/glossary/" data-newtab="true">Glosario de Términos — Definiciones de términos del yoga y sánscrito</option>
   </select>

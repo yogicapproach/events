@@ -29,17 +29,17 @@
   ];
   var m = path.match(/\/events\/(2026[\w-]+)\//);
   if (m && VALID_FOLDERS.indexOf(m[1]) !== -1) {
-    location.replace('/2026-uruguay/' + lang + '/events/' + m[1] + '/'); return;
+    location.replace('/2026-uruguay/' + lang + '/' + m[1] + '/'); return;
   }
 
   // Recognisable pattern: glossary
   if (path.includes('glossary')) { location.replace('/2026-uruguay/' + lang + '/glossary/'); return; }
 
   // Recognisable pattern: /events/ listing
-  if (path.match(/\/events\/?$/)) { location.replace('/2026-uruguay/' + lang + '/events/'); return; }
+  if (path.match(/\/events\/?$/)) { location.replace('/2026-uruguay/' + lang + '/'); return; }
 
   // No match — countdown to events listing
-  var dest = '/2026-uruguay/' + lang + '/events/';
+  var dest = '/2026-uruguay/' + lang + '/';
   var secs = 5;
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -61,6 +61,6 @@
 <h1>Page not found</h1>
 <p>That link doesn't exist — it may be old or broken.</p>
 <p id="countdown-msg"></p>
-<p><a id="redirect-link" href="/2026-uruguay/es/events/">Go to the events page now</a></p>
+<p><a id="redirect-link" href="/2026-uruguay/es/">Go to the events page now</a></p>
 </body>
 </html>
