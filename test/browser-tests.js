@@ -19,7 +19,7 @@
 const puppeteer = require('puppeteer');
 
 const PORT = process.env.BROWSER_TEST_PORT || process.argv.find(a => /^\d+$/.test(a)) || '8083';
-const BASE = `http://localhost:${PORT}`;
+const BASE = process.env.BROWSER_TEST_BASE || `http://localhost:${PORT}`;
 const PIRIOPOLIS = `${BASE}/events/2026-uruguay/en/20260223-koshas-piriopolis/`;
 const LA_PALOMA  = `${BASE}/events/2026-uruguay/en/20260218-tantroktam-devi-suktam-la-paloma/`;
 

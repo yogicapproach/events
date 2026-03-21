@@ -1,25 +1,54 @@
 #!/usr/bin/env bash
 # 2026-uruguay — Eleventy build test suite
-# Usage: bash test/run-tests.sh [--skip-build]
+# Usage:
+#   bash test/run-tests.sh [--skip-build]          # local build + server
+#   bash test/run-tests.sh --live [https://url]    # test live site (default: https://yogicapproach.com)
 # Requires: python3, curl
-# Runs a clean build, starts a local server, tests all URLs and content, reports results.
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PORT=8083
-BASE="http://localhost:$PORT"
 SITE="$REPO/_site"
 SERVE_DIR="$REPO/_serve"   # temp dir: serves _site/ contents under /events/
 PASS=0; FAIL=0; WARN=0
 PYTHON=$(which python 2>/dev/null || which python3 2>/dev/null || echo "python")
+LIVE_MODE=false
+
+# Parse args
+for arg in "$@"; do
+  if [[ "$arg" == "--live" ]]; then LIVE_MODE=true; fi
+done
+if $LIVE_MODE; then
+  # Optional second arg is the base URL
+  LIVE_URL="${2:-https://yogicapproach.com}"
+  BASE="$LIVE_URL"
+else
+  BASE="http://localhost:$PORT"
+fi
 
 pass() { echo "  PASS  $*"; PASS=$((PASS+1)); }
 fail() { echo "  FAIL  $*"; FAIL=$((FAIL+1)); }
 warn() { echo "  WARN  $*"; WARN=$((WARN+1)); }
 section() { echo ""; echo "══════════════════════════════════════════"; echo "  $*"; echo "══════════════════════════════════════════"; }
 
+# check_file is filesystem-only; skip when testing live
+check_file() {
+  local path="$1" label="$2"
+  if $LIVE_MODE; then
+    warn "$label (skipped in --live mode: filesystem not available)"
+    return
+  fi
+  if [ -f "$path" ] || [ -d "$path" ]; then
+    pass "$label"
+  else
+    fail "$label — not found: $path"
+  fi
+}
+
 # ── Build ────────────────────────────────────────────────────────────────────
 section "BUILD"
-if [[ "${1:-}" != "--skip-build" ]]; then
+if $LIVE_MODE; then
+  echo "  Live mode — skipping build"
+elif [[ "${1:-}" != "--skip-build" ]]; then
   cd "$REPO"
   echo "  Cleaning _site/..."
   npm run clean 2>&1 | tail -1
@@ -32,29 +61,40 @@ fi
 
 # ── Server ───────────────────────────────────────────────────────────────────
 section "SERVER"
-# Kill anything on port first
-taskkill //F //IM python.exe 2>/dev/null || true
-sleep 1
-
-# Build a serve directory that mirrors GitHub Pages path structure:
-# GitHub Pages serves yogicapproach/events repo at /events/, so _site/ contents
-# must be accessible at /events/... for absolute paths in HTML to resolve.
-rm -rf "$SERVE_DIR"
-mkdir -p "$SERVE_DIR/events"
-cp -r "$SITE"/. "$SERVE_DIR/events/"
-
-cd "$SERVE_DIR"
-$PYTHON -m http.server $PORT > /tmp/yogaval-test-server.log 2>&1 &
-SERVER_PID=$!
-sleep 2
-cd "$REPO"
-
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/events/2026-uruguay/es/" 2>/dev/null || echo "000")
-if [ "$STATUS" = "200" ]; then
-  pass "Server up at $BASE/events/ (PID $SERVER_PID)"
+if $LIVE_MODE; then
+  echo "  Live mode — using $BASE"
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/events/2026-uruguay/es/" 2>/dev/null || echo "000")
+  if [ "$STATUS" = "200" ]; then
+    pass "Live site reachable at $BASE/events/"
+  else
+    fail "Live site not responding (status $STATUS) — aborting"
+    exit 1
+  fi
 else
-  fail "Server not responding (status $STATUS) — aborting"
-  exit 1
+  # Kill anything on port first
+  taskkill //F //IM python.exe 2>/dev/null || true
+  sleep 1
+
+  # Build a serve directory that mirrors GitHub Pages path structure:
+  # GitHub Pages serves yogicapproach/events repo at /events/, so _site/ contents
+  # must be accessible at /events/... for absolute paths in HTML to resolve.
+  rm -rf "$SERVE_DIR"
+  mkdir -p "$SERVE_DIR/events"
+  cp -r "$SITE"/. "$SERVE_DIR/events/"
+
+  cd "$SERVE_DIR"
+  $PYTHON -m http.server $PORT > /tmp/yogaval-test-server.log 2>&1 &
+  SERVER_PID=$!
+  sleep 2
+  cd "$REPO"
+
+  STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/events/2026-uruguay/es/" 2>/dev/null || echo "000")
+  if [ "$STATUS" = "200" ]; then
+    pass "Server up at $BASE/events/ (PID $SERVER_PID)"
+  else
+    fail "Server not responding (status $STATUS) — aborting"
+    exit 1
+  fi
 fi
 
 # ── Helper ───────────────────────────────────────────────────────────────────
@@ -504,7 +544,7 @@ echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" 
 # ── 35. Browser tests (Puppeteer) ────────────────────────────────────────────
 section "35. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
-  BROWSER_OUT=$(BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
+  BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"
   B_PASS=$(echo "$BROWSER_OUT" | grep -c "^  PASS  ")
   B_FAIL=$(echo "$BROWSER_OUT" | grep -c "^  FAIL  ")
@@ -528,6 +568,8 @@ else
   echo "  RESULT:  ✗ $FAIL FAILURE(S) — fix before committing"
 fi
 
-# Stop server and clean up temp serve dir
-taskkill //F //IM python.exe 2>/dev/null || true
-rm -rf "$SERVE_DIR"
+# Stop server and clean up temp serve dir (local mode only)
+if ! $LIVE_MODE; then
+  taskkill //F //IM python.exe 2>/dev/null || true
+  rm -rf "$SERVE_DIR"
+fi
