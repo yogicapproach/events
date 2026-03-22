@@ -36,17 +36,33 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
   {%- set _subtitle = ev.subtitle_en -%}
 {%- endif -%}
 
-{% block page_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block og_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block twitter_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block meta_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block og_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block twitter_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
+{% block page_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block og_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block twitter_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block meta_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block og_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block twitter_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
 
+{% block og_type %}article{% endblock %}
 {% block head_extra %}
 <style>
   #resources-section { display: none; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ _title | dump | safe }},
+  "description": {{ ev.description_en | dump | safe }},
+  "abstract": {{ ev.abstract_en | dump | safe }},
+  "author": {"@type": "Person", "name": "Satchidananda"},
+  "publisher": {"@type": "Organization", "name": "YogicApproach", "url": "https://yogicapproach.com"},
+  "datePublished": "{{ talkFolder | folderToIsoDate }}",
+  "inLanguage": "{{ lang }}",
+  "isPartOf": {"@type": "WebSite", "name": {{ site.title | dump | safe }}, "url": "{{ site.baseUrl }}/2026-uruguay/{{ lang }}/"},
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 {% endblock %}
 
 {% block header %}

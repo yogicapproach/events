@@ -161,6 +161,11 @@ module.exports = function (eleventyConfig) {
     return path.join(__dirname, "docs", `glossary-${lang}.md`);
   });
 
+  eleventyConfig.addFilter("folderToIsoDate", function (folder) {
+    const f = String(folder);
+    return `${f.slice(0,4)}-${f.slice(4,6)}-${f.slice(6,8)}`;
+  });
+
   // ── Directory config ─────────────────────────────────────────────────────
   return {
     dir: {
