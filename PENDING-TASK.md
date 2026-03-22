@@ -33,12 +33,20 @@ git checkout <branch> && npm run build && npm run serve
 
 ---
 
-## Still To Build
+## All Branches Now Built — 9 PRs Open
 
-| Branch | What it does | Issues |
-|--------|-------------|--------|
-| `standards/json-ld` | `Article` JSON-LD on talk pages; `WebSite` JSON-LD on synthesis — structured data for Google/AI crawlers | #55 |
-| `design/ab-theme-flag` | `?theme=v2` URL param sets `data-theme="v2"` on `<body>`; experimental styles scoped to that selector | #55 |
+| PR | Branch | Status |
+|----|--------|--------|
+| #56 | `standards/og-meta-fixes` | awaiting test |
+| #57 | `design/devanagari-font` | awaiting test |
+| #58 | `design/touch-targets` | awaiting test |
+| #59 | `standards/hreflang-canonical` | awaiting test |
+| #60 | `standards/sitemap-robots` | awaiting test |
+| #61 | `design/font-size-tokens` | awaiting test |
+| #62 | `design/lang-select-mobile` | awaiting test |
+| #65 | `standards/json-ld` | awaiting test |
+| #66 | `design/ab-theme-flag` | awaiting test |
+| #67 | `test/regression-wave-1` | merge after #56-#66 pass |
 
 ---
 
