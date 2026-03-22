@@ -1,7 +1,7 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: d9ce2f3
+Last commit on main: 1ce559c
 
 ---
 
@@ -10,8 +10,8 @@ Last commit on main: d9ce2f3
 **Order (easiest → hardest to verify):**
 - [x] #60 standards/sitemap-robots — MERGED ✓ (sitemap at events root; root repo gets robots.txt + sitemap index)
 - [x] #56 standards/og-meta-fixes — MERGED ✓ (og:type article on talk+synthesis; Yogaval → site.title)
-- [ ] #59 standards/hreflang-canonical — hreflang + canonical source check ← **CURRENTLY TESTING**
-- [ ] #65 standards/json-ld — JSON-LD source check
+- [x] #59 standards/hreflang-canonical — MERGED ✓ (canonical + hreflang EN/ES/NE/x-default on all pages)
+- [ ] #65 standards/json-ld — JSON-LD source check ← **CURRENTLY TESTING**
 - [ ] #62 design/lang-select-mobile — JS source + mobile viewport
 - [ ] #66 design/ab-theme-flag — ?theme=v2 URL behavior
 - [ ] #57 design/devanagari-font — visual NE page check
