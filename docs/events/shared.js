@@ -399,6 +399,36 @@ if (typeof marked !== 'undefined') {
     } } });
 }
 
+function injectLangSelectMobile() {
+    var toggle = document.querySelector('.lang-toggle');
+    if (!toggle) return;
+
+    // Detect current lang from URL path (e.g. /2026-uruguay/en/ or /events/2026-uruguay/es/foo/)
+    var pathMatch = window.location.pathname.match(/\/(en|es|ne)\//);
+    if (!pathMatch) return;
+    var currentLang = pathMatch[1];
+
+    var labels = {
+        en: 'English \u2014 Original',
+        es: 'Espa\u00f1ol \u2014 IA Traducido',
+        ne: '\u0928\u0947\u092a\u093e\u0932\u0940 \u2014 AI \u0905\u0928\u0941\u0935\u093e\u0926\u093f\u0924'
+    };
+
+    var sel = document.createElement('select');
+    sel.className = 'lang-select-mobile';
+    sel.setAttribute('aria-label', 'Select language');
+    ['en', 'es', 'ne'].forEach(function(l) {
+        var opt = document.createElement('option');
+        // Swap the lang segment in the current path — works for any URL depth
+        opt.value = window.location.pathname.replace('/' + currentLang + '/', '/' + l + '/');
+        opt.textContent = labels[l];
+        if (l === currentLang) opt.selected = true;
+        sel.appendChild(opt);
+    });
+    sel.addEventListener('change', function() { window.location.href = this.value; });
+    toggle.parentNode.insertBefore(sel, toggle.nextSibling);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     var lang = new URLSearchParams(window.location.search).get('lang')
                || (window.location.pathname.match(/\/(en|es|ne)\//) || [])[1]
@@ -432,4 +462,6 @@ document.addEventListener('DOMContentLoaded', function() {
         bar.appendChild(fl);
         footerEl.appendChild(bar);
     }
+
+    injectLangSelectMobile();
 });
