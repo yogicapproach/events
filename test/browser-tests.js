@@ -255,23 +255,68 @@ async function waitVisible(page, selector, timeout = 6000) {
     });
   }
 
-  // ── B10. Mobile viewport — talk page renders without horizontal scroll ────────
+  // ── B10. Mobile viewport — progressive lang toggle compression ───────────────
   console.log('\n══════════════════════════════════════════');
-  console.log('  B9. MOBILE VIEWPORT — no horizontal overflow');
+  console.log('  B10. MOBILE VIEWPORT — progressive lang toggle');
   console.log('══════════════════════════════════════════');
 
-  await page.setViewport({ width: 375, height: 812 }); // iPhone 14
+  // 420px: abbreviated buttons visible, full text hidden
+  await page.setViewport({ width: 420, height: 812 });
   await page.goto(PIRIOPOLIS, { waitUntil: 'networkidle0' });
-  await check('Mobile 375px: no horizontal scroll on talk page', async () => {
+  await check('Mobile 420px: no horizontal scroll on talk page', async () => {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     return !overflow;
   });
-  await check('Mobile 375px: lang toggle buttons visible', async () => {
-    await page.waitForSelector('#btn-en', { visible: true, timeout: 3000 });
+  await check('Mobile 420px: lang-abbr span visible (abbreviated state)', async () => {
+    const visible = await page.evaluate(() => {
+      const el = document.querySelector('.lang-abbr');
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      return style.display !== 'none';
+    });
+    return visible;
   });
-  await check('Mobile 375px: transcript content present', async () => {
+  await check('Mobile 420px: lang-full span hidden (abbreviated state)', async () => {
+    const hidden = await page.evaluate(() => {
+      const el = document.querySelector('.lang-full');
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      return style.display === 'none';
+    });
+    return hidden;
+  });
+  await check('Mobile 420px: transcript content present', async () => {
     const len = await page.$eval('#content', el => el.innerText.length);
     return len > 1000;
+  });
+
+  // 350px: select wrapper visible, toggle hidden
+  await page.setViewport({ width: 350, height: 812 });
+  await page.goto(PIRIOPOLIS, { waitUntil: 'networkidle0' });
+  await check('Mobile 350px: lang-select-wrapper visible', async () => {
+    const visible = await page.evaluate(() => {
+      const el = document.querySelector('.lang-select-wrapper');
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      return style.display !== 'none';
+    });
+    return visible;
+  });
+  await check('Mobile 350px: lang-toggle hidden', async () => {
+    const hidden = await page.evaluate(() => {
+      const el = document.querySelector('.lang-toggle');
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      return style.display === 'none';
+    });
+    return hidden;
+  });
+  await check('Mobile 350px: select label text present', async () => {
+    const text = await page.evaluate(() => {
+      const el = document.querySelector('.lang-select-label');
+      return el ? el.textContent.trim() : '';
+    });
+    return text.length > 0;
   });
   await page.setViewport({ width: 1280, height: 800 }); // restore desktop
 

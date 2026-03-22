@@ -149,6 +149,22 @@ details.compact-pdfs .compact-list { margin-top: 8px; padding-left: 4px; }
 /* ── Error message ───────────────────────────────────────────── */
 .error-message { color: #c00; }
 
+/* ── Language select (mobile) ────────────────────────────────── */
+/* On mobile, replace 3-button toggle with a native <select> */
+.lang-select-mobile {
+    display: none;
+    width: 100%; max-width: 320px;
+    margin: 12px auto; padding: 10px 12px;
+    font-size: 1em; border: 2px solid #555;
+    border-radius: 4px; background: white;
+    cursor: pointer;
+}
+@media (max-width: 600px) {
+    .lang-toggle { display: none; }
+    .lang-select-mobile { display: block; }
+    #other-talks-label span, #other-talks-label > span { display: none; }
+}
+
 /* ── Responsive / Mobile ─────────────────────────────────────── */
 @media (max-width: 480px) {
     body { padding: 12px; }
@@ -156,10 +172,6 @@ details.compact-pdfs .compact-list { margin-top: 8px; padding-left: 4px; }
     /* Topbar and footer-bar: tighter on small screens */
     .topbar { margin: -12px -12px 12px -12px; padding: 3px 12px; }
     .footer-bar { margin: 0 -12px -12px -12px; padding: 3px 12px; }
-
-    /* Language toggle: stack vertically on very narrow screens */
-    .lang-toggle { flex-direction: column; align-items: center; gap: 6px; }
-    .lang-toggle button { width: 100%; max-width: 260px; padding: 12px 16px; }
 
     /* Talk selector: prevent overflow */
     #talk-select { max-width: 100%; }
@@ -211,3 +223,11 @@ summary:focus-visible {
     z-index: 1000;
 }
 #img-modal-close:hover { background: rgba(255,255,255,0.3); }
+
+/* ── Devanagari / Nepali script ─────────────────────────────── */
+/* No font-family override — Nirmala UI (Windows) and system Devanagari fonts
+   render better than Noto Sans Devanagari on most platforms. Spacing only. */
+:lang(ne) #content {
+    line-height: 2.0;
+    font-size: 1.05em;
+}
