@@ -255,9 +255,42 @@ async function waitVisible(page, selector, timeout = 6000) {
     });
   }
 
-  // ── B10. Mobile viewport — talk page renders without horizontal scroll ────────
+  // ── B10. Mobile lang select — .lang-select-mobile injected at ≤600px ────────
   console.log('\n══════════════════════════════════════════');
-  console.log('  B9. MOBILE VIEWPORT — no horizontal overflow');
+  console.log('  B10. MOBILE LANG SELECT — JS-injected select visible at ≤600px');
+  console.log('══════════════════════════════════════════');
+
+  await page.setViewport({ width: 375, height: 812 }); // iPhone viewport
+  await page.goto(PIRIOPOLIS, { waitUntil: 'networkidle0' });
+  await check('Mobile lang select: .lang-select-mobile injected into DOM', async () => {
+    await page.waitForSelector('.lang-select-mobile', { timeout: 5000 });
+  });
+  await check('Mobile lang select: .lang-select-mobile is visible at 375px', async () => {
+    const visible = await page.$eval('.lang-select-mobile', el => {
+      const style = window.getComputedStyle(el);
+      return style.display !== 'none' && style.visibility !== 'hidden';
+    });
+    return visible;
+  });
+  await check('Mobile lang select: .lang-toggle buttons hidden at 375px', async () => {
+    const hidden = await page.$eval('.lang-toggle', el => {
+      return window.getComputedStyle(el).display === 'none';
+    });
+    return hidden;
+  });
+  await check('Mobile lang select: has 3 options (en, es, ne)', async () => {
+    const count = await page.$$eval('.lang-select-mobile option', opts => opts.length);
+    return count === 3;
+  });
+  await check('Mobile lang select: current lang option is selected', async () => {
+    const selected = await page.$eval('.lang-select-mobile', sel => sel.value);
+    return selected && selected.includes('/en/');
+  });
+  await page.setViewport({ width: 1280, height: 800 }); // restore desktop
+
+  // ── B11. Mobile viewport — talk page renders without horizontal scroll ────────
+  console.log('\n══════════════════════════════════════════');
+  console.log('  B11. MOBILE VIEWPORT — no horizontal overflow');
   console.log('══════════════════════════════════════════');
 
   await page.setViewport({ width: 375, height: 812 }); // iPhone 14
@@ -266,8 +299,9 @@ async function waitVisible(page, selector, timeout = 6000) {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     return !overflow;
   });
-  await check('Mobile 375px: lang toggle buttons visible', async () => {
-    await page.waitForSelector('#btn-en', { visible: true, timeout: 3000 });
+  await check('Mobile 375px: lang toggle buttons hidden (select shown instead)', async () => {
+    const hidden = await page.$eval('.lang-toggle', el => window.getComputedStyle(el).display === 'none');
+    return hidden;
   });
   await check('Mobile 375px: transcript content present', async () => {
     const len = await page.$eval('#content', el => el.innerText.length);

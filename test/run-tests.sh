@@ -541,8 +541,129 @@ echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdel
 echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
 echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
 
-# ── 35. Browser tests (Puppeteer) ────────────────────────────────────────────
-section "35. BROWSER TESTS (Puppeteer) — JS runtime features"
+# ── 35. PR #56: og-meta-fixes ────────────────────────────────────────────────
+section "35. PR #56 — OG META: no &amp;mdash;, og:type=article on talk pages"
+for lang in en es ne; do
+  DESC=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" \
+    | grep -o 'name="description"[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+  if echo "$DESC" | grep -q '&amp;'; then
+    fail "$lang: meta description contains &amp; (HTML entity encoding bug): $DESC"
+  else
+    pass "$lang: meta description clean (no &amp; encoding): $DESC"
+  fi
+done
+# og:type must be "article" on talk pages (not "website")
+OGTYPE=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/" \
+  | grep -o 'og:type[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+if [ "$OGTYPE" = 'content="article"' ]; then
+  pass "og:type=article on talk page: $OGTYPE"
+else
+  fail "og:type wrong on talk page (expected article, got): $OGTYPE"
+fi
+# og:type on listing page should still be "website"
+OGTYPE_LIST=$(curl -s "$BASE/events/2026-uruguay/en/" \
+  | grep -o 'og:type[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+if [ "$OGTYPE_LIST" = 'content="website"' ]; then
+  pass "og:type=website on synthesis/listing page (correct)"
+else
+  warn "og:type on synthesis page: $OGTYPE_LIST (expected website)"
+fi
+
+# ── 36. PR #57: devanagari-font ──────────────────────────────────────────────
+section "36. PR #57 — DEVANAGARI FONT: Noto Sans on NE pages only"
+NE_BODY=$(curl -s "$BASE/events/2026-uruguay/ne/20260223-koshas-piriopolis/")
+echo "$NE_BODY" | grep -qi "noto.*sans.*devanagari\|fonts.googleapis.com" \
+  && pass "NE talk page: Noto Sans Devanagari font referenced" \
+  || fail "NE talk page: Noto Sans Devanagari font missing"
+EN_BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$EN_BODY" | grep -qi "noto.*sans.*devanagari" \
+  && fail "EN talk page: Noto Sans Devanagari incorrectly present (should be NE-only)" \
+  || pass "EN talk page: Noto Sans Devanagari absent (correct)"
+
+# ── 37. PR #58: touch-targets ────────────────────────────────────────────────
+section "37. PR #58 — TOUCH TARGETS: 44px audio player + PDF summary"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q "resource-player" && echo "$CSS" | grep -A3 "resource-player" | grep -q "44px" \
+  && pass "shared.css: .resource-player height 44px" \
+  || fail "shared.css: .resource-player height 44px missing (WCAG touch target)"
+echo "$CSS" | grep -q "compact-pdfs.*summary\|summary.*44px\|min-height.*44" \
+  && pass "shared.css: PDF summary min-height 44px" \
+  || fail "shared.css: PDF summary min-height 44px missing"
+# Modal close button should exist in HTML
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q 'img-modal.*button\|modal-close\|×\|✕' \
+  && pass "Talk page: modal close button present" \
+  || fail "Talk page: modal close button missing (touch users need explicit dismiss)"
+
+# ── 38. PR #59: hreflang + canonical ─────────────────────────────────────────
+section "38. PR #59 — HREFLANG + CANONICAL"
+for lang in en es ne; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
+  echo "$BODY" | grep -q 'rel="alternate".*hreflang' \
+    && pass "$lang: hreflang alternates present" \
+    || fail "$lang: hreflang alternates missing"
+  echo "$BODY" | grep -q 'rel="canonical"' \
+    && pass "$lang: canonical link present" \
+    || fail "$lang: canonical link missing"
+  # x-default must point to EN
+  echo "$BODY" | grep 'hreflang.*x-default\|x-default.*hreflang' | grep -q '/en/' \
+    && pass "$lang: hreflang x-default → EN" \
+    || fail "$lang: hreflang x-default missing or not pointing to /en/"
+done
+
+# ── 39. PR #60: sitemap + robots ─────────────────────────────────────────────
+section "39. PR #60 — SITEMAP.XML + ROBOTS.TXT"
+check_http "/events/2026-uruguay/sitemap.xml"
+SITEMAP=$(curl -s "$BASE/events/2026-uruguay/sitemap.xml")
+echo "$SITEMAP" | grep -q "<urlset" \
+  && pass "sitemap.xml: valid XML wrapper" \
+  || fail "sitemap.xml: <urlset> missing"
+# Count URLs — expect at least 15 talk pages + 3 synthesis + 3 glossary
+URL_COUNT=$(echo "$SITEMAP" | grep -c "<loc>")
+[ "$URL_COUNT" -ge 20 ] \
+  && pass "sitemap.xml: $URL_COUNT URLs (≥20 expected)" \
+  || fail "sitemap.xml: only $URL_COUNT URLs (expected ≥20)"
+check_http "/robots.txt"
+ROBOTS=$(curl -s "$BASE/robots.txt")
+echo "$ROBOTS" | grep -q "User-agent" \
+  && pass "robots.txt: User-agent directive present" \
+  || fail "robots.txt: User-agent missing"
+echo "$ROBOTS" | grep -q "Sitemap:" \
+  && pass "robots.txt: Sitemap: directive present" \
+  || fail "robots.txt: Sitemap: directive missing"
+
+# ── 40. PR #61: font-size-tokens ─────────────────────────────────────────────
+section "40. PR #61 — CSS TOKENS + 18px BASE FONT"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q ":root\s*{" \
+  && pass "shared.css: :root block present" \
+  || fail "shared.css: :root block missing (CSS custom properties)"
+echo "$CSS" | grep -q "\-\-color-accent\|--accent\|--color" \
+  && pass "shared.css: CSS custom properties (--color-*) defined" \
+  || fail "shared.css: CSS custom properties missing"
+echo "$CSS" | grep -q "font-size.*18px\|18px.*font-size" \
+  && pass "shared.css: 18px base font-size set" \
+  || fail "shared.css: 18px base font-size missing"
+echo "$CSS" | grep -q "#faf8f5\|faf8f5" \
+  && pass "shared.css: warm background #faf8f5 present" \
+  || fail "shared.css: warm background #faf8f5 missing"
+
+# ── 41. PR #62: lang-select-mobile ───────────────────────────────────────────
+section "41. PR #62 — MOBILE LANG SELECT (JS injection)"
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS" | grep -q "injectLangSelectMobile" \
+  && pass "shared.js: injectLangSelectMobile function present" \
+  || fail "shared.js: injectLangSelectMobile function missing"
+echo "$JS" | grep -q "lang-select-mobile" \
+  && pass "shared.js: lang-select-mobile class injected via JS" \
+  || fail "shared.js: lang-select-mobile class missing from JS"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q "lang-select-mobile" \
+  && pass "shared.css: .lang-select-mobile style defined" \
+  || fail "shared.css: .lang-select-mobile style missing"
+
+# ── 42. Browser tests (Puppeteer) ────────────────────────────────────────────
+section "42. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
   BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"
