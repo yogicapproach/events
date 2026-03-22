@@ -24,7 +24,9 @@ module.exports = function () {
         __dirname, "..", "..", "docs", "events", event.folder,
         `transcript-${lang}.md`
       );
-      matrix.push({ lang, event, transcriptPath });
+      const f = event.folder;
+      const isoDate = `${f.slice(0,4)}-${f.slice(4,6)}-${f.slice(6,8)}`;
+      matrix.push({ lang, event, transcriptPath, isoDate });
     }
   }
   return matrix;
