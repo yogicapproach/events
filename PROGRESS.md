@@ -1,7 +1,61 @@
-# 2026-uruguay — Session Progress
+# Session Progress — yogicapproach/events
 
-Site: https://yogic-approach.github.io/2026-uruguay/
-Repo: https://github.com/yogic-approach/2026-uruguay
+Site: https://yogicapproach.com/events/2026-uruguay/
+Repo: https://github.com/yogicapproach/events
+
+---
+
+## Session: 2026-03-22 — PR Merge Wave: Standards + Lang Toggle
+
+**Focus:** Test and merge PRs in order (#60 → #56 → #59 → #65 → #62); supplement test suite per PR.
+
+**Completed:**
+- **#60 standards/sitemap-robots** — MERGED: sitemap.xml moved to events root (`/sitemap.xml`); robots.txt + sitemap index created in yogicapproach/yogicapproach.github.io root repo; CI issue filed there (#2)
+- **#56 standards/og-meta-fixes** — MERGED: og:type `article` on all talk + synthesis pages; all "Yogaval 2026" hardcoded strings replaced with `{{ site.title }}`; dead `cdn.jsdelivr.net` preconnect and `marked.js` CDN script removed from base.njk
+- **#59 standards/hreflang-canonical** — MERGED: canonical + hreflang EN/ES/NE/x-default on all lang pages
+- **#65 standards/json-ld** — MERGED: Article JSON-LD with `description_en` + `abstract_en` drafted from transcripts for all 5 talks; `folderToIsoDate` Eleventy filter added; `publisher`, `isPartOf`, `datePublished` fields; synthesis pages also get Article JSON-LD
+- **#62 design/lang-select-mobile** — MERGED: 4-stage progressive lang toggle (full → compact → abbreviated → select); abbreviated labels Eng./Esp./नेप. + Orig./IA Trad./AI अनु. with period; localized "Select language:" label in select; dead `marked.use()` block removed from shared.js; `docs.google.com` preconnect removed
+- Test suite updated for each PR: §33 (dead preconnects absent), §37 (compression spans), browser-tests B10 (420px abbreviated / 350px select)
+- PENDING-TASK.md protocol formalized in global CLAUDE.md memory
+
+**PRs merged:** #60, #56, #59, #65, #62
+**Issues closed:** (inline with PRs above)
+**Bugs caught during testing:**
+- Squash merge captured old remote branch (not local fix) — fix: always push before merge
+- `{{ item.isoDate }}` inaccessible from Nunjucks block scope in paginated templates — fixed via `folderToIsoDate` filter
+- `og_type` frontmatter override not working in content-injected layouts — fixed by reading variable in base.njk block
+- Branch regressions on merge (missing earlier fixes) — fixed by `git merge main` before each PR merge
+
+**Remaining PRs:** #66, #57, #58, #61, #67 (last)
+
+---
+
+## Session: 2026-03-22 — Design/Standards PR Wave + URL Architecture
+
+**Focus:** Create 9 feature branches (PRs #56–#62) from issues #54/#55; establish URL architecture direction.
+
+**Completed:**
+- Deleted `TODO.txt`; rewrote `README.md` (correct URL, 5 talks, trilingual, Eleventy); rewrote `TODO.md` (new issue numbers)
+- `site.json`: updated `baseUrl` → `https://yogicapproach.com/events`, `ogImage` → favicon, `title` → "Uruguay 2026 — Exploring the Koshas"
+- Site title updated across `base.njk` and all 3 synthesis page frontmatter (`en/index.njk`, `es/index.njk`, `ne/index.njk`)
+- Fixed `&mdash;` → `—` (em dash) in all 15 subtitle fields in `events.json` to prevent `&amp;mdash;` appearing in meta tags
+- Bajomana Ma resource label fixed to "Intermission Kirtan" / "Kirtan del intermedio" / "मध्यान्तर कीर्तन"
+- Design analysis written up as issues #54 (design review) and #55 (deep-dive: mobile, accessibility, standards, A/B)
+- 5 PRs created from agents (rescued from worktree Bash permission failure): #56 og-meta-fixes, #57 devanagari-font, #58 touch-targets, #59 hreflang-canonical, #60 sitemap-robots
+- PR #61: `design/font-size-tokens` — `:root` 18px, CSS custom properties, warm background `#faf8f5`
+- PR #62: `design/lang-select-mobile` — JS-injected `<select>` via `shared.js`; works across all pages without template changes
+- Issue #63: URL architecture analysis — lang at root (`/en/...`) confirmed as direction; full migration plan written up
+- `PENDING-TASK.md` updated with full state for context recovery
+
+**Issues opened:** #54, #55, #63
+**PRs opened:** #56, #57, #58, #59, #60, #61, #62
+**Branches created:** standards/og-meta-fixes, design/devanagari-font, design/touch-targets, standards/hreflang-canonical, standards/sitemap-robots, design/font-size-tokens, design/lang-select-mobile
+
+**Still open (not yet built):**
+- `standards/json-ld` — Article + WebSite JSON-LD structured data
+- `design/ab-theme-flag` — `?theme=v2` CSS scoping mechanism
+
+**Next session:** Test PRs #56–#62 locally → merge one at a time → then build json-ld + ab-theme-flag → then tackle #63 (lang-at-root migration)
 
 ---
 

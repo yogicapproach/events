@@ -36,17 +36,33 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
   {%- set _subtitle = ev.subtitle_en -%}
 {%- endif -%}
 
-{% block page_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block og_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block twitter_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block meta_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block og_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block twitter_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
+{% block page_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block og_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block twitter_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block meta_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block og_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block twitter_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
 
+{% block og_type %}article{% endblock %}
 {% block head_extra %}
 <style>
   #resources-section { display: none; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ _title | dump | safe }},
+  "description": {{ ev.description_en | dump | safe }},
+  "abstract": {{ ev.abstract_en | dump | safe }},
+  "author": {"@type": "Person", "name": "Satchidananda"},
+  "publisher": {"@type": "Organization", "name": "YogicApproach", "url": "https://yogicapproach.com"},
+  "datePublished": "{{ talkFolder | folderToIsoDate }}",
+  "inLanguage": "{{ lang }}",
+  "isPartOf": {"@type": "WebSite", "name": {{ site.title | dump | safe }}, "url": "{{ site.baseUrl }}/2026-uruguay/{{ lang }}/"},
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 {% endblock %}
 
 {% block header %}
@@ -94,15 +110,15 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
     <a href="{{ siteRoot }}/2026-uruguay/en/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'en' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'en' else 'false' }}"
-       id="btn-en">English<span class="lang-sublabel">Original</span></a>
+       id="btn-en"><span class="lang-full">English</span><span class="lang-abbr" aria-hidden="true">Eng.</span><span class="lang-sublabel lang-sublabel-full">Original</span><span class="lang-sublabel lang-sublabel-abbr" aria-hidden="true">Orig.</span></a>
     <a href="{{ siteRoot }}/2026-uruguay/es/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'es' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'es' else 'false' }}"
-       id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
+       id="btn-es"><span class="lang-full">Español</span><span class="lang-abbr" aria-hidden="true">Esp.</span><span class="lang-sublabel lang-sublabel-full">IA Traducido</span><span class="lang-sublabel lang-sublabel-abbr" aria-hidden="true">IA Trad.</span></a>
     <a href="{{ siteRoot }}/2026-uruguay/ne/{{ talkFolder }}/"
        class="lang-btn{% if lang == 'ne' %} active{% endif %}"
        role="button" aria-pressed="{{ 'true' if lang == 'ne' else 'false' }}"
-       id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
+       id="btn-ne"><span class="lang-full">नेपाली</span><span class="lang-abbr" aria-hidden="true">नेप.</span><span class="lang-sublabel lang-sublabel-full">AI अनुवादित</span><span class="lang-sublabel lang-sublabel-abbr" aria-hidden="true">AI अनु.</span></a>
   </div>
 
   {# ── Resources section (populated at runtime by shared.js loadResources()) #}
@@ -119,6 +135,7 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
 
   {# ── Image modal ─────────────────────────────────────────────────────── #}
   <div id="img-modal" onclick="this.classList.remove('open')">
+    <button id="img-modal-close" onclick="event.stopPropagation();document.getElementById('img-modal').classList.remove('open')" aria-label="Close image">&#x2715;</button>
     <img id="img-modal-img" src="" alt="">
   </div>
 {% endblock %}
