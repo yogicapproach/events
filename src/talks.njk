@@ -53,9 +53,13 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": {{ _title | dump | safe }},
+  "description": {{ ev.description_en | dump | safe }},
+  "abstract": {{ ev.abstract_en | dump | safe }},
   "author": {"@type": "Person", "name": "Satchidananda"},
-  "datePublished": "{{ item.isoDate }}",
+  "publisher": {"@type": "Organization", "name": "YogicApproach", "url": "https://yogicapproach.com"},
+  "datePublished": "{{ talkFolder | folderToIsoDate }}",
   "inLanguage": "{{ lang }}",
+  "isPartOf": {"@type": "WebSite", "name": {{ site.title | dump | safe }}, "url": "{{ site.baseUrl }}/2026-uruguay/{{ lang }}/"},
   "url": "{{ site.baseUrl }}{{ page.url }}"
 }
 </script>
