@@ -28,6 +28,13 @@
   <link rel="stylesheet" href="{{ '/2026-uruguay/events/shared.css' | url }}">
   {# Supplemental styles for Eleventy-specific HTML (lang-btn <a> elements, etc.) #}
   <link rel="stylesheet" href="{{ '/2026-uruguay/assets/eleventy-extra.css' | url }}">
+  {% if lang %}
+  <link rel="canonical" href="{{ site.baseUrl }}{{ page.url }}">
+  <link rel="alternate" hreflang="en" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/en/') }}">
+  <link rel="alternate" hreflang="es" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/es/') }}">
+  <link rel="alternate" hreflang="ne" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/ne/') }}">
+  <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/en/') }}">
+  {% endif %}
   {% block head_extra %}{% endblock %}
 </head>
 <body>
