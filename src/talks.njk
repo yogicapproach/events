@@ -47,6 +47,17 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
 <style>
   #resources-section { display: none; }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ _title | dump | safe }},
+  "author": {"@type": "Person", "name": "Satchidananda"},
+  "datePublished": "{{ item.isoDate }}",
+  "inLanguage": "{{ lang }}",
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 {% endblock %}
 
 {% block header %}

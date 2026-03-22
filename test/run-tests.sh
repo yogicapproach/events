@@ -541,8 +541,46 @@ echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdel
 echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
 echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
 
-# ── 35. Browser tests (Puppeteer) ────────────────────────────────────────────
-section "35. BROWSER TESTS (Puppeteer) — JS runtime features"
+# ── 35. JSON-LD structured data ──────────────────────────────────────────────
+section "35. JSON-LD STRUCTURED DATA"
+# Talk pages must have Article JSON-LD with required fields
+for folder in "${FOLDERS[@]}"; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/en/$folder/")
+  if echo "$BODY" | grep -q '"@type": "Article"'; then
+    pass "JSON-LD Article present: en/$folder"
+  else
+    fail "JSON-LD Article missing: en/$folder"
+  fi
+  if echo "$BODY" | grep -q '"author"'; then
+    pass "JSON-LD author field: en/$folder"
+  else
+    fail "JSON-LD author field missing: en/$folder"
+  fi
+  if echo "$BODY" | grep -q '"datePublished"'; then
+    pass "JSON-LD datePublished field: en/$folder"
+  else
+    fail "JSON-LD datePublished missing: en/$folder"
+  fi
+done
+# datePublished must be ISO format (YYYY-MM-DD)
+DATE_CHECK=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/" | grep -o '"datePublished": "[^"]*"')
+if echo "$DATE_CHECK" | grep -qE '"datePublished": "20[0-9]{2}-[0-9]{2}-[0-9]{2}"'; then
+  pass "JSON-LD datePublished is ISO 8601: $DATE_CHECK"
+else
+  fail "JSON-LD datePublished not ISO 8601: $DATE_CHECK"
+fi
+# Synthesis pages must have Article JSON-LD with inLanguage
+for lang in en es ne; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/")
+  if echo "$BODY" | grep -q '"@type": "Article"' && echo "$BODY" | grep -q "\"inLanguage\": \"$lang\""; then
+    pass "JSON-LD Article + inLanguage=$lang on synthesis/$lang"
+  else
+    fail "JSON-LD missing or wrong on synthesis/$lang"
+  fi
+done
+
+# ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
+section "36. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
   BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"

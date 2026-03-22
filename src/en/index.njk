@@ -41,6 +41,16 @@ footerNavLabel: "&#8592; Browse Individual Talks"
   {% renderMarkdownFile _synthPath, "en" %}
 </div>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Synthesis of Talks — Exploring the Koshas",
+  "author": {"@type": "Organization", "name": "YogicApproach"},
+  "inLanguage": "en",
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     if (typeof updateTopbar === "function") updateTopbar("en");
