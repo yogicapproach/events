@@ -1,7 +1,7 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: 58cbdd2
+Last commit on main: 2c5e7cf
 
 ---
 
@@ -15,8 +15,8 @@ Last commit on main: 58cbdd2
 - [x] #62 design/lang-select-mobile — MERGED ✓ (progressive compression: full→compact→abbreviated→select; dead code removed)
 - [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign needed; revisit after #61 merged)
 - [x] #57 design/devanagari-font — MERGED ✓ (spacing only; Nirmala UI system font retained)
-- [ ] #58 design/touch-targets — visual audio player + PDF check ← **NEXT**
-- [ ] #61 design/font-size-tokens — visual font/background check
+- [x] #58 design/touch-targets — MERGED ✓ (44px audio/PDF targets, X modal button, overlay 0.50)
+- [ ] #61 design/font-size-tokens — visual font/background check ← **NEXT**
 - [ ] #67 test/regression-wave-1 — merge last after all others pass
 
 **Protocol per PR:**
