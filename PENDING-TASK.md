@@ -1,7 +1,7 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: b1541ae
+Last commit on main: e17a74a
 
 ---
 
@@ -12,8 +12,8 @@ Last commit on main: b1541ae
 - [x] #56 standards/og-meta-fixes — MERGED ✓ (og:type article on talk+synthesis; Yogaval → site.title)
 - [x] #59 standards/hreflang-canonical — MERGED ✓ (canonical + hreflang EN/ES/NE/x-default on all pages)
 - [x] #65 standards/json-ld — MERGED ✓ (Article JSON-LD with description, abstract, publisher, isPartOf)
-- [ ] #62 design/lang-select-mobile — JS source + mobile viewport ← **CURRENTLY TESTING**
-- [ ] #66 design/ab-theme-flag — ?theme=v2 URL behavior
+- [x] #62 design/lang-select-mobile — MERGED ✓ (progressive compression: full→compact→abbreviated→select; dead code removed)
+- [ ] #66 design/ab-theme-flag — ?theme=v2 URL behavior ← **NEXT**
 - [ ] #57 design/devanagari-font — visual NE page check
 - [ ] #58 design/touch-targets — visual audio player + PDF check
 - [ ] #61 design/font-size-tokens — visual font/background check
