@@ -1,7 +1,7 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: 2c5e7cf
+Last commit on main: 3449c49
 
 ---
 
@@ -16,8 +16,8 @@ Last commit on main: 2c5e7cf
 - [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign needed; revisit after #61 merged)
 - [x] #57 design/devanagari-font — MERGED ✓ (spacing only; Nirmala UI system font retained)
 - [x] #58 design/touch-targets — MERGED ✓ (44px audio/PDF targets, X modal button, overlay 0.50)
-- [ ] #61 design/font-size-tokens — visual font/background check ← **NEXT**
-- [ ] #67 test/regression-wave-1 — merge last after all others pass
+- [x] #61 design/font-size-tokens — MERGED ✓ (CSS tokens, 18px base, #f7f7f7 background)
+- [ ] #67 test/regression-wave-1 — merge last after all others pass ← **NEXT**
 
 **Protocol per PR:**
 1. `git checkout <branch> && npm run build`
