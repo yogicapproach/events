@@ -32,6 +32,8 @@
   <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/en/') }}">
   {% endif %}
   {% block head_extra %}{% endblock %}
+  <!-- A/B theme flag: ?theme=v2 sets data-theme="v2" on <html> for scoped variant styles -->
+  <script>(function(){if(new URLSearchParams(window.location.search).get('theme')==='v2'){document.documentElement.setAttribute('data-theme','v2');}}());</script>
 </head>
 <body>
   {# Topbar (#topbar div) is injected at DOMContentLoaded by shared.js.

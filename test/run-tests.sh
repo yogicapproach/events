@@ -609,6 +609,24 @@ echo "$JS" | grep -q 'lang-select-label'           && pass "shared.js: lang-sele
 echo "$JS" | grep -q 'Select language:'            && pass "shared.js: EN select label text present" || fail "shared.js: EN select label text missing"
 echo "$JS" | grep -q 'Seleccionar idioma:'         && pass "shared.js: ES select label text present" || fail "shared.js: ES select label text missing"
 
+# ── 38. A/B theme flag ───────────────────────────────────────────────────────
+section "38. A/B THEME FLAG — ?theme=v2 mechanism"
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS" | grep -q "injectThemeFeedback" \
+  && pass "shared.js: injectThemeFeedback function present" \
+  || fail "shared.js: injectThemeFeedback function missing"
+echo "$JS" | grep -q "theme/v2/" \
+  && pass "shared.js: GoatCounter theme/v2/ event path present" \
+  || fail "shared.js: GoatCounter theme/v2/ path missing"
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q "data-theme.*v2\|theme.*v2" \
+  && pass "base.njk: theme flag script present in HTML" \
+  || fail "base.njk: theme flag script missing from HTML"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q "theme-feedback-bar" \
+  && pass "shared.css: .theme-feedback-bar style defined" \
+  || fail "shared.css: .theme-feedback-bar style missing"
+
 # ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
 section "36. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
