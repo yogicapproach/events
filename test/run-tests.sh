@@ -534,12 +534,20 @@ else
   fail "404: _site/404.html not found"
 fi
 
-# ── 33. CDN preconnects + marked.js ──────────────────────────────────────────
-section "33. CDN PRECONNECTS + MARKED.JS"
+# ── 33. CDN preconnects — removed dead, kept active ──────────────────────────
+section "33. CDN PRECONNECTS — removed dead, kept active"
 BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
-echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdelivr" || fail "preconnect: cdn.jsdelivr missing"
-echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
-echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
+# Active: GoatCounter (analytics)
+echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'    && pass "preconnect: gc.zgo.at (GoatCounter) present" || fail "preconnect: gc.zgo.at missing"
+# Removed: cdn.jsdelivr (marked.js CDN — unused on Eleventy pages; transcripts rendered at build time)
+echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && fail "preconnect: cdn.jsdelivr should be removed (was unused)" || pass "preconnect: cdn.jsdelivr correctly absent"
+# Removed: docs.google.com (forms open in new tabs — preconnect provides no benefit to current page)
+echo "$BODY" | grep -q 'preconnect.*docs.google'  && fail "preconnect: docs.google.com should be removed (forms open in new tab)" || pass "preconnect: docs.google.com correctly absent"
+# Removed: marked.js CDN script tag
+echo "$BODY" | grep -q 'marked@15'                && fail "marked.js CDN script still present (should be removed)" || pass "marked.js CDN script correctly absent"
+# Removed: marked.use() dead code from shared.js
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS"  | grep -q 'marked\.use'               && fail "marked.use() dead code still in shared.js" || pass "marked.use() dead code correctly removed"
 
 # ── 35. JSON-LD structured data ──────────────────────────────────────────────
 section "35. JSON-LD STRUCTURED DATA"
@@ -578,6 +586,28 @@ for lang in en es ne; do
     fail "JSON-LD missing or wrong on synthesis/$lang"
   fi
 done
+
+# ── 37. Lang toggle — progressive compression spans ─────────────────────────
+section "37. LANG TOGGLE — progressive compression"
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+# Full/abbreviated wrapper spans present in HTML
+echo "$BODY" | grep -q 'class="lang-full"'        && pass "lang-full spans present in HTML" || fail "lang-full spans missing from HTML"
+echo "$BODY" | grep -q 'class="lang-abbr"'        && pass "lang-abbr spans present in HTML" || fail "lang-abbr spans missing from HTML"
+echo "$BODY" | grep -q 'lang-sublabel-full'        && pass "lang-sublabel-full spans present" || fail "lang-sublabel-full spans missing"
+echo "$BODY" | grep -q 'lang-sublabel-abbr'        && pass "lang-sublabel-abbr spans present" || fail "lang-sublabel-abbr spans missing"
+# Abbreviated text values (with period per house style)
+echo "$BODY" | grep -q '>Eng\.'                    && pass "Eng. abbreviation present"     || fail "Eng. abbreviation missing"
+echo "$BODY" | grep -q '>Esp\.'                    && pass "Esp. abbreviation present"     || fail "Esp. abbreviation missing"
+echo "$BODY" | grep -q 'नेप\.'                     && pass "नेप. abbreviation present"    || fail "नेप. abbreviation missing"
+echo "$BODY" | grep -q '>Orig\.'                   && pass "Orig. sublabel present"        || fail "Orig. sublabel missing"
+echo "$BODY" | grep -q 'IA Trad\.'                 && pass "IA Trad. sublabel present"     || fail "IA Trad. sublabel missing"
+echo "$BODY" | grep -q 'AI अनु\.'                  && pass "AI अनु. sublabel present"     || fail "AI अनु. sublabel missing"
+# lang-select-wrapper and lang-select-label injected by shared.js
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS" | grep -q 'lang-select-wrapper'         && pass "shared.js: lang-select-wrapper present" || fail "shared.js: lang-select-wrapper missing"
+echo "$JS" | grep -q 'lang-select-label'           && pass "shared.js: lang-select-label present"   || fail "shared.js: lang-select-label missing"
+echo "$JS" | grep -q 'Select language:'            && pass "shared.js: EN select label text present" || fail "shared.js: EN select label text missing"
+echo "$JS" | grep -q 'Seleccionar idioma:'         && pass "shared.js: ES select label text present" || fail "shared.js: ES select label text missing"
 
 # ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
 section "36. BROWSER TESTS (Puppeteer) — JS runtime features"

@@ -392,13 +392,6 @@ function loadEventsList(lang) {
     });
 }
 
-// Configure marked link renderer (only on pages that load marked)
-if (typeof marked !== 'undefined') {
-    marked.use({ renderer: { link({ href, title, text }) {
-        return `<a href="${href}"${title ? ` title="${title}"` : ''} target="_blank" rel="noopener">${text}</a>`;
-    } } });
-}
-
 function injectLangSelectMobile() {
     var toggle = document.querySelector('.lang-toggle');
     if (!toggle) return;
@@ -408,25 +401,39 @@ function injectLangSelectMobile() {
     if (!pathMatch) return;
     var currentLang = pathMatch[1];
 
-    var labels = {
+    var optionLabels = {
         en: 'English \u2014 Original',
         es: 'Espa\u00f1ol \u2014 IA Traducido',
         ne: '\u0928\u0947\u092a\u093e\u0932\u0940 \u2014 AI \u0905\u0928\u0941\u0935\u093e\u0926\u093f\u0924'
     };
+    var selectLabels = {
+        en: 'Select language:',
+        es: 'Seleccionar idioma:',
+        ne: '\u092d\u093e\u0937\u093e \u091b\u093e\u0928\u094d\u0928\u0941\u0939\u094b\u0938\u094d:'
+    };
 
     var sel = document.createElement('select');
     sel.className = 'lang-select-mobile';
-    sel.setAttribute('aria-label', 'Select language');
+    sel.setAttribute('aria-label', selectLabels[currentLang] || selectLabels.en);
     ['en', 'es', 'ne'].forEach(function(l) {
         var opt = document.createElement('option');
         // Swap the lang segment in the current path — works for any URL depth
         opt.value = window.location.pathname.replace('/' + currentLang + '/', '/' + l + '/');
-        opt.textContent = labels[l];
+        opt.textContent = optionLabels[l];
         if (l === currentLang) opt.selected = true;
         sel.appendChild(opt);
     });
     sel.addEventListener('change', function() { window.location.href = this.value; });
-    toggle.parentNode.insertBefore(sel, toggle.nextSibling);
+
+    var labelEl = document.createElement('span');
+    labelEl.className = 'lang-select-label';
+    labelEl.textContent = selectLabels[currentLang] || selectLabels.en;
+
+    var wrapper = document.createElement('div');
+    wrapper.className = 'lang-select-wrapper';
+    wrapper.appendChild(labelEl);
+    wrapper.appendChild(sel);
+    toggle.parentNode.insertBefore(wrapper, toggle.nextSibling);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
