@@ -1,9 +1,26 @@
 /* shared.css — common styles for all event transcript pages */
 
+/* ── Design tokens ───────────────────────────────────────────── */
+:root {
+    --color-accent: #2a6496;
+    --color-text: #333;
+    --color-text-muted: #666;
+    --color-text-faint: #999;
+    --color-border: #ddd;
+    --color-bg: #faf8f5;
+    --color-bg-subtle: #f5f5f5;
+    --font-body: Georgia, 'Times New Roman', serif;
+    --font-ui: system-ui, -apple-system, sans-serif;
+    --font-size-base: 18px;
+    --line-height-body: 1.8;
+    --max-width: 800px;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Georgia, 'Times New Roman', serif; line-height: 1.7; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid #ddd; margin-bottom: 20px; }
-header h1 { font-size: 1.5em; margin-bottom: 5px; }
+html { font-size: var(--font-size-base); }
+body { font-family: var(--font-body); line-height: var(--line-height-body); color: var(--color-text); background: var(--color-bg); max-width: var(--max-width); margin: 0 auto; padding: 20px; }
+header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid var(--color-border); margin-bottom: 20px; }
+header h1 { font-size: 1.8em; margin-bottom: 5px; }
 header p { color: #666; font-size: 0.95em; }
 .lang-toggle { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
 .lang-toggle button {
@@ -26,12 +43,12 @@ header p { color: #666; font-size: 0.95em; }
     gap: 4px;
     margin: -20px -20px 20px -20px;
 }
-.topbar-credit a { color: #2a6496; text-decoration: none; }
+.topbar-credit a { color: var(--color-accent); text-decoration: none; }
 .topbar-credit a:hover { text-decoration: underline; }
 .topbar-links { display: flex; align-items: center; gap: 6px; }
-.topbar-links a { color: #2a6496; text-decoration: none; }
+.topbar-links a { color: var(--color-accent); text-decoration: none; }
 .topbar-links a:hover { text-decoration: underline; }
-.topbar-sep { color: #2a6496; }
+.topbar-sep { color: var(--color-accent); }
 .lang-sublabel { display: block; font-size: 0.65em; opacity: 0.75; }
 #content { padding: 10px 0; }
 #content h1 { font-size: 1.6em; margin: 1.5em 0 0.5em; }
@@ -44,7 +61,7 @@ header p { color: #666; font-size: 0.95em; }
 #content blockquote { border-left: 3px solid #ccc; padding-left: 1em; color: #666; margin: 1em 0; }
 #content em { font-style: italic; }
 #content strong { font-weight: bold; }
-#content a { color: #2a6496; }
+#content a { color: var(--color-accent); }
 #loading { text-align: center; padding: 40px; color: #999; }
 footer {
     display: block;
@@ -74,10 +91,10 @@ footer {
     color: #666;
     gap: 4px;
 }
-.footer-bar .site-credit a { color: #2a6496; text-decoration: none; }
+.footer-bar .site-credit a { color: var(--color-accent); text-decoration: none; }
 .footer-bar .site-credit a:hover { text-decoration: underline; }
 .footer-links { display: flex; align-items: center; gap: 6px; }
-.footer-links a { color: #2a6496; text-decoration: none; }
+.footer-links a { color: var(--color-accent); text-decoration: none; }
 .footer-links a:hover { text-decoration: underline; }
 
 /* Resources section */
@@ -106,7 +123,7 @@ footer {
 .resource-title { font-weight: bold; font-size: 0.95em; margin-bottom: 1px; }
 .resource-meta { font-size: 0.82em; color: #888; margin-bottom: 6px; }
 .resource-player { width: 100%; height: 32px; margin-top: 6px; }
-.resource-download { font-size: 0.82em; color: #2a6496; text-decoration: none; }
+.resource-download { font-size: 0.82em; color: var(--color-accent); text-decoration: none; }
 .resource-download:hover { text-decoration: underline; }
 .resource-pdfs { margin-top: 12px; }
 .resource-pdfs-heading {
@@ -114,7 +131,7 @@ footer {
     color: #aaa; margin-bottom: 8px;
 }
 .resource-pdf-item { margin: 5px 0; font-size: 0.88em; }
-.resource-pdf-item a { color: #2a6496; text-decoration: none; }
+.resource-pdf-item a { color: var(--color-accent); text-decoration: none; }
 .resource-pdf-item a:hover { text-decoration: underline; }
 .lang-badge {
     display: inline-block; font-size: 0.72em; background: #f0f0f0;
