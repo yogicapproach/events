@@ -199,3 +199,18 @@ summary:focus-visible {
     transition: top 0.2s;
 }
 .skip-nav:focus { top: 0; }
+
+/* ── Devanagari / Nepali script ─────────────────────────────── */
+:lang(ne) body,
+:lang(ne) #content,
+:lang(ne) .lang-toggle {
+    font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif;
+}
+:lang(ne) #content {
+    line-height: 2.0;
+    font-size: 1.05em;
+}
+:lang(ne) header h1,
+:lang(ne) header p {
+    font-family: 'Noto Sans Devanagari', 'Noto Sans', sans-serif;
+}
