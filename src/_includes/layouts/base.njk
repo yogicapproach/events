@@ -6,7 +6,7 @@
   <title>{% block page_title %}{{ title }}{% if title %} | {% endif %}{{ site.title }}{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{{ description | default('Talks by Satchidananda — Uruguay, February 2026. Transcripts in English, Spanish, and Nepali.') }}{% endblock %}">
   <meta name="author" content="Satchidananda">
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="{% block og_type %}{{ og_type | default('website') }}{% endblock %}">
   <meta property="og:title" content="{% block og_title %}{{ ogTitle | default(title) }}{% if ogTitle or title %} | {% endif %}{{ site.title }}{% endblock %}">
   <meta property="og:description" content="{% block og_description %}{{ description | default('Talks by Satchidananda — Uruguay, February 2026.') }}{% endblock %}">
   <meta property="og:url" content="{{ site.baseUrl }}{{ ogUrl | default(page.url) }}">
@@ -21,12 +21,20 @@
   <link rel="icon" type="image/x-icon" href="{{ '/2026-uruguay/favicon.ico' | url }}">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ '/2026-uruguay/favicon.png' | url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ '/2026-uruguay/apple-touch-icon.png' | url }}">
+  <link rel="sitemap" type="application/xml" href="{{ '/sitemap.xml' | url }}">
   {# marked.js kept for runtime needs (loadResources audio players, etc.) #}
   <script src="https://cdn.jsdelivr.net/npm/marked@15.0.4/marked.min.js"></script>
   {# shared.css — same file as used by the legacy docs/ site #}
   <link rel="stylesheet" href="{{ '/2026-uruguay/events/shared.css' | url }}">
   {# Supplemental styles for Eleventy-specific HTML (lang-btn <a> elements, etc.) #}
   <link rel="stylesheet" href="{{ '/2026-uruguay/assets/eleventy-extra.css' | url }}">
+  {% if lang %}
+  <link rel="canonical" href="{{ site.baseUrl }}{{ page.url }}">
+  <link rel="alternate" hreflang="en" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/en/') }}">
+  <link rel="alternate" hreflang="es" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/es/') }}">
+  <link rel="alternate" hreflang="ne" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/ne/') }}">
+  <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}{{ page.url | replace('/' + lang + '/', '/en/') }}">
+  {% endif %}
   {% block head_extra %}{% endblock %}
 </head>
 <body>
