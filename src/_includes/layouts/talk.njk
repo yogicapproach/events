@@ -78,6 +78,7 @@
 
   {# ── Image modal ─────────────────────────────────────────────────────── #}
   <div id="img-modal" onclick="this.classList.remove('open')">
+    <button id="img-modal-close" aria-label="Close image" onclick="document.getElementById('img-modal').classList.remove('open'); event.stopPropagation();">&#x2715;</button>
     <img id="img-modal-img" src="" alt="">
   </div>
 {% endblock %}
