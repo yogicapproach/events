@@ -1,15 +1,15 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: 9757a10
+Last commit on main: 1413d15
 
 ---
 
 ## Active Work: Testing + Merging PRs One by One
 
 **Order (easiest → hardest to verify):**
-- [ ] #60 standards/sitemap-robots — sitemap.xml + robots.txt ← **CURRENTLY TESTING**
-- [ ] #56 standards/og-meta-fixes — og:type + meta description source check
+- [x] #60 standards/sitemap-robots — MERGED ✓ (sitemap at events root; root repo gets robots.txt + sitemap index)
+- [ ] #56 standards/og-meta-fixes — og:type + meta description source check ← **CURRENTLY TESTING**
 - [ ] #59 standards/hreflang-canonical — hreflang + canonical source check
 - [ ] #65 standards/json-ld — JSON-LD source check
 - [ ] #62 design/lang-select-mobile — JS source + mobile viewport
@@ -29,7 +29,7 @@ Last commit on main: 9757a10
 
 ## Flags Noted During Testing
 
-- **#60**: `robots.txt` deploys to `yogicapproach.com/events/robots.txt` not domain root — structural GitHub Pages subdirectory limitation. Not blocking; noted on PR.
+- **#60**: `robots.txt` domain root handled by `yogicapproach/yogicapproach.github.io`. Section sitemap correctly at `yogicapproach.com/events/sitemap.xml`. CI issue filed at root repo (#2). Root repo issue #1 closed.
 
 ---
 
