@@ -135,6 +135,7 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
 
   {# ── Image modal ─────────────────────────────────────────────────────── #}
   <div id="img-modal" onclick="this.classList.remove('open')">
+    <button id="img-modal-close" onclick="event.stopPropagation();document.getElementById('img-modal').classList.remove('open')" aria-label="Close image">&#x2715;</button>
     <img id="img-modal-img" src="" alt="">
   </div>
 {% endblock %}
