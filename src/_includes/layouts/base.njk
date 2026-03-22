@@ -28,6 +28,8 @@
   {# Supplemental styles for Eleventy-specific HTML (lang-btn <a> elements, etc.) #}
   <link rel="stylesheet" href="{{ '/2026-uruguay/assets/eleventy-extra.css' | url }}">
   {% block head_extra %}{% endblock %}
+  <!-- A/B theme flag: ?theme=v2 sets data-theme="v2" on <html> for scoped variant styles -->
+  <script>(function(){if(new URLSearchParams(window.location.search).get('theme')==='v2'){document.documentElement.setAttribute('data-theme','v2');}}());</script>
 </head>
 <body>
   {# Topbar (#topbar div) is injected at DOMContentLoaded by shared.js.

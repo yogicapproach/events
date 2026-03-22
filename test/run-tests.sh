@@ -541,8 +541,25 @@ echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdel
 echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
 echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
 
-# ── 35. Browser tests (Puppeteer) ────────────────────────────────────────────
-section "35. BROWSER TESTS (Puppeteer) — JS runtime features"
+# ── 35. A/B theme flag ───────────────────────────────────────────────────────
+section "35. A/B THEME FLAG — ?theme=v2 mechanism"
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS" | grep -q "injectThemeFeedback" \
+  && pass "shared.js: injectThemeFeedback function present" \
+  || fail "shared.js: injectThemeFeedback function missing"
+echo "$JS" | grep -q "theme/v2/" \
+  && pass "shared.js: GoatCounter theme/v2/ event path present" \
+  || fail "shared.js: GoatCounter theme/v2/ path missing"
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q "data-theme.*v2\|theme.*v2" \
+  && pass "base.njk: theme flag script present in HTML" \
+  || fail "base.njk: theme flag script missing from HTML"
+echo "$BODY" | grep -q "theme-feedback-bar\|theme-feedback" \
+  && pass "shared.css: .theme-feedback-bar style referenced" \
+  || warn "shared.css: .theme-feedback-bar not referenced inline (check shared.css)"
+
+# ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
+section "36. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
   BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"

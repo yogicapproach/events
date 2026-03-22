@@ -199,3 +199,28 @@ summary:focus-visible {
     transition: top 0.2s;
 }
 .skip-nav:focus { top: 0; }
+
+/* ── A/B theme feedback bar ──────────────────────────────────── */
+.theme-feedback-bar {
+    position: fixed; bottom: 12px; right: 12px;
+    background: #333; color: #fff;
+    padding: 8px 14px; border-radius: 8px;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.85em; z-index: 998;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.theme-feedback-text { color: #fff; white-space: nowrap; }
+.theme-feedback-btn {
+    background: none; border: none; color: inherit;
+    font-size: 1.4em; cursor: pointer; line-height: 1;
+    padding: 2px; min-width: 44px; min-height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px; transition: transform 0.15s;
+}
+.theme-feedback-btn:hover { transform: scale(1.2); }
+.theme-feedback-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+/* ── Design v2 experiment styles (A/B via ?theme=v2) ─────────── */
+/* All v2 overrides scoped to [data-theme="v2"] — zero impact on production.  */
+/* Add styles here during experiments; promote winners by removing the scope. */
+/* Example: [data-theme="v2"] body { font-size: 18px; background: #faf8f5; } */

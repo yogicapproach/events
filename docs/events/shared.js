@@ -392,6 +392,37 @@ function loadEventsList(lang) {
     });
 }
 
+function injectThemeFeedback() {
+    if (document.documentElement.getAttribute('data-theme') !== 'v2') return;
+    var key = 'theme-v2-voted';
+    if (localStorage.getItem(key)) return; // already voted — don't show again
+
+    var bar = document.createElement('div');
+    bar.id = 'theme-feedback';
+    bar.className = 'theme-feedback-bar';
+    bar.setAttribute('role', 'region');
+    bar.setAttribute('aria-label', 'Theme feedback');
+    bar.innerHTML =
+        '<span class="theme-feedback-text">How does this look?</span>' +
+        '<button class="theme-feedback-btn" data-vote="like" aria-label="Looks good">&#128077;</button>' +
+        '<button class="theme-feedback-btn" data-vote="dislike" aria-label="Not for me">&#128078;</button>';
+
+    bar.querySelectorAll('.theme-feedback-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var vote = this.getAttribute('data-vote');
+            // GoatCounter custom event — view at https://yogicapproach.goatcounter.com
+            if (window.goatcounter && typeof window.goatcounter.count === 'function') {
+                window.goatcounter.count({ path: 'theme/v2/' + vote });
+            }
+            localStorage.setItem(key, vote);
+            bar.innerHTML = '<span class="theme-feedback-text">Thanks! &#x1F64F;</span>';
+            setTimeout(function() { bar.style.display = 'none'; }, 2000);
+        });
+    });
+
+    document.body.appendChild(bar);
+}
+
 // Configure marked link renderer (only on pages that load marked)
 if (typeof marked !== 'undefined') {
     marked.use({ renderer: { link({ href, title, text }) {
@@ -432,4 +463,6 @@ document.addEventListener('DOMContentLoaded', function() {
         bar.appendChild(fl);
         footerEl.appendChild(bar);
     }
+
+    injectThemeFeedback();
 });

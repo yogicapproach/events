@@ -275,6 +275,55 @@ async function waitVisible(page, selector, timeout = 6000) {
   });
   await page.setViewport({ width: 1280, height: 800 }); // restore desktop
 
+  // ── B11. A/B theme flag — ?theme=v2 activates data-theme ───────────────────
+  console.log('\n══════════════════════════════════════════');
+  console.log('  B11. A/B THEME FLAG — ?theme=v2 mechanism');
+  console.log('══════════════════════════════════════════');
+
+  await page.goto(`${PIRIOPOLIS}?theme=v2`, { waitUntil: 'domcontentloaded' });
+  await check('Theme flag: data-theme="v2" set on <html> via ?theme=v2', async () => {
+    const val = await page.$eval('html', el => el.getAttribute('data-theme'));
+    return val === 'v2';
+  });
+  await check('Theme flag: #theme-feedback bar injected into DOM', async () => {
+    await page.waitForSelector('#theme-feedback', { timeout: 5000 });
+  });
+  await check('Theme flag: thumbs buttons are present', async () => {
+    const count = await page.$$eval('.theme-feedback-btn', btns => btns.length);
+    return count === 2;
+  });
+  // Clear localStorage so clicking works fresh
+  await page.evaluate(() => localStorage.removeItem('theme-v2-voted'));
+  await check('Theme flag: clicking 👍 fires event and shows thanks', async () => {
+    const likeBtn = await page.$('.theme-feedback-btn[data-vote="like"]');
+    await likeBtn.click();
+    await page.waitForFunction(
+      () => document.getElementById('theme-feedback')?.innerText?.includes('Thanks'),
+      { timeout: 4000 }
+    );
+  });
+  await check('Theme flag: localStorage records the vote', async () => {
+    const stored = await page.evaluate(() => localStorage.getItem('theme-v2-voted'));
+    return stored === 'like';
+  });
+  // Cleanup: remove vote so other test runs aren't affected
+  await page.evaluate(() => localStorage.removeItem('theme-v2-voted'));
+
+  // ── B12. No theme flag on plain URL — bar not present ───────────────────────
+  console.log('\n══════════════════════════════════════════');
+  console.log('  B12. A/B THEME — no bar on default URL');
+  console.log('══════════════════════════════════════════');
+
+  await page.goto(PIRIOPOLIS, { waitUntil: 'networkidle0' });
+  await check('Theme flag: data-theme NOT set on plain URL', async () => {
+    const val = await page.$eval('html', el => el.getAttribute('data-theme'));
+    return val === null;
+  });
+  await check('Theme flag: #theme-feedback bar NOT present on plain URL', async () => {
+    const el = await page.$('#theme-feedback');
+    return el === null;
+  });
+
   // ── Summary ─────────────────────────────────────────────────────────────────
   await browser.close();
   const total = pass + fail;
