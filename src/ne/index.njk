@@ -42,6 +42,16 @@ og_type: article
   {% renderMarkdownFile _synthPath, "ne" %}
 </div>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "सारांश — कोशहरूको अन्वेषण",
+  "author": {"@type": "Organization", "name": "YogicApproach"},
+  "inLanguage": "ne",
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     if (typeof updateTopbar === "function") updateTopbar("ne");

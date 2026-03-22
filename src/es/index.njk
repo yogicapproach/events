@@ -42,6 +42,16 @@ og_type: article
   {% renderMarkdownFile _synthPath, "es" %}
 </div>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Resumen de Charlas — Explorando los Koshas",
+  "author": {"@type": "Organization", "name": "YogicApproach"},
+  "inLanguage": "es",
+  "url": "{{ site.baseUrl }}{{ page.url }}"
+}
+</script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     if (typeof updateTopbar === "function") updateTopbar("es");
