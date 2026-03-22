@@ -5,6 +5,31 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## Session: 2026-03-22 — PR Merge Wave: Standards + Lang Toggle
+
+**Focus:** Test and merge PRs in order (#60 → #56 → #59 → #65 → #62); supplement test suite per PR.
+
+**Completed:**
+- **#60 standards/sitemap-robots** — MERGED: sitemap.xml moved to events root (`/sitemap.xml`); robots.txt + sitemap index created in yogicapproach/yogicapproach.github.io root repo; CI issue filed there (#2)
+- **#56 standards/og-meta-fixes** — MERGED: og:type `article` on all talk + synthesis pages; all "Yogaval 2026" hardcoded strings replaced with `{{ site.title }}`; dead `cdn.jsdelivr.net` preconnect and `marked.js` CDN script removed from base.njk
+- **#59 standards/hreflang-canonical** — MERGED: canonical + hreflang EN/ES/NE/x-default on all lang pages
+- **#65 standards/json-ld** — MERGED: Article JSON-LD with `description_en` + `abstract_en` drafted from transcripts for all 5 talks; `folderToIsoDate` Eleventy filter added; `publisher`, `isPartOf`, `datePublished` fields; synthesis pages also get Article JSON-LD
+- **#62 design/lang-select-mobile** — MERGED: 4-stage progressive lang toggle (full → compact → abbreviated → select); abbreviated labels Eng./Esp./नेप. + Orig./IA Trad./AI अनु. with period; localized "Select language:" label in select; dead `marked.use()` block removed from shared.js; `docs.google.com` preconnect removed
+- Test suite updated for each PR: §33 (dead preconnects absent), §37 (compression spans), browser-tests B10 (420px abbreviated / 350px select)
+- PENDING-TASK.md protocol formalized in global CLAUDE.md memory
+
+**PRs merged:** #60, #56, #59, #65, #62
+**Issues closed:** (inline with PRs above)
+**Bugs caught during testing:**
+- Squash merge captured old remote branch (not local fix) — fix: always push before merge
+- `{{ item.isoDate }}` inaccessible from Nunjucks block scope in paginated templates — fixed via `folderToIsoDate` filter
+- `og_type` frontmatter override not working in content-injected layouts — fixed by reading variable in base.njk block
+- Branch regressions on merge (missing earlier fixes) — fixed by `git merge main` before each PR merge
+
+**Remaining PRs:** #66, #57, #58, #61, #67 (last)
+
+---
+
 ## Session: 2026-03-22 — Design/Standards PR Wave + URL Architecture
 
 **Focus:** Create 9 feature branches (PRs #56–#62) from issues #54/#55; establish URL architecture direction.
