@@ -1,7 +1,7 @@
 {
   "name": "2026-uruguay",
   "version": "1.0.0",
-  "description": "Yogaval 2026 — talk transcripts site",
+  "description": "Uruguay 2026 — Exploring the Koshas — talk transcripts site",
   "scripts": {
     "build": "eleventy && npx pagefind --site _site --output-path _site/2026-uruguay/pagefind",
     "serve": "eleventy --serve --port 8080",
