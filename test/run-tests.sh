@@ -622,9 +622,10 @@ BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
 echo "$BODY" | grep -q "data-theme.*v2\|theme.*v2" \
   && pass "base.njk: theme flag script present in HTML" \
   || fail "base.njk: theme flag script missing from HTML"
-echo "$BODY" | grep -q "theme-feedback-bar\|theme-feedback" \
-  && pass "shared.css: .theme-feedback-bar style referenced" \
-  || warn "shared.css: .theme-feedback-bar not referenced inline (check shared.css)"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q "theme-feedback-bar" \
+  && pass "shared.css: .theme-feedback-bar style defined" \
+  || fail "shared.css: .theme-feedback-bar style missing"
 
 # ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
 section "36. BROWSER TESTS (Puppeteer) — JS runtime features"
