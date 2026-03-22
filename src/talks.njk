@@ -36,13 +36,14 @@ permalink: "/2026-uruguay/{{ item.lang }}/{{ item.event.folder }}/"
   {%- set _subtitle = ev.subtitle_en -%}
 {%- endif -%}
 
-{% block page_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block og_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block twitter_title %}{{ _title }} | Yogaval 2026{% endblock %}
-{% block meta_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block og_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
-{% block twitter_description %}{{ _subtitle | striptags }} — Yogaval 2026{% endblock %}
+{% block page_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block og_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block twitter_title %}{{ _title }} | {{ site.title }}{% endblock %}
+{% block meta_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block og_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
+{% block twitter_description %}{{ _subtitle | striptags }} — {{ site.title }}{% endblock %}
 
+{% block og_type %}article{% endblock %}
 {% block head_extra %}
 <style>
   #resources-section { display: none; }

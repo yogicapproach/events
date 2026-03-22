@@ -1,7 +1,36 @@
-# 2026-uruguay — Session Progress
+# Session Progress — yogicapproach/events
 
-Site: https://yogic-approach.github.io/2026-uruguay/
-Repo: https://github.com/yogic-approach/2026-uruguay
+Site: https://yogicapproach.com/events/2026-uruguay/
+Repo: https://github.com/yogicapproach/events
+
+---
+
+## Session: 2026-03-22 — Design/Standards PR Wave + URL Architecture
+
+**Focus:** Create 9 feature branches (PRs #56–#62) from issues #54/#55; establish URL architecture direction.
+
+**Completed:**
+- Deleted `TODO.txt`; rewrote `README.md` (correct URL, 5 talks, trilingual, Eleventy); rewrote `TODO.md` (new issue numbers)
+- `site.json`: updated `baseUrl` → `https://yogicapproach.com/events`, `ogImage` → favicon, `title` → "Uruguay 2026 — Exploring the Koshas"
+- Site title updated across `base.njk` and all 3 synthesis page frontmatter (`en/index.njk`, `es/index.njk`, `ne/index.njk`)
+- Fixed `&mdash;` → `—` (em dash) in all 15 subtitle fields in `events.json` to prevent `&amp;mdash;` appearing in meta tags
+- Bajomana Ma resource label fixed to "Intermission Kirtan" / "Kirtan del intermedio" / "मध्यान्तर कीर्तन"
+- Design analysis written up as issues #54 (design review) and #55 (deep-dive: mobile, accessibility, standards, A/B)
+- 5 PRs created from agents (rescued from worktree Bash permission failure): #56 og-meta-fixes, #57 devanagari-font, #58 touch-targets, #59 hreflang-canonical, #60 sitemap-robots
+- PR #61: `design/font-size-tokens` — `:root` 18px, CSS custom properties, warm background `#faf8f5`
+- PR #62: `design/lang-select-mobile` — JS-injected `<select>` via `shared.js`; works across all pages without template changes
+- Issue #63: URL architecture analysis — lang at root (`/en/...`) confirmed as direction; full migration plan written up
+- `PENDING-TASK.md` updated with full state for context recovery
+
+**Issues opened:** #54, #55, #63
+**PRs opened:** #56, #57, #58, #59, #60, #61, #62
+**Branches created:** standards/og-meta-fixes, design/devanagari-font, design/touch-targets, standards/hreflang-canonical, standards/sitemap-robots, design/font-size-tokens, design/lang-select-mobile
+
+**Still open (not yet built):**
+- `standards/json-ld` — Article + WebSite JSON-LD structured data
+- `design/ab-theme-flag` — `?theme=v2` CSS scoping mechanism
+
+**Next session:** Test PRs #56–#62 locally → merge one at a time → then build json-ld + ab-theme-flag → then tackle #63 (lang-at-root migration)
 
 ---
 

@@ -1,70 +1,79 @@
-# Pending Task — 2026-uruguay
+# Pending Task — yogicapproach/events
 
-This file tracks the **current in-progress plan**. Written before any execution begins.
-Session resume point — contains full plan so work can restart from scratch if context is lost.
-
----
-
-## Status: Active — Eleventy migration (feature/35-eleventy), 2026-03-20
-
-**Current branch:** `feature/35-eleventy` (all Eleventy work is uncommitted — user must test before commit)
-**Last stable commit on main:** `8863a61` (Update synthesis date label)
-**GH issues driving this work:** #35 (Eleventy migration), #41 (URL redirect strategy), #44 (Pagefind search)
+Written: 2026-03-22 — always updated on main only
+Last commit on main: d9ce2f3
 
 ---
 
-## What is built and working (not yet committed)
+## Active Work: Testing + Merging PRs One by One
 
-All changes are in the working directory on `feature/35-eleventy`. The Eleventy build runs via `npm run build` and outputs to `_site/`.
+**Order (easiest → hardest to verify):**
+- [x] #60 standards/sitemap-robots — MERGED ✓ (sitemap at events root; root repo gets robots.txt + sitemap index)
+- [x] #56 standards/og-meta-fixes — MERGED ✓ (og:type article on talk+synthesis; Yogaval → site.title)
+- [ ] #59 standards/hreflang-canonical — hreflang + canonical source check ← **CURRENTLY TESTING**
+- [ ] #65 standards/json-ld — JSON-LD source check
+- [ ] #62 design/lang-select-mobile — JS source + mobile viewport
+- [ ] #66 design/ab-theme-flag — ?theme=v2 URL behavior
+- [ ] #57 design/devanagari-font — visual NE page check
+- [ ] #58 design/touch-targets — visual audio player + PDF check
+- [ ] #61 design/font-size-tokens — visual font/background check
+- [ ] #67 test/regression-wave-1 — merge last after all others pass
 
-- [x] Eleventy v3 scaffold — `src/`, `.eleventy.js`, `package.json`
-- [x] 15 talk pages generated (5 talks × 3 langs) from `src/talks.njk`
-- [x] Synthesis pages (3 langs) — `src/{en,es,ne}/index.njk`
-- [x] Glossary pages (3 langs) — `src/{en,es,ne}/glossary/index.njk`
-- [x] Events listing pages (3 langs) — `src/{en,es,ne}/events/index.njk`
-- [x] CSS/JS/favicon passthrough copies to `_site/2026-uruguay/` (correct paths)
-- [x] Binary resources copied to `_site/2026-uruguay/events/[folder]/resources/`
-- [x] `resources.json` copied to each lang path per event
-- [x] Language redirect stubs — `/2026-uruguay/events/[folder]/` → lang-specific
-- [x] Smart `static/404.html` — instant redirect for known patterns; 5-second countdown to events page for unknown URLs; whitelist prevents infinite redirect loop
-- [x] `src/search.njk` — Pagefind search page at `/2026-uruguay/search/`
-- [x] Pagefind index built into `_site/pagefind/` (15 talk pages indexed, 10,372 words, 3 langs)
-- [x] Search link added to events listing pages (EN/ES/NE)
-
-## Awaiting user test before committing
-
-User needs to run `npm run serve` and verify locally:
-1. Talk pages render correctly with transcript content
-2. Language toggle switches between EN/ES/NE
-3. Talk selector dropdown navigates correctly
-4. Resources section loads audio/PDFs
-5. Synthesis and glossary pages render
-6. `/2026-uruguay/search/` — Pagefind search box works, returns results
-7. Bad URL → 5-second countdown → events listing (no infinite loop)
-8. Known folder without lang (e.g. `/2026-uruguay/events/20260223-koshas-piriopolis/`) → instant redirect
-
-## Comparison test suite
-
-A background agent was launched to produce a full PASS/FAIL report comparing `_site/` (Eleventy) vs `docs/` (legacy). Report pending — will surface when agent completes.
+**Protocol per PR:**
+1. `git checkout <branch> && npm run build`
+2. Claude verifies via curl/filesystem + flags any issues
+3. User checks `http://localhost:8080/events/2026-uruguay/...`
+4. Both confirm → `gh pr merge <n> --squash` → update checklist above on main
 
 ---
 
-## Open issues to implement next (after Eleventy is merged)
+## Flags Noted During Testing
 
-| Issue | Title | Notes |
-|-------|-------|-------|
-| #41 | URL migration plan: legacy docs/ redirects | Decide fate of docs/ after Eleventy goes live |
-| #42 | SEO: sitemap.xml, robots.txt, hreflang | Also applies to yogicapproach.com |
-| #43 | LLM/agentic discoverability: llms.txt, JSON-LD | Also applies to yogicapproach.com |
-| #45 | Voice AI Q&A over corpus (Cloudflare Workers AI + RAG) | Builds on #44 Pagefind; needs Cloudflare account setup |
-| #38 | Update favicon to YogicApproach logo | Waiting on user to provide logo file |
-| #27 | Floating toolbar / Web Share API | On `feature/27-web-share`, not started |
-| #39 | Migrate npm → Bun | Not started |
+- **#60**: `robots.txt` domain root handled by `yogicapproach/yogicapproach.github.io`. Section sitemap correctly at `yogicapproach.com/events/sitemap.xml`. CI issue filed at root repo (#2). Root repo issue #1 closed.
 
 ---
 
-## Deferred / background
+## After All PRs Merged — Next Major Task
 
-- GoatCounter on Das Mahavidya repo (saved in memory — needs repo name confirmed)
-- #40 — Auto-approve read-only Claude Code operations in VS Code
-- #12 — Audio diarization research
+**Issue #63: URL Architecture — Move lang to root path**
+- Current: `yogicapproach.com/events/2026-uruguay/en/...`
+- Target: `yogicapproach.com/en/events/2026-uruguay/...` (lang always segment 1)
+- Branch: `arch/lang-at-root` (to be created)
+- Prerequisites: all current PRs merged and green on main
+
+---
+
+## Agent Permission Issue — To Resolve
+
+Agents with `isolation: "worktree"` don't inherit Bash permissions.
+Fix: add git/gh to `allowedTools` in `.claude/settings.json` — create GH issue before next agent wave.
+
+---
+
+## Other Open Issues
+
+| # | Title |
+|---|-------|
+| #3 | Audio diarization research |
+| #4 | Floating toolbar + Web Share API |
+| #5 | Site audit (Eleventy-era) |
+| #7 | Regression test checklist |
+| #9 | npm → Bun |
+| #10 | Auto-approve read-only Claude Code ops |
+| #15 | Voice AI Q&A (Cloudflare Workers) |
+| #21 | Search bar in page header |
+| #52 | Choose proper site-wide OG image |
+| #54 | Design review (parent) |
+| #55 | Deep-dive: mobile UX, accessibility, web standards, A/B |
+| #63 | URL architecture: lang at root |
+
+---
+
+## Resume Instructions
+
+1. `cd c:\Users\kaanchan\Projects\Yoga\yogicapproach\events`
+2. `gh pr list --state open` — see remaining open PRs
+3. Check testing order above — tick off what's merged
+4. `git checkout <branch> && npm run build` to test each
+5. Do NOT merge #67 until all others are done
+6. PENDING-TASK.md is always on main — never edit it on a feature branch
