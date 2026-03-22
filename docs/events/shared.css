@@ -211,3 +211,11 @@ summary:focus-visible {
     transition: top 0.2s;
 }
 .skip-nav:focus { top: 0; }
+
+/* ── Devanagari / Nepali script ─────────────────────────────── */
+/* No font-family override — Nirmala UI (Windows) and system Devanagari fonts
+   render better than Noto Sans Devanagari on most platforms. Spacing only. */
+:lang(ne) #content {
+    line-height: 2.0;
+    font-size: 1.05em;
+}
