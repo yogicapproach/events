@@ -173,7 +173,7 @@ check_http "/events/2026-uruguay/assets/eleventy-extra.css"
 check_http "/events/2026-uruguay/favicon.svg"
 check_http "/events/2026-uruguay/pagefind/pagefind-ui.js"
 check_http "/events/2026-uruguay/pagefind/pagefind-ui.css"
-check_http "/events/2026-uruguay/20260223-koshas-piriopolis/resources/cover-art-yoga-nidra.png"
+check_http "/events/2026-uruguay/20260223-koshas-piriopolis/resources/cover-art-yoga-nidra.jpg"
 check_http "/events/2026-uruguay/20260218-tantroktam-devi-suktam-la-paloma/resources/cover-tantroktam-devi-suktam.jpg"
 
 # ── 5. Bad URLs → 404 ────────────────────────────────────────────────────────
@@ -587,30 +587,150 @@ for lang in en es ne; do
   fi
 done
 
-# ── 37. Lang toggle — progressive compression spans ─────────────────────────
-section "37. LANG TOGGLE — progressive compression"
-BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
-# Full/abbreviated wrapper spans present in HTML
-echo "$BODY" | grep -q 'class="lang-full"'        && pass "lang-full spans present in HTML" || fail "lang-full spans missing from HTML"
-echo "$BODY" | grep -q 'class="lang-abbr"'        && pass "lang-abbr spans present in HTML" || fail "lang-abbr spans missing from HTML"
-echo "$BODY" | grep -q 'lang-sublabel-full'        && pass "lang-sublabel-full spans present" || fail "lang-sublabel-full spans missing"
-echo "$BODY" | grep -q 'lang-sublabel-abbr'        && pass "lang-sublabel-abbr spans present" || fail "lang-sublabel-abbr spans missing"
-# Abbreviated text values (with period per house style)
-echo "$BODY" | grep -q '>Eng\.'                    && pass "Eng. abbreviation present"     || fail "Eng. abbreviation missing"
-echo "$BODY" | grep -q '>Esp\.'                    && pass "Esp. abbreviation present"     || fail "Esp. abbreviation missing"
-echo "$BODY" | grep -q 'नेप\.'                     && pass "नेप. abbreviation present"    || fail "नेप. abbreviation missing"
-echo "$BODY" | grep -q '>Orig\.'                   && pass "Orig. sublabel present"        || fail "Orig. sublabel missing"
-echo "$BODY" | grep -q 'IA Trad\.'                 && pass "IA Trad. sublabel present"     || fail "IA Trad. sublabel missing"
-echo "$BODY" | grep -q 'AI अनु\.'                  && pass "AI अनु. sublabel present"     || fail "AI अनु. sublabel missing"
-# lang-select-wrapper and lang-select-label injected by shared.js
-JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
-echo "$JS" | grep -q 'lang-select-wrapper'         && pass "shared.js: lang-select-wrapper present" || fail "shared.js: lang-select-wrapper missing"
-echo "$JS" | grep -q 'lang-select-label'           && pass "shared.js: lang-select-label present"   || fail "shared.js: lang-select-label missing"
-echo "$JS" | grep -q 'Select language:'            && pass "shared.js: EN select label text present" || fail "shared.js: EN select label text missing"
-echo "$JS" | grep -q 'Seleccionar idioma:'         && pass "shared.js: ES select label text present" || fail "shared.js: ES select label text missing"
+# ── 36. PR #56: og-meta-fixes ────────────────────────────────────────────────
+section "36. PR #56 — OG META: no &amp;mdash;, og:type=article on talk pages"
+for lang in en es ne; do
+  DESC=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" \
+    | grep -o 'name="description"[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+  if echo "$DESC" | grep -q '&amp;'; then
+    fail "$lang: meta description contains &amp; (HTML entity encoding bug): $DESC"
+  else
+    pass "$lang: meta description clean (no &amp; encoding): $DESC"
+  fi
+done
+# og:type must be "article" on talk pages (not "website")
+OGTYPE=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/" \
+  | grep -o 'og:type[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+if [ "$OGTYPE" = 'content="article"' ]; then
+  pass "og:type=article on talk page: $OGTYPE"
+else
+  fail "og:type wrong on talk page (expected article, got): $OGTYPE"
+fi
+# og:type on listing page should still be "website"
+OGTYPE_LIST=$(curl -s "$BASE/events/2026-uruguay/en/" \
+  | grep -o 'og:type[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
+if [ "$OGTYPE_LIST" = 'content="website"' ]; then
+  pass "og:type=website on synthesis/listing page (correct)"
+else
+  warn "og:type on synthesis page: $OGTYPE_LIST (expected website)"
+fi
 
-# ── 36. Browser tests (Puppeteer) ────────────────────────────────────────────
-section "36. BROWSER TESTS (Puppeteer) — JS runtime features"
+# ── 37. PR #57: devanagari-font ──────────────────────────────────────────────
+# Decision: Noto Sans Devanagari removed; system font (Nirmala UI on Windows) retained.
+# Only spacing CSS (:lang(ne) line-height + font-size) is applied via shared.css.
+section "37. PR #57 — DEVANAGARI FONT: system font + spacing only (no Noto)"
+NE_BODY=$(curl -s "$BASE/events/2026-uruguay/ne/20260223-koshas-piriopolis/")
+echo "$NE_BODY" | grep -qi "noto.*sans.*devanagari\|fonts.googleapis.com" \
+  && fail "NE talk page: Noto Sans / Google Fonts still present (should be removed)" \
+  || pass "NE talk page: Noto Sans / Google Fonts correctly absent"
+EN_BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$EN_BODY" | grep -qi "noto.*sans.*devanagari" \
+  && fail "EN talk page: Noto Sans Devanagari incorrectly present" \
+  || pass "EN talk page: Noto Sans Devanagari absent (correct)"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q ':lang(ne)' \
+  && pass "shared.css: :lang(ne) Devanagari spacing rule present" \
+  || fail "shared.css: :lang(ne) spacing rule missing"
+
+# ── 38. PR #58: touch-targets ────────────────────────────────────────────────
+section "38. PR #58 — TOUCH TARGETS: 44px audio player + PDF summary"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q "resource-player" && echo "$CSS" | grep -A3 "resource-player" | grep -q "44px" \
+  && pass "shared.css: .resource-player height 44px" \
+  || fail "shared.css: .resource-player height 44px missing (WCAG touch target)"
+echo "$CSS" | grep -q "compact-pdfs.*summary\|summary.*44px\|min-height.*44" \
+  && pass "shared.css: PDF summary min-height 44px" \
+  || fail "shared.css: PDF summary min-height 44px missing"
+# Modal close button should exist in HTML
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q 'img-modal.*button\|modal-close\|×\|✕' \
+  && pass "Talk page: modal close button present" \
+  || fail "Talk page: modal close button missing (touch users need explicit dismiss)"
+
+# ── 39. PR #59: hreflang + canonical ─────────────────────────────────────────
+section "39. PR #59 — HREFLANG + CANONICAL"
+for lang in en es ne; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
+  echo "$BODY" | grep -q 'rel="alternate".*hreflang' \
+    && pass "$lang: hreflang alternates present" \
+    || fail "$lang: hreflang alternates missing"
+  echo "$BODY" | grep -q 'rel="canonical"' \
+    && pass "$lang: canonical link present" \
+    || fail "$lang: canonical link missing"
+  # x-default must point to EN
+  echo "$BODY" | grep 'hreflang.*x-default\|x-default.*hreflang' | grep -q '/en/' \
+    && pass "$lang: hreflang x-default → EN" \
+    || fail "$lang: hreflang x-default missing or not pointing to /en/"
+done
+
+# ── 40. PR #60: sitemap + robots ─────────────────────────────────────────────
+# NOTE: sitemap.xml is at /events/sitemap.xml (events subsite root), not /events/2026-uruguay/
+# NOTE: robots.txt is served by yogicapproach/yogicapproach.github.io (root repo) — WARN only here
+section "40. PR #60 — SITEMAP.XML + ROBOTS.TXT"
+check_http "/events/sitemap.xml"
+SITEMAP=$(curl -s "$BASE/events/sitemap.xml")
+echo "$SITEMAP" | grep -q "<urlset" \
+  && pass "sitemap.xml: valid XML wrapper" \
+  || fail "sitemap.xml: <urlset> missing"
+# Count URLs — expect at least 15 talk pages + 3 synthesis + 3 glossary
+URL_COUNT=$(echo "$SITEMAP" | grep -c "<loc>")
+[ "$URL_COUNT" -ge 20 ] \
+  && pass "sitemap.xml: $URL_COUNT URLs (≥20 expected)" \
+  || fail "sitemap.xml: only $URL_COUNT URLs (expected ≥20)"
+# robots.txt is owned by root repo (yogicapproach.github.io) — warn if absent, don't fail
+ROBOTS_STATUS=$(curl -o /dev/null -s -w "%{http_code}" "$BASE/robots.txt")
+[ "$ROBOTS_STATUS" = "200" ] \
+  && pass "robots.txt: present (HTTP 200)" \
+  || warn "robots.txt: HTTP $ROBOTS_STATUS — served by root repo (yogicapproach.github.io), not this subsite"
+
+# ── 41. PR #61: font-size-tokens ─────────────────────────────────────────────
+section "41. PR #61 — CSS TOKENS + 18px BASE FONT"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q ":root" \
+  && pass "shared.css: :root block present" \
+  || fail "shared.css: :root block missing (CSS custom properties)"
+echo "$CSS" | grep -q "\-\-color-accent\|--accent\|--color" \
+  && pass "shared.css: CSS custom properties (--color-*) defined" \
+  || fail "shared.css: CSS custom properties missing"
+echo "$CSS" | grep -q "font-size.*18px\|18px.*font-size" \
+  && pass "shared.css: 18px base font-size set" \
+  || fail "shared.css: 18px base font-size missing"
+echo "$CSS" | grep -q "#f7f7f7\|f7f7f7" \
+  && pass "shared.css: neutral background #f7f7f7 present" \
+  || fail "shared.css: neutral background #f7f7f7 missing"
+
+# ── 42. PR #62: lang-select mobile + progressive compression ─────────────────
+section "42. PR #62 — MOBILE LANG SELECT + PROGRESSIVE COMPRESSION"
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS" | grep -q "injectLangSelectMobile" \
+  && pass "shared.js: injectLangSelectMobile function present" \
+  || fail "shared.js: injectLangSelectMobile function missing"
+echo "$JS" | grep -q 'lang-select-wrapper' \
+  && pass "shared.js: lang-select-wrapper injected via JS" \
+  || fail "shared.js: lang-select-wrapper missing from JS"
+echo "$JS" | grep -q 'lang-select-label' \
+  && pass "shared.js: lang-select-label injected via JS" \
+  || fail "shared.js: lang-select-label missing from JS"
+echo "$JS" | grep -q 'Select language:' \
+  && pass "shared.js: EN select label text present" \
+  || fail "shared.js: EN select label text missing"
+echo "$JS" | grep -q 'Seleccionar idioma:' \
+  && pass "shared.js: ES select label text present" \
+  || fail "shared.js: ES select label text missing"
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q 'class="lang-full"'   && pass "lang-full spans present in HTML"   || fail "lang-full spans missing from HTML"
+echo "$BODY" | grep -q 'class="lang-abbr"'   && pass "lang-abbr spans present in HTML"   || fail "lang-abbr spans missing from HTML"
+echo "$BODY" | grep -q 'lang-sublabel-full'   && pass "lang-sublabel-full spans present"  || fail "lang-sublabel-full spans missing"
+echo "$BODY" | grep -q 'lang-sublabel-abbr'   && pass "lang-sublabel-abbr spans present"  || fail "lang-sublabel-abbr spans missing"
+echo "$BODY" | grep -q '>Eng\.'              && pass "Eng. abbreviation present"         || fail "Eng. abbreviation missing"
+echo "$BODY" | grep -q '>Esp\.'              && pass "Esp. abbreviation present"         || fail "Esp. abbreviation missing"
+echo "$BODY" | grep -q 'नेप\.'               && pass "नेप. abbreviation present"        || fail "नेप. abbreviation missing"
+echo "$BODY" | grep -q '>Orig\.'             && pass "Orig. sublabel present"            || fail "Orig. sublabel missing"
+echo "$BODY" | grep -q 'IA Trad\.'           && pass "IA Trad. sublabel present"         || fail "IA Trad. sublabel missing"
+echo "$BODY" | grep -q 'AI अनु\.'            && pass "AI अनु. sublabel present"         || fail "AI अनु. sublabel missing"
+
+# ── 43. Browser tests (Puppeteer) ────────────────────────────────────────────
+section "43. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
   BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"

@@ -258,6 +258,7 @@ async function waitVisible(page, selector, timeout = 6000) {
   // ── B10. Mobile viewport — progressive lang toggle compression ───────────────
   console.log('\n══════════════════════════════════════════');
   console.log('  B10. MOBILE VIEWPORT — progressive lang toggle');
+
   console.log('══════════════════════════════════════════');
 
   // 420px: abbreviated buttons visible, full text hidden
