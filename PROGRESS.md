@@ -5,6 +5,32 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## Session: 2026-03-23 — PR Merge Wave: Design + Regression Tests (complete)
+
+**Focus:** Complete remaining PRs from design wave (#66 deferred, #57, #58, #61, #67); begin #71.
+
+**Completed:**
+- **#57 design/devanagari-font** — MERGED: Noto Sans Devanagari removed (blocky on Windows); Nirmala UI system font retained; only `:lang(ne)` spacing CSS kept (`line-height: 2.0`, `font-size: 1.05em`); Google Fonts preconnects removed from base.njk
+- **#58 design/touch-targets** — MERGED: 44px audio player height; modal X close button added to `src/talks.njk` (was missing — original commit targeted old `talk.njk` filename); overlay opacity 0.82 → 0.50
+- **#61 design/font-size-tokens** — MERGED: CSS custom properties in `:root`; 18px base font; background `#f7f7f7` (user rejected `#faf8f5` as "unappetizing cream"; side-by-side comparison confirmed cooler neutral preferred)
+- **#67 test/regression-wave-1** — MERGED: §35–§42 regression tests covering all wave PRs; fixed §40 sitemap URL (`/events/sitemap.xml` not `/events/2026-uruguay/sitemap.xml`); robots.txt downgraded to WARN (root repo); cover-art `.png` → `.jpg`
+- **#66 design/ab-theme-flag** — DEFERRED: user unhappy with thumbs bar UX; needs redesign as live A/B toggle (ChatGPT-style); filed on [#64](https://github.com/yogicapproach/events/issues/64)
+- Issues created: [#68](https://github.com/yogicapproach/events/issues/68) (translation QA), [#69](https://github.com/yogicapproach/events/issues/69) (dark mode), [#70](https://github.com/yogicapproach/events/issues/70) (CI/GitHub Actions), [#71](https://github.com/yogicapproach/events/issues/71) (audio player layout)
+- Memory updated: always create GH issues without asking; clickable URL links in VS Code
+
+**Bugs caught:**
+- `talk.njk` → `talks.njk` rename: modal close button HTML never landed in #58; fixed manually
+- Conflict resolution on all branches: each branch predated several main merges; resolved by `git merge main --no-edit` before each PR merge
+- Squash merge subject: use `--subject` flag to override GitHub's default (PR title at creation time)
+
+**PRs merged this session:** #57, #58, #61, #67
+**Deferred:** #66
+**Wave complete:** all prerequisite PRs for #63 now merged ✓
+
+**In progress:** #71 `design/audio-player-layout` — built, awaiting user visual confirm
+
+---
+
 ## Session: 2026-03-22 — PR Merge Wave: Standards + Lang Toggle
 
 **Focus:** Test and merge PRs in order (#60 → #56 → #59 → #65 → #62); supplement test suite per PR.

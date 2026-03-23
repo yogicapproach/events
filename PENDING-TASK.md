@@ -1,29 +1,30 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: 3449c49
+Last commit on main: 55a347f
 
 ---
 
-## Active Work: Testing + Merging PRs One by One
+## PR Merge Wave — COMPLETE ✓
 
-**Order (easiest → hardest to verify):**
-- [x] #60 standards/sitemap-robots — MERGED ✓ (sitemap at events root; root repo gets robots.txt + sitemap index)
-- [x] #56 standards/og-meta-fixes — MERGED ✓ (og:type article on talk+synthesis; Yogaval → site.title)
-- [x] #59 standards/hreflang-canonical — MERGED ✓ (canonical + hreflang EN/ES/NE/x-default on all pages)
-- [x] #65 standards/json-ld — MERGED ✓ (Article JSON-LD with description, abstract, publisher, isPartOf)
-- [x] #62 design/lang-select-mobile — MERGED ✓ (progressive compression: full→compact→abbreviated→select; dead code removed)
-- [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign needed; revisit after #61 merged)
-- [x] #57 design/devanagari-font — MERGED ✓ (spacing only; Nirmala UI system font retained)
-- [x] #58 design/touch-targets — MERGED ✓ (44px audio/PDF targets, X modal button, overlay 0.50)
-- [x] #61 design/font-size-tokens — MERGED ✓ (CSS tokens, 18px base, #f7f7f7 background)
-- [ ] #67 test/regression-wave-1 — merge last after all others pass ← **NEXT**
+- [x] #60 standards/sitemap-robots — MERGED ✓
+- [x] #56 standards/og-meta-fixes — MERGED ✓
+- [x] #59 standards/hreflang-canonical — MERGED ✓
+- [x] #65 standards/json-ld — MERGED ✓
+- [x] #62 design/lang-select-mobile — MERGED ✓
+- [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign: live A/B toggle; revisit after #71)
+- [x] #57 design/devanagari-font — MERGED ✓
+- [x] #58 design/touch-targets — MERGED ✓
+- [x] #61 design/font-size-tokens — MERGED ✓
+- [x] #67 test/regression-wave-1 — MERGED ✓
 
-**Protocol per PR:**
-1. `git checkout <branch> && npm run build`
-2. Claude verifies via curl/filesystem + flags any issues
-3. User checks `http://localhost:8080/events/2026-uruguay/...`
-4. Both confirm → `gh pr merge <n> --squash` → update checklist above on main
+---
+
+## Active Work
+
+**#71 design/audio-player-layout** — audio player full-width below cover art
+- Branch: `design/audio-player-layout` (built, awaiting user visual confirm)
+- Files: `docs/events/shared.js` (audio out of `.resource-body`), `docs/events/shared.css` (`flex-wrap`, `flex: 0 0 100%`)
 
 ---
 
@@ -33,20 +34,13 @@ Last commit on main: 3449c49
 
 ---
 
-## After All PRs Merged — Next Major Task
+## Next Major Tasks
 
 **Issue #63: URL Architecture — Move lang to root path**
 - Current: `yogicapproach.com/events/2026-uruguay/en/...`
 - Target: `yogicapproach.com/en/events/2026-uruguay/...` (lang always segment 1)
 - Branch: `arch/lang-at-root` (to be created)
-- Prerequisites: all current PRs merged and green on main
-
----
-
-## Agent Permission Issue — To Resolve
-
-Agents with `isolation: "worktree"` don't inherit Bash permissions.
-Fix: add git/gh to `allowedTools` in `.claude/settings.json` — create GH issue before next agent wave.
+- Prerequisites: all current PRs merged and green on main ← satisfied
 
 ---
 
@@ -66,6 +60,12 @@ Fix: add git/gh to `allowedTools` in `.claude/settings.json` — create GH issue
 | #54 | Design review (parent) |
 | #55 | Deep-dive: mobile UX, accessibility, web standards, A/B |
 | #63 | URL architecture: lang at root |
+| #64 | A/B theme flag redesign (live toggle) |
+| #66 | A/B theme flag PR (deferred) |
+| #68 | Translation QA — NE/ES AI peer review + native speaker |
+| #69 | Dark mode support |
+| #70 | CI via GitHub Actions |
+| #71 | Audio player layout: full-width below cover art |
 
 ---
 
@@ -73,7 +73,4 @@ Fix: add git/gh to `allowedTools` in `.claude/settings.json` — create GH issue
 
 1. `cd c:\Users\kaanchan\Projects\Yoga\yogicapproach\events`
 2. `gh pr list --state open` — see remaining open PRs
-3. Check testing order above — tick off what's merged
-4. `git checkout <branch> && npm run build` to test each
-5. Do NOT merge #67 until all others are done
-6. PENDING-TASK.md is always on main — never edit it on a feature branch
+3. PENDING-TASK.md is always on main — never edit it on a feature branch
