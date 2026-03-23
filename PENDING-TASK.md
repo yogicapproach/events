@@ -1,7 +1,7 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-03-22 — always updated on main only
-Last commit on main: 55a347f
+Last commit on main: dd7fb24
 
 ---
 
@@ -18,7 +18,8 @@ Last commit on main: 55a347f
 - [x] #59 standards/hreflang-canonical — MERGED ✓
 - [x] #65 standards/json-ld — MERGED ✓
 - [x] #62 design/lang-select-mobile — MERGED ✓
-- [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign: live A/B toggle; revisit after #71)
+- [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign: live A/B toggle)
+- [x] #71 design/audio-player-layout — MERGED ✓ (full-width player, 24px slim bar, card border #fdfdfd)
 - [x] #57 design/devanagari-font — MERGED ✓
 - [x] #58 design/touch-targets — MERGED ✓
 - [x] #61 design/font-size-tokens — MERGED ✓
