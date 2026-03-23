@@ -5,6 +5,32 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## Session: 2026-03-23 — GSC, Agent Permissions, #63 Architecture Plan
+
+**Focus:** Google Search Console setup, settings.json restructure, agent worktree permission testing, URL architecture blocker analysis.
+
+**Completed:**
+- **GSC — events sitemap** `https://yogicapproach.com/events/sitemap.xml` → Success, 27 URLs discovered
+- **GSC — root sitemap** `https://yogicapproach.com/sitemap.xml` → Success (index, 0 pages — expected); namespace bug fixed (`https://` → `http://` in `<sitemapindex xmlns>` in `yogicapproach.github.io` repo via GH API)
+- **Audio player #71** — Full-width player below cover art, 24px slim bar, card border; merged to main (commit dd7fb24)
+- **Private dev repo created** — `yogicapproach/yogicapproach-dev` (private); issue #1 filed: domain portfolio / Cloudflare registrar migration research
+- **Domain pricing & API research** — Cloudflare registrar at-cost ~$10.46/yr for .com; clear winner on API (modern REST, scoped tokens vs NameSilo XML); full analysis in `yogicapproach-dev #1`
+- **Mishap corrected** — Notes file accidentally created in public `yogicapproach.github.io` (would have exposed domain portfolio); deleted immediately; moved to private repo
+- **Issue #75** — PageSpeed Insights audit filed; noted as API-scriptable
+- **#63 URL architecture plan** — Identified `pathPrefix: "/events/"` blocker: `en` segment cannot sit above `/events/` in GitHub Pages without Cloudflare URL rewriting; plan updated on issue; **#73 Cloudflare is now a prerequisite for #63**
+- **settings.json restructured** — Project `.claude/settings.json` and global `~/.claude/settings.json` overhauled: cleaner allow list, worktree symlink config, legacy stale entries removed from global
+- **Agent permission testing** — Three worktree agent tests passed cleanly: WebFetch, git operations, node/npm — no permission prompts, no squashing issues
+- **Permission gap documented** — `deny` rules block prefix matches only; agents can bypass via `cd ../.. && rm`, `find -delete`, or Python/Node scripts; accepted tradeoff given working environment
+
+**Pending from this session (in PENDING-TASK.md):**
+- settings.json/.gitignore decision: commit `settings.json` publicly vs keep `.claude/` entirely gitignored
+- Commit the settings changes once decided
+
+**Issues opened:** [#73](https://github.com/yogicapproach/events/issues/73) (Cloudflare DNS/CDN), [#74](https://github.com/yogicapproach/events/issues/74) (domain registrar migration), [#75](https://github.com/yogicapproach/events/issues/75) (PageSpeed audit), yogicapproach-dev [#1](https://github.com/yogicapproach/yogicapproach-dev/issues/1) (domain portfolio, private)
+**Issues closeable:** #54 (design review parent), #55 (deep-dive) — all child PRs now merged
+
+---
+
 ## Session: 2026-03-23 — PR Merge Wave: Design + Regression Tests (complete)
 
 **Focus:** Complete remaining PRs from design wave (#66 deferred, #57, #58, #61, #67); begin #71.

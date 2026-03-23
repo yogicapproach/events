@@ -5,34 +5,37 @@ See `PROGRESS.md` for completed work and `PENDING-TASK.md` for in-progress sessi
 
 ---
 
-## Active — Remaining PR Merge Wave
-
-| # | Branch | Title | Status |
-|---|--------|-------|--------|
-| #66 | design/ab-theme-flag | ?theme=v2 URL A/B behavior | Next |
-| #57 | design/devanagari-font | Devanagari font load for NE pages | Pending |
-| #58 | design/touch-targets | Audio player + PDF touch targets | Pending |
-| #61 | design/font-size-tokens | Font size tokens + warm background | Pending |
-| #67 | test/regression-wave-1 | Regression test suite (merge last) | Pending — merge after all others |
-
----
-
-## Open Issues
+## Active
 
 | # | Title | Notes |
 |---|-------|-------|
-| #3 | Research: audio diarization and isolation of bilingual talks | Backlog |
-| #4 | Add floating toolbar on text selection with Web Share API for mobile | Backlog |
-| #5 | Site audit: comprehensive HTML/JS/CSS review | Eleventy-era audit needed |
-| #6 | Research: static site framework evaluation (Eleventy) | Research done; Eleventy shipped — closeable |
-| #9 | Migrate from npm to Bun | Backlog |
-| #10 | Auto-approve read-only Claude Code operations in VS Code | Settings task |
-| #15 | Add voice-enabled AI Q&A over talk corpus (Cloudflare Workers AI + RAG) | Backlog |
-| #21 | Search: integrate search bar into page header (per-lang, browser-lang aware) | Search page exists; header integration pending |
-| #52 | Choose proper site-wide OG image | Pending decision |
-| #54 | Design review (parent) | Tracks #57–#62; close when all merged |
-| #55 | Deep-dive: mobile UX, accessibility, web standards, A/B | Close when #57–#61 merged |
-| #63 | URL architecture: move lang to root path `/en/events/...` | After all PRs merged |
+| — | settings.json/.gitignore decision | Commit `settings.json` publicly or keep `.claude/` gitignored? See PENDING-TASK.md |
+
+---
+
+## Open Issues (priority order)
+
+| # | Title | Notes |
+|---|-------|-------|
+| **#73** | Cloudflare DNS/CDN migration | **Prerequisite for #63** — do first |
+| **#63** | URL architecture: lang at root `/en/events/...` | Blocked on #73; pathPrefix constraint requires Cloudflare URL rewriting; plan in issue |
+| **#70** | CI via GitHub Actions | Run tests on every push to main |
+| **#75** | PageSpeed Insights audit | API-scriptable; all 8+ pages |
+| **#68** | Translation QA — NE/ES AI peer review | Content quality |
+| **#69** | Dark mode | prefers-color-scheme + toggle |
+| **#66** | A/B theme flag (deferred) | Needs redesign (#64) first |
+| **#74** | Domain registrar migration to Cloudflare | Research in yogicapproach-dev #1 |
+| #3 | Audio diarization research | Backlog |
+| #4 | Floating toolbar + Web Share API | Backlog |
+| #5 | Site audit (Eleventy-era) | Backlog |
+| #9 | npm → Bun | Backlog |
+| #10 | Auto-approve read-only Claude Code ops | Settings task |
+| #15 | Voice AI Q&A (Cloudflare Workers AI + RAG) | Backlog |
+| #21 | Search bar in page header | Backlog |
+| #52 | Site-wide OG image | Pending decision |
+| #54 | Design review (parent) | **Closeable** — all child PRs merged |
+| #55 | Deep-dive: mobile, accessibility, A/B | **Closeable** — all child PRs merged |
+| #64 | A/B theme flag redesign | Backlog |
 
 ---
 
