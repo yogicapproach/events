@@ -233,10 +233,10 @@ async function loadResources(lang, resourcesBasePath) {
                         <div class="resource-body">
                             <div class="resource-title">${r.title}</div>
                             <div class="resource-meta">${metaPartsA.join(' &middot; ')}${downloadLink}</div>
-                            <audio class="resource-player" controls preload="none">
-                                <source src="${fileSrc}" type="${mime}">
-                            </audio>
                         </div>
+                        <audio class="resource-player" controls preload="none">
+                            <source src="${fileSrc}" type="${mime}">
+                        </audio>
                     </div>`;
             }
         });

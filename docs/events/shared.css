@@ -104,10 +104,10 @@ footer {
     color: #999; margin-bottom: 16px; font-family: Georgia, serif;
 }
 .resource-audio-card {
-    display: flex; gap: 14px; align-items: flex-start;
-    margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #f0f0f0;
+    display: flex; flex-wrap: wrap; gap: 0 14px; align-items: flex-start;
+    margin-bottom: 12px; padding: 12px;
+    border: 1px solid #e4e4e4; border-radius: 6px; background: #fdfdfd;
 }
-.resource-audio-card:last-of-type { border-bottom: none; }
 .resource-cover {
     width: 72px; height: 72px; object-fit: cover;
     border-radius: 4px; flex-shrink: 0; cursor: zoom-in;
@@ -122,7 +122,7 @@ footer {
 .resource-body { flex: 1; min-width: 0; }
 .resource-title { font-weight: bold; font-size: 0.95em; margin-bottom: 1px; }
 .resource-meta { font-size: 0.82em; color: #888; margin-bottom: 6px; }
-.resource-player { width: 100%; height: 44px; margin-top: 6px; }
+.resource-player { flex: 0 0 100%; height: 24px; margin-top: 4px; }
 .resource-download { font-size: 0.82em; color: var(--color-accent); text-decoration: none; }
 .resource-download:hover { text-decoration: underline; }
 .resource-pdfs { margin-top: 12px; }
