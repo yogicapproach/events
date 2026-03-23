@@ -534,15 +534,61 @@ else
   fail "404: _site/404.html not found"
 fi
 
-# ── 33. CDN preconnects + marked.js ──────────────────────────────────────────
-section "33. CDN PRECONNECTS + MARKED.JS"
+# ── 33. CDN preconnects — removed dead, kept active ──────────────────────────
+section "33. CDN PRECONNECTS — removed dead, kept active"
 BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
-echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && pass "preconnect: cdn.jsdelivr" || fail "preconnect: cdn.jsdelivr missing"
-echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'   && pass "preconnect: gc.zgo.at (GoatCounter)" || fail "preconnect: gc.zgo.at missing"
-echo "$BODY" | grep -q 'marked@15'               && pass "marked.js CDN loaded" || fail "marked.js CDN missing"
+# Active: GoatCounter (analytics)
+echo "$BODY" | grep -q 'preconnect.*gc.zgo.at'    && pass "preconnect: gc.zgo.at (GoatCounter) present" || fail "preconnect: gc.zgo.at missing"
+# Removed: cdn.jsdelivr (marked.js CDN — unused on Eleventy pages; transcripts rendered at build time)
+echo "$BODY" | grep -q 'preconnect.*cdn.jsdelivr' && fail "preconnect: cdn.jsdelivr should be removed (was unused)" || pass "preconnect: cdn.jsdelivr correctly absent"
+# Removed: docs.google.com (forms open in new tabs — preconnect provides no benefit to current page)
+echo "$BODY" | grep -q 'preconnect.*docs.google'  && fail "preconnect: docs.google.com should be removed (forms open in new tab)" || pass "preconnect: docs.google.com correctly absent"
+# Removed: marked.js CDN script tag
+echo "$BODY" | grep -q 'marked@15'                && fail "marked.js CDN script still present (should be removed)" || pass "marked.js CDN script correctly absent"
+# Removed: marked.use() dead code from shared.js
+JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS"  | grep -q 'marked\.use'               && fail "marked.use() dead code still in shared.js" || pass "marked.use() dead code correctly removed"
 
-# ── 35. PR #56: og-meta-fixes ────────────────────────────────────────────────
-section "35. PR #56 — OG META: no &amp;mdash;, og:type=article on talk pages"
+# ── 35. JSON-LD structured data ──────────────────────────────────────────────
+section "35. JSON-LD STRUCTURED DATA"
+# Talk pages must have Article JSON-LD with required fields
+for folder in "${FOLDERS[@]}"; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/en/$folder/")
+  if echo "$BODY" | grep -q '"@type": "Article"'; then
+    pass "JSON-LD Article present: en/$folder"
+  else
+    fail "JSON-LD Article missing: en/$folder"
+  fi
+  if echo "$BODY" | grep -q '"author"'; then
+    pass "JSON-LD author field: en/$folder"
+  else
+    fail "JSON-LD author field missing: en/$folder"
+  fi
+  if echo "$BODY" | grep -q '"datePublished"'; then
+    pass "JSON-LD datePublished field: en/$folder"
+  else
+    fail "JSON-LD datePublished missing: en/$folder"
+  fi
+done
+# datePublished must be ISO format (YYYY-MM-DD)
+DATE_CHECK=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/" | grep -o '"datePublished": "[^"]*"')
+if echo "$DATE_CHECK" | grep -qE '"datePublished": "20[0-9]{2}-[0-9]{2}-[0-9]{2}"'; then
+  pass "JSON-LD datePublished is ISO 8601: $DATE_CHECK"
+else
+  fail "JSON-LD datePublished not ISO 8601: $DATE_CHECK"
+fi
+# Synthesis pages must have Article JSON-LD with inLanguage
+for lang in en es ne; do
+  BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/")
+  if echo "$BODY" | grep -q '"@type": "Article"' && echo "$BODY" | grep -q "\"inLanguage\": \"$lang\""; then
+    pass "JSON-LD Article + inLanguage=$lang on synthesis/$lang"
+  else
+    fail "JSON-LD missing or wrong on synthesis/$lang"
+  fi
+done
+
+# ── 36. PR #56: og-meta-fixes ────────────────────────────────────────────────
+section "36. PR #56 — OG META: no &amp;mdash;, og:type=article on talk pages"
 for lang in en es ne; do
   DESC=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/" \
     | grep -o 'name="description"[^>]*content="[^"]*"' | grep -o 'content="[^"]*"')
@@ -569,19 +615,25 @@ else
   warn "og:type on synthesis page: $OGTYPE_LIST (expected website)"
 fi
 
-# ── 36. PR #57: devanagari-font ──────────────────────────────────────────────
-section "36. PR #57 — DEVANAGARI FONT: Noto Sans on NE pages only"
+# ── 37. PR #57: devanagari-font ──────────────────────────────────────────────
+# Decision: Noto Sans Devanagari removed; system font (Nirmala UI on Windows) retained.
+# Only spacing CSS (:lang(ne) line-height + font-size) is applied via shared.css.
+section "37. PR #57 — DEVANAGARI FONT: system font + spacing only (no Noto)"
 NE_BODY=$(curl -s "$BASE/events/2026-uruguay/ne/20260223-koshas-piriopolis/")
 echo "$NE_BODY" | grep -qi "noto.*sans.*devanagari\|fonts.googleapis.com" \
-  && pass "NE talk page: Noto Sans Devanagari font referenced" \
-  || fail "NE talk page: Noto Sans Devanagari font missing"
+  && fail "NE talk page: Noto Sans / Google Fonts still present (should be removed)" \
+  || pass "NE talk page: Noto Sans / Google Fonts correctly absent"
 EN_BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
 echo "$EN_BODY" | grep -qi "noto.*sans.*devanagari" \
-  && fail "EN talk page: Noto Sans Devanagari incorrectly present (should be NE-only)" \
+  && fail "EN talk page: Noto Sans Devanagari incorrectly present" \
   || pass "EN talk page: Noto Sans Devanagari absent (correct)"
+CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS" | grep -q ':lang(ne)' \
+  && pass "shared.css: :lang(ne) Devanagari spacing rule present" \
+  || fail "shared.css: :lang(ne) spacing rule missing"
 
-# ── 37. PR #58: touch-targets ────────────────────────────────────────────────
-section "37. PR #58 — TOUCH TARGETS: 44px audio player + PDF summary"
+# ── 38. PR #58: touch-targets ────────────────────────────────────────────────
+section "38. PR #58 — TOUCH TARGETS: 44px audio player + PDF summary"
 CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
 echo "$CSS" | grep -q "resource-player" && echo "$CSS" | grep -A3 "resource-player" | grep -q "44px" \
   && pass "shared.css: .resource-player height 44px" \
@@ -595,8 +647,8 @@ echo "$BODY" | grep -q 'img-modal.*button\|modal-close\|×\|✕' \
   && pass "Talk page: modal close button present" \
   || fail "Talk page: modal close button missing (touch users need explicit dismiss)"
 
-# ── 38. PR #59: hreflang + canonical ─────────────────────────────────────────
-section "38. PR #59 — HREFLANG + CANONICAL"
+# ── 39. PR #59: hreflang + canonical ─────────────────────────────────────────
+section "39. PR #59 — HREFLANG + CANONICAL"
 for lang in en es ne; do
   BODY=$(curl -s "$BASE/events/2026-uruguay/$lang/20260223-koshas-piriopolis/")
   echo "$BODY" | grep -q 'rel="alternate".*hreflang' \
@@ -611,8 +663,8 @@ for lang in en es ne; do
     || fail "$lang: hreflang x-default missing or not pointing to /en/"
 done
 
-# ── 39. PR #60: sitemap + robots ─────────────────────────────────────────────
-section "39. PR #60 — SITEMAP.XML + ROBOTS.TXT"
+# ── 40. PR #60: sitemap + robots ─────────────────────────────────────────────
+section "40. PR #60 — SITEMAP.XML + ROBOTS.TXT"
 check_http "/events/2026-uruguay/sitemap.xml"
 SITEMAP=$(curl -s "$BASE/events/2026-uruguay/sitemap.xml")
 echo "$SITEMAP" | grep -q "<urlset" \
@@ -632,10 +684,10 @@ echo "$ROBOTS" | grep -q "Sitemap:" \
   && pass "robots.txt: Sitemap: directive present" \
   || fail "robots.txt: Sitemap: directive missing"
 
-# ── 40. PR #61: font-size-tokens ─────────────────────────────────────────────
-section "40. PR #61 — CSS TOKENS + 18px BASE FONT"
+# ── 41. PR #61: font-size-tokens ─────────────────────────────────────────────
+section "41. PR #61 — CSS TOKENS + 18px BASE FONT"
 CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
-echo "$CSS" | grep -q ":root\s*{" \
+echo "$CSS" | grep -q ":root" \
   && pass "shared.css: :root block present" \
   || fail "shared.css: :root block missing (CSS custom properties)"
 echo "$CSS" | grep -q "\-\-color-accent\|--accent\|--color" \
@@ -644,26 +696,42 @@ echo "$CSS" | grep -q "\-\-color-accent\|--accent\|--color" \
 echo "$CSS" | grep -q "font-size.*18px\|18px.*font-size" \
   && pass "shared.css: 18px base font-size set" \
   || fail "shared.css: 18px base font-size missing"
-echo "$CSS" | grep -q "#faf8f5\|faf8f5" \
-  && pass "shared.css: warm background #faf8f5 present" \
-  || fail "shared.css: warm background #faf8f5 missing"
+echo "$CSS" | grep -q "#f7f7f7\|f7f7f7" \
+  && pass "shared.css: neutral background #f7f7f7 present" \
+  || fail "shared.css: neutral background #f7f7f7 missing"
 
-# ── 41. PR #62: lang-select-mobile ───────────────────────────────────────────
-section "41. PR #62 — MOBILE LANG SELECT (JS injection)"
+# ── 42. PR #62: lang-select mobile + progressive compression ─────────────────
+section "42. PR #62 — MOBILE LANG SELECT + PROGRESSIVE COMPRESSION"
 JS=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
 echo "$JS" | grep -q "injectLangSelectMobile" \
   && pass "shared.js: injectLangSelectMobile function present" \
   || fail "shared.js: injectLangSelectMobile function missing"
-echo "$JS" | grep -q "lang-select-mobile" \
-  && pass "shared.js: lang-select-mobile class injected via JS" \
-  || fail "shared.js: lang-select-mobile class missing from JS"
-CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
-echo "$CSS" | grep -q "lang-select-mobile" \
-  && pass "shared.css: .lang-select-mobile style defined" \
-  || fail "shared.css: .lang-select-mobile style missing"
+echo "$JS" | grep -q 'lang-select-wrapper' \
+  && pass "shared.js: lang-select-wrapper injected via JS" \
+  || fail "shared.js: lang-select-wrapper missing from JS"
+echo "$JS" | grep -q 'lang-select-label' \
+  && pass "shared.js: lang-select-label injected via JS" \
+  || fail "shared.js: lang-select-label missing from JS"
+echo "$JS" | grep -q 'Select language:' \
+  && pass "shared.js: EN select label text present" \
+  || fail "shared.js: EN select label text missing"
+echo "$JS" | grep -q 'Seleccionar idioma:' \
+  && pass "shared.js: ES select label text present" \
+  || fail "shared.js: ES select label text missing"
+BODY=$(curl -s "$BASE/events/2026-uruguay/en/20260223-koshas-piriopolis/")
+echo "$BODY" | grep -q 'class="lang-full"'   && pass "lang-full spans present in HTML"   || fail "lang-full spans missing from HTML"
+echo "$BODY" | grep -q 'class="lang-abbr"'   && pass "lang-abbr spans present in HTML"   || fail "lang-abbr spans missing from HTML"
+echo "$BODY" | grep -q 'lang-sublabel-full'   && pass "lang-sublabel-full spans present"  || fail "lang-sublabel-full spans missing"
+echo "$BODY" | grep -q 'lang-sublabel-abbr'   && pass "lang-sublabel-abbr spans present"  || fail "lang-sublabel-abbr spans missing"
+echo "$BODY" | grep -q '>Eng\.'              && pass "Eng. abbreviation present"         || fail "Eng. abbreviation missing"
+echo "$BODY" | grep -q '>Esp\.'              && pass "Esp. abbreviation present"         || fail "Esp. abbreviation missing"
+echo "$BODY" | grep -q 'नेप\.'               && pass "नेप. abbreviation present"        || fail "नेप. abbreviation missing"
+echo "$BODY" | grep -q '>Orig\.'             && pass "Orig. sublabel present"            || fail "Orig. sublabel missing"
+echo "$BODY" | grep -q 'IA Trad\.'           && pass "IA Trad. sublabel present"         || fail "IA Trad. sublabel missing"
+echo "$BODY" | grep -q 'AI अनु\.'            && pass "AI अनु. sublabel present"         || fail "AI अनु. sublabel missing"
 
-# ── 42. Browser tests (Puppeteer) ────────────────────────────────────────────
-section "42. BROWSER TESTS (Puppeteer) — JS runtime features"
+# ── 43. Browser tests (Puppeteer) ────────────────────────────────────────────
+section "43. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then
   BROWSER_OUT=$(BROWSER_TEST_BASE="$BASE" BROWSER_TEST_PORT=$PORT node "$REPO/test/browser-tests.js" 2>&1)
   echo "$BROWSER_OUT" | grep -E "PASS|FAIL|SKIP|RESULT"
