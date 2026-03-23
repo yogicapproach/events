@@ -5,6 +5,12 @@ Last commit on main: 55a347f
 
 ---
 
+## Follow-up Needed
+
+- [ ] **Google Search Console** — TXT record added to NameSilo 2026-03-23. Once verified: submit sitemap `https://yogicapproach.com/events/sitemap.xml`. Tracked in [#73](https://github.com/yogicapproach/events/issues/73).
+
+---
+
 ## PR Merge Wave — COMPLETE ✓
 
 - [x] #60 standards/sitemap-robots — MERGED ✓
