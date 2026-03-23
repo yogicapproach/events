@@ -33,8 +33,8 @@ See `PROGRESS.md` for completed work and `PENDING-TASK.md` for in-progress sessi
 | #15 | Voice AI Q&A (Cloudflare Workers AI + RAG) | Backlog |
 | #21 | Search bar in page header | Backlog |
 | #52 | Site-wide OG image | Pending decision |
-| #54 | Design review (parent) | **Closeable** — all child PRs merged |
-| #55 | Deep-dive: mobile, accessibility, A/B | **Closeable** — all child PRs merged |
+| #54 | Design review (parent) |  |
+| #55 | Deep-dive: mobile, accessibility, A/B |  |
 | #64 | A/B theme flag redesign | Backlog |
 
 ---

@@ -51,8 +51,8 @@ Last commit on main: 1cfc099
 | #15 | Voice AI Q&A (Cloudflare Workers) |
 | #21 | Search bar in page header |
 | #52 | Choose proper site-wide OG image |
-| #54 | Design review (parent) — closeable: all child PRs merged |
-| #55 | Deep-dive: mobile UX, accessibility, web standards, A/B — closeable: all child PRs merged |
+| #54 | Design review (parent) |
+| #55 | Deep-dive: mobile UX, accessibility, web standards, A/B |
 | #64 | A/B theme flag redesign (live toggle) |
 | #66 | A/B theme flag PR (deferred) |
 | #68 | Translation QA — NE/ES AI peer review + native speaker |
