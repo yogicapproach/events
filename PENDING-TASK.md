@@ -1,53 +1,38 @@
 # Pending Task — yogicapproach/events
 
-Written: 2026-03-22 — always updated on main only
-Last commit on main: dd7fb24
+Written: 2026-03-23 — always updated on main only
+Last commit on main: 432d932
 
 ---
 
-## Follow-up Needed
+## Completed This Session ✓
 
-- [x] **Google Search Console** — verified 2026-03-23. Sitemap submitted: `https://yogicapproach.com/events/sitemap.xml`. Tracked in [#73](https://github.com/yogicapproach/events/issues/73).
-
----
-
-## PR Merge Wave — COMPLETE ✓
-
-- [x] #60 standards/sitemap-robots — MERGED ✓
-- [x] #56 standards/og-meta-fixes — MERGED ✓
-- [x] #59 standards/hreflang-canonical — MERGED ✓
-- [x] #65 standards/json-ld — MERGED ✓
-- [x] #62 design/lang-select-mobile — MERGED ✓
-- [ ] #66 design/ab-theme-flag — DEFERRED (UX redesign: live A/B toggle)
-- [x] #71 design/audio-player-layout — MERGED ✓ (full-width player, 24px slim bar, card border #fdfdfd)
-- [x] #57 design/devanagari-font — MERGED ✓
-- [x] #58 design/touch-targets — MERGED ✓
-- [x] #61 design/font-size-tokens — MERGED ✓
-- [x] #67 test/regression-wave-1 — MERGED ✓
+- [x] **Google Search Console** — Domain property verified 2026-03-23
+  - `https://yogicapproach.com/events/sitemap.xml` → Success, 27 URLs
+  - `https://yogicapproach.com/sitemap.xml` → Success (sitemap index, 0 pages — expected)
+  - Root sitemap namespace bug fixed (`https://` → `http://` in sitemapindex xmlns)
+- [x] **PR Merge Wave** — All PRs merged; #66 deferred (UX redesign)
+- [x] **Private dev repo** — `yogicapproach/yogicapproach-dev` created (private)
+  - Issue #1: Domain portfolio / Cloudflare registrar migration research
 
 ---
 
-## Active Work
+## No Active Work
 
-**#71 design/audio-player-layout** — audio player full-width below cover art
-- Branch: `design/audio-player-layout` (built, awaiting user visual confirm)
-- Files: `docs/events/shared.js` (audio out of `.resource-body`), `docs/events/shared.css` (`flex-wrap`, `flex: 0 0 100%`)
+No branch in progress. Ready to start next task.
 
 ---
 
-## Flags Noted During Testing
+## Next Major Tasks (in rough priority order)
 
-- **#60**: `robots.txt` domain root handled by `yogicapproach/yogicapproach.github.io`. Section sitemap correctly at `yogicapproach.com/events/sitemap.xml`. CI issue filed at root repo (#2). Root repo issue #1 closed.
-
----
-
-## Next Major Tasks
-
-**Issue #63: URL Architecture — Move lang to root path**
-- Current: `yogicapproach.com/events/2026-uruguay/en/...`
-- Target: `yogicapproach.com/en/events/2026-uruguay/...` (lang always segment 1)
-- Branch: `arch/lang-at-root` (to be created)
-- Prerequisites: all current PRs merged and green on main ← satisfied
+| # | Title | Notes |
+|---|-------|-------|
+| **#63** | URL architecture: lang at root `/en/events/...` | Prerequisites satisfied — ready to start |
+| **#70** | CI via GitHub Actions | Run test suite on every push to main |
+| **#75** | PageSpeed Insights audit | API-scriptable; feeds into #54/#55 |
+| **#68** | Translation QA — NE/ES AI peer review | Content quality |
+| **#69** | Dark mode | prefers-color-scheme + manual toggle |
+| **#66** | A/B theme flag (deferred) | Needs UX redesign first (#64) |
 
 ---
 
@@ -66,13 +51,14 @@ Last commit on main: dd7fb24
 | #52 | Choose proper site-wide OG image |
 | #54 | Design review (parent) |
 | #55 | Deep-dive: mobile UX, accessibility, web standards, A/B |
-| #63 | URL architecture: lang at root |
 | #64 | A/B theme flag redesign (live toggle) |
 | #66 | A/B theme flag PR (deferred) |
 | #68 | Translation QA — NE/ES AI peer review + native speaker |
 | #69 | Dark mode support |
 | #70 | CI via GitHub Actions |
-| #71 | Audio player layout: full-width below cover art |
+| #73 | Cloudflare DNS/CDN migration for yogicapproach.com |
+| #74 | Domain registration migration to Cloudflare Registrar |
+| #75 | PageSpeed Insights audit |
 
 ---
 
