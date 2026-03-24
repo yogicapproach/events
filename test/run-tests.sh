@@ -72,7 +72,7 @@ if $LIVE_MODE; then
   fi
 else
   # Kill anything on port first
-  taskkill //F //IM python.exe 2>/dev/null || true
+  taskkill //F //IM python.exe 2>/dev/null || pkill -f "python.*http.server" 2>/dev/null || true
   sleep 1
 
   # Build a serve directory that mirrors GitHub Pages path structure:
@@ -633,11 +633,12 @@ echo "$CSS" | grep -q ':lang(ne)' \
   || fail "shared.css: :lang(ne) spacing rule missing"
 
 # ── 38. PR #58: touch-targets ────────────────────────────────────────────────
-section "38. PR #58 — TOUCH TARGETS: 44px audio player + PDF summary"
+section "38. PR #58 — TOUCH TARGETS: audio player present + PDF summary"
 CSS=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
-echo "$CSS" | grep -q "resource-player" && echo "$CSS" | grep -A3 "resource-player" | grep -q "44px" \
-  && pass "shared.css: .resource-player height 44px" \
-  || fail "shared.css: .resource-player height 44px missing (WCAG touch target)"
+# Height intentionally 24px (#71 design decision — slim player). WCAG trade-off accepted.
+echo "$CSS" | grep -q "resource-player" \
+  && pass "shared.css: .resource-player present" \
+  || fail "shared.css: .resource-player missing"
 echo "$CSS" | grep -q "compact-pdfs.*summary\|summary.*44px\|min-height.*44" \
   && pass "shared.css: PDF summary min-height 44px" \
   || fail "shared.css: PDF summary min-height 44px missing"
@@ -758,6 +759,6 @@ fi
 
 # Stop server and clean up temp serve dir (local mode only)
 if ! $LIVE_MODE; then
-  taskkill //F //IM python.exe 2>/dev/null || true
+  taskkill //F //IM python.exe 2>/dev/null || pkill -f "python.*http.server" 2>/dev/null || true
   rm -rf "$SERVE_DIR"
 fi
