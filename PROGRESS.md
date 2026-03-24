@@ -5,6 +5,28 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## Session: 2026-03-24 — Agent Wave: llms.txt, CI, Dark Mode, Housekeeping
+
+**Focus:** Parallel agent deployment, permission fixes, issue housekeeping, dark mode CSS.
+
+**Completed:**
+- **#13 llms.txt** — Merged `feat/llms-txt`: `src/llms.njk` outputs `llms.txt` with all 5 talks EN/ES/NE; `robots.njk` updated with anthropic-ai, Googlebot, Applebot entries. Closed.
+- **#70 CI** — Merged `ci/github-actions`: `.github/workflows/test.yml` runs test suite on ubuntu-latest / Node 22 on every push/PR to main. Closed.
+- **#69 Dark mode** — Merged `feat/dark-mode`: `@media (prefers-color-scheme: dark)` token overrides in `shared.css`; all hardcoded colours tokenised as prerequisite; `eleventy-extra.css` updated to match. Tested live in browser — instant OS-level switching. Closed.
+- **§38 test fix** — Updated `run-tests.sh` to accept 24px player height (intentional #71 design decision, was still checking 44px WCAG target).
+- **Settings overhaul** — Global `~/.claude/settings.json` and project `.claude/settings.json` updated: Bash allow list expanded (git, curl, npm, node, python, gh), `deny` rules for destructive ops, `worktree.symlinkDirectories: [node_modules]`. Background agents now inherit Bash permissions.
+- **Issue housekeeping** — Closed #10, #71, #12, #5 (stale/superseded); updated #73 title to "Cloudflare DNS/CDN" (GSC was already done).
+- **#54/#55 cleanup** — Merged `chore/close-issue-54` worktree branch; worktree removed.
+- **PSI #75** — Deferred: daily unauthenticated API quota exhausted by failed agent attempts. Retry tomorrow.
+- **Private dev repo** — `yogicapproach/yogicapproach-dev` created; issue #1 (domain portfolio/Cloudflare pricing) filed privately.
+- **Agent permission gap identified** — Background agents don't inherit project `.claude/settings.json` Bash rules; fixed by mirroring key allows into global settings. `deny` list cannot block indirect destruction (cd + rm, find -delete, python scripts) — accepted tradeoff.
+
+**Issues closed:** #5, #10, #12, #13, #69, #70, #71
+**Issues opened:** none new this session
+**Commits:** `4a6a6c8` (llms+CI merge), `55af41a` (§38 test fix), `f9b2866` (dark mode merge)
+
+---
+
 ## Session: 2026-03-23 — GSC, Agent Permissions, #63 Architecture Plan
 
 **Focus:** Google Search Console setup, settings.json restructure, agent worktree permission testing, URL architecture blocker analysis.
