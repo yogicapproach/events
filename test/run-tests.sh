@@ -730,6 +730,29 @@ echo "$BODY" | grep -q '>Orig\.'             && pass "Orig. sublabel present"   
 echo "$BODY" | grep -q 'IA Trad\.'           && pass "IA Trad. sublabel present"         || fail "IA Trad. sublabel missing"
 echo "$BODY" | grep -q 'AI अनु\.'            && pass "AI अनु. sublabel present"         || fail "AI अनु. sublabel missing"
 
+# ── 44. PR #77 — THEME TOGGLE ────────────────────────────────────────────────
+section "44. PR #77 — THEME TOGGLE"
+CSS2=$(curl -s "$BASE/events/2026-uruguay/events/shared.css")
+echo "$CSS2" | grep -q 'data-theme="dark"' \
+  && pass "shared.css: [data-theme=\"dark\"] block present" \
+  || fail "shared.css: [data-theme=\"dark\"] block missing"
+echo "$CSS2" | grep -q 'data-theme="light"' \
+  && pass "shared.css: [data-theme=\"light\"] block present" \
+  || fail "shared.css: [data-theme=\"light\"] block missing"
+echo "$CSS2" | grep -q 'theme-toggle-btn' \
+  && pass "shared.css: .theme-toggle-btn style present" \
+  || fail "shared.css: .theme-toggle-btn style missing"
+JS2=$(curl -s "$BASE/events/2026-uruguay/events/shared.js")
+echo "$JS2" | grep -q 'toggleTheme' \
+  && pass "shared.js: toggleTheme function present" \
+  || fail "shared.js: toggleTheme function missing"
+echo "$JS2" | grep -q 'prefers-color-scheme' \
+  && pass "shared.js: OS preference fallback present" \
+  || fail "shared.js: OS preference fallback missing"
+echo "$JS2" | grep -q 'theme-toggle-btn' \
+  && pass "shared.js: theme-toggle-btn injected via JS" \
+  || fail "shared.js: theme-toggle-btn missing from JS"
+
 # ── 43. Browser tests (Puppeteer) ────────────────────────────────────────────
 section "43. BROWSER TESTS (Puppeteer) — JS runtime features"
 if command -v node >/dev/null 2>&1 && [ -f "$REPO/node_modules/puppeteer/package.json" ]; then

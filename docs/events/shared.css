@@ -262,8 +262,7 @@ summary:focus-visible {
 /* ── Dark mode (system preference) ──────────────────────────── */
 /* Override colour tokens only — no selector rules here.
    Issue #69: https://github.com/yogicapproach/events/issues/69
-   A manual toggle (#64) will layer on top of this via a [data-theme] attribute
-   once that issue is implemented. */
+   Manual toggle (#77) layers on top via [data-theme] with higher specificity. */
 @media (prefers-color-scheme: dark) {
     :root {
         --color-accent: #6aabdb;
@@ -285,3 +284,52 @@ summary:focus-visible {
         --color-error: #ff6b6b;
     }
 }
+
+/* ── Theme toggle (manual override) — Issue #77 ─────────────── */
+/* Higher specificity than :root inside @media — always wins.    */
+:root[data-theme="dark"] {
+    --color-accent: #6aabdb;
+    --color-text: #e0e0e0;
+    --color-text-muted: #aaa;
+    --color-text-faint: #777;
+    --color-border: #3a3a3a;
+    --color-border-strong: #2e2e2e;
+    --color-bg: #1a1a1a;
+    --color-bg-subtle: #212121;
+    --color-bg-card: #242424;
+    --color-bg-card-border: #333;
+    --color-btn-border: #888;
+    --color-btn-bg: #2a2a2a;
+    --color-btn-active-bg: #888;
+    --color-btn-hover-bg: #999;
+    --color-badge-bg: #2e2e2e;
+    --color-badge-text: #999;
+    --color-error: #ff6b6b;
+}
+:root[data-theme="light"] {
+    --color-accent: #2a6496;
+    --color-text: #333;
+    --color-text-muted: #666;
+    --color-text-faint: #999;
+    --color-border: #ddd;
+    --color-border-strong: #e0e0e0;
+    --color-bg: #f7f7f7;
+    --color-bg-subtle: #f5f5f5;
+    --color-bg-card: #fdfdfd;
+    --color-bg-card-border: #e4e4e4;
+    --color-btn-border: #555;
+    --color-btn-bg: white;
+    --color-btn-active-bg: #555;
+    --color-btn-hover-bg: #444;
+    --color-badge-bg: #f0f0f0;
+    --color-badge-text: #888;
+    --color-error: #c00;
+}
+
+/* ── Theme toggle button ─────────────────────────────────────── */
+.theme-toggle-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 1em; padding: 2px 4px; line-height: 1;
+    opacity: 0.75; vertical-align: middle;
+}
+.theme-toggle-btn:hover { opacity: 1; }
