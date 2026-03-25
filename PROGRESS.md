@@ -5,6 +5,17 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## Session: 2026-03-25 — Theme Toggle (#77)
+
+**Focus:** Manual dark/light mode toggle button (session-only, no localStorage).
+
+**Completed:**
+- **#77 Theme toggle** — Merged `feat/theme-toggle`: `:root[data-theme="dark/light"]` CSS token overrides (higher specificity than `@media`); IIFE sets theme from OS on every load; `toggleTheme()` + `_updateThemeButton()` for session-only override; ☀️/🌙 button injected into topbar; regression tests in section 44 of `run-tests.sh`. Closed.
+
+**Issues closed:** #77
+
+---
+
 ## Session: 2026-03-24 — Agent Wave: llms.txt, CI, Dark Mode, Housekeeping
 
 **Focus:** Parallel agent deployment, permission fixes, issue housekeeping, dark mode CSS.

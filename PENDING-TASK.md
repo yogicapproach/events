@@ -7,20 +7,11 @@ Last commit on main: f9b2866
 
 ## Active Work
 
-None. All worktrees merged and cleaned up.
+None.
 
 ---
 
-## Next Session: Theme toggle (#77) + Cloudflare DNS (#73)
-
-**#77** — Dark/light mode toggle button
-- Branch: `feat/theme-toggle`
-- Icon: ☀️ (in dark mode) / 🌙 (in light mode) — sun/moon confirmed
-- Foundation already in place from #69: CSS tokens, `@media` block
-- Needs: `[data-theme]` CSS overrides, JS toggle + localStorage, button in topbar
-- Effort: ~30-40 lines total
-
-**#73** — Cloudflare DNS/CDN — still prerequisite for #63
+## Next: #73 Cloudflare DNS/CDN — prerequisite for #63
 
 ---
 
