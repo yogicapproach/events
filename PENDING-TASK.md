@@ -7,7 +7,15 @@ Last commit on main: 59c6a01
 
 ## Active Work
 
-None.
+**#63 — URL architecture: lang at root**
+Updating issue with agreed approach + implementation plan.
+
+**Agreed approach:**
+- Push built `_site/` from `events` repo → `yogicapproach.github.io` (targeted sync, not full overwrite)
+- Eleventy permalinks restructured to `/en/events/...`, `/es/events/...`, `/ne/events/...`
+- Deploy gate: GitHub Environments (`production`) + required reviewer (manual only) + `last-deployed` git tag
+- Redirects: single Cloudflare Redirect Rule regex covering all old `/events/2026-uruguay/(en|es|ne)/` URLs → true 301
+- Disable GitHub Pages on `events` repo after first successful deploy
 
 ---
 
