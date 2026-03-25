@@ -11,6 +11,19 @@ None. All worktrees merged and cleaned up.
 
 ---
 
+## Next Session: Theme toggle (#77) + Cloudflare DNS (#73)
+
+**#77** — Dark/light mode toggle button
+- Branch: `feat/theme-toggle`
+- Icon: ☀️ (in dark mode) / 🌙 (in light mode) — sun/moon confirmed
+- Foundation already in place from #69: CSS tokens, `@media` block
+- Needs: `[data-theme]` CSS overrides, JS toggle + localStorage, button in topbar
+- Effort: ~30-40 lines total
+
+**#73** — Cloudflare DNS/CDN — still prerequisite for #63
+
+---
+
 ## Next Session: Start with #73 Cloudflare DNS
 
 **#73** — Set up Cloudflare DNS/CDN for yogicapproach.com (GitHub Pages orange-cloud)

@@ -21,9 +21,9 @@ Repo: https://github.com/yogicapproach/events
 - **Private dev repo** — `yogicapproach/yogicapproach-dev` created; issue #1 (domain portfolio/Cloudflare pricing) filed privately.
 - **Agent permission gap identified** — Background agents don't inherit project `.claude/settings.json` Bash rules; fixed by mirroring key allows into global settings. `deny` list cannot block indirect destruction (cd + rm, find -delete, python scripts) — accepted tradeoff.
 
-**Issues closed:** #5, #10, #12, #13, #69, #70, #71
-**Issues opened:** none new this session
-**Commits:** `4a6a6c8` (llms+CI merge), `55af41a` (§38 test fix), `f9b2866` (dark mode merge)
+**Issues closed:** #5, #10, #12, #13, #69, #70, #71, #76
+**Issues opened:** #77 (theme toggle ☀️🌙, sun/moon confirmed, branch feat/theme-toggle)
+**Commits:** `4a6a6c8` (llms+CI merge), `55af41a` (§38 test fix), `f9b2866` (dark mode merge), `b3f3ad5` (Shanti visarga fix)
 
 ---
 
