@@ -1,5 +1,28 @@
 // Shared event navigation for all transcript pages
 
+// ── Theme toggle — Issue #77 ──────────────────────────────────────────────
+// Runs immediately to avoid flash of wrong theme before DOMContentLoaded.
+// Always starts from OS preference — no localStorage persistence.
+(function() {
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+})();
+
+function _updateThemeButton() {
+    var btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+    btn.title = btn.getAttribute('aria-label');
+}
+
+function toggleTheme() {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    _updateThemeButton();
+}
+
 // GoatCounter analytics
 (function() {
     var gc = document.createElement('script');
@@ -450,8 +473,11 @@ document.addEventListener('DOMContentLoaded', function() {
             '<a id="topbar-feedback" href="' + _formUrl('feedback', lang) + '" target="_blank" rel="noopener" aria-label="Share feedback (opens Google Form in new tab)">' + s.feedback + '</a>' +
             '<span class="topbar-sep">&middot;</span>' +
             '<a id="topbar-report" href="' + _formUrl('report', lang) + '" target="_blank" rel="noopener" aria-label="Report an issue (opens Google Form in new tab)">' + s.report + '</a>' +
+            '<span class="topbar-sep">&middot;</span>' +
+            '<button id="theme-toggle-btn" class="theme-toggle-btn" onclick="toggleTheme()">&#x1F311;</button>' +
         '</div>';
     document.body.insertBefore(tb, document.body.firstChild);
+    _updateThemeButton();
 
     var footerEl = document.querySelector('footer');
     if (footerEl) {
