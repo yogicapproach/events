@@ -3,7 +3,7 @@
   "baseUrl": "https://yogicapproach.com",
   "langs": ["en", "es", "ne"],
   "defaultLang": "es",
-  "ogImage": "https://yogicapproach.com/2026-uruguay/favicon.png",
+  "ogImage": "https://yogicapproach.com/assets/2026-uruguay/favicon.png",
   "langLabels": {
     "en": { "label": "English",   "sublabel": "Original"     },
     "es": { "label": "Español",   "sublabel": "IA Traducido" },

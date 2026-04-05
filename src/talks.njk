@@ -59,7 +59,7 @@ permalink: "/{{ item.lang }}/events/2026-uruguay/{{ item.event.folder }}/"
   "publisher": {"@type": "Organization", "name": "YogicApproach", "url": "https://yogicapproach.com"},
   "datePublished": "{{ talkFolder | folderToIsoDate }}",
   "inLanguage": "{{ lang }}",
-  "isPartOf": {"@type": "WebSite", "name": {{ site.title | dump | safe }}, "url": "{{ site.baseUrl }}/2026-uruguay/{{ lang }}/"},
+  "isPartOf": {"@type": "WebSite", "name": {{ site.title | dump | safe }}, "url": "{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/"},
   "url": "{{ site.baseUrl }}{{ page.url }}"
 }
 </script>
@@ -173,7 +173,7 @@ permalink: "/{{ item.lang }}/events/2026-uruguay/{{ item.event.folder }}/"
       window._currentProgram = evDate + " \u2014 " + evLocation + " \u2014 " + evTitle;
       updateTopbar(lang);
     }
-    if (typeof loadResources === "function") loadResources(lang, "/2026-uruguay/{{ talkFolder }}/resources/");
+    if (typeof loadResources === "function") loadResources(lang, "/assets/2026-uruguay/{{ talkFolder }}/resources/");
   });
 })();
 </script>

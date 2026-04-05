@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Uruguay 2026 — Exploring the Koshas — talk transcripts site",
   "scripts": {
-    "build": "eleventy && npx pagefind --site _site --output-path _site/2026-uruguay/pagefind",
+    "build": "eleventy && npx pagefind --site _site --output-path _site/assets/2026-uruguay/pagefind",
     "serve": "eleventy --serve --port 8080",
     "clean": "rimraf _site",
     "test": "bash test/run-tests.sh",

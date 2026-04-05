@@ -21,29 +21,29 @@ module.exports = function (eleventyConfig) {
   // Note: eleventyConfig.addPassthroughCopy({ src: dest }) maps src file/dir
   // to a destination path inside _site/.
 
-  // All paths must be nested under 2026-uruguay/ in _site because GitHub Pages
-  // serves this repo at https://yogic-approach.github.io/2026-uruguay/ and
-  // all absolute asset references in HTML use /2026-uruguay/... paths.
+  // All static assets for this project land under assets/2026-uruguay/ in _site.
+  // This keeps the public repo root clean when multiple dev repos (events, retreats,
+  // talks, ...) each push their own asset bundle alongside shared lang directories.
 
-  // shared.css → _site/2026-uruguay/events/shared.css
+  // shared.css → _site/assets/2026-uruguay/events/shared.css
   eleventyConfig.addPassthroughCopy({
-    "docs/events/shared.css": "2026-uruguay/events/shared.css"
+    "docs/events/shared.css": "assets/2026-uruguay/events/shared.css"
   });
-  // shared.js → _site/2026-uruguay/events/shared.js
+  // shared.js → _site/assets/2026-uruguay/events/shared.js
   eleventyConfig.addPassthroughCopy({
-    "docs/events/shared.js": "2026-uruguay/events/shared.js"
+    "docs/events/shared.js": "assets/2026-uruguay/events/shared.js"
   });
-  // favicons → _site/2026-uruguay/
+  // favicons → _site/assets/2026-uruguay/
   eleventyConfig.addPassthroughCopy({
-    "docs/favicon.svg":          "2026-uruguay/favicon.svg",
-    "docs/favicon.ico":          "2026-uruguay/favicon.ico",
-    "docs/favicon.png":          "2026-uruguay/favicon.png",
-    "docs/apple-touch-icon.png": "2026-uruguay/apple-touch-icon.png"
+    "docs/favicon.svg":          "assets/2026-uruguay/favicon.svg",
+    "docs/favicon.ico":          "assets/2026-uruguay/favicon.ico",
+    "docs/favicon.png":          "assets/2026-uruguay/favicon.png",
+    "docs/apple-touch-icon.png": "assets/2026-uruguay/apple-touch-icon.png"
   });
 
   // Eleventy-specific supplemental CSS (lang-btn styles, etc.)
   eleventyConfig.addPassthroughCopy({
-    "src/assets/eleventy-extra.css": "2026-uruguay/assets/eleventy-extra.css"
+    "src/assets/eleventy-extra.css": "assets/2026-uruguay/eleventy-extra.css"
   });
 
   // Smart 404 page — must live at _site/404.html (repo root of the published
@@ -95,10 +95,10 @@ module.exports = function (eleventyConfig) {
         fs.copyFileSync(srcPath, path.join(destDir, "resources.json"));
       }
 
-      // Copy binary resources dir to 2026-uruguay/events/[folder]/resources/
+      // Copy binary resources dir to assets/2026-uruguay/[folder]/resources/
       const srcResDir = path.join(__dirname, "docs", "events", ev.folder, "resources");
       if (fs.existsSync(srcResDir)) {
-        const destResDir = path.join(dir.output, "2026-uruguay", ev.folder, "resources");
+        const destResDir = path.join(dir.output, "assets", "2026-uruguay", ev.folder, "resources");
         fs.mkdirSync(destResDir, { recursive: true });
         for (const file of fs.readdirSync(srcResDir)) {
           fs.copyFileSync(path.join(srcResDir, file), path.join(destResDir, file));

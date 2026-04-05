@@ -11,7 +11,7 @@ footerNavLabel: "&#8592; Browse Individual Talks"
 {% extends "layouts/base.njk" %}
 
 {% block head_extra %}
-<link href="{{ '/2026-uruguay/pagefind/pagefind-ui.css' | url }}" rel="stylesheet">
+<link href="{{ '/assets/2026-uruguay/pagefind/pagefind-ui.css' | url }}" rel="stylesheet">
 <style>
   #search { max-width: 800px; margin: 1.5em auto; }
   .search-lang-filters { max-width: 800px; margin: 0 auto 1em; display: flex; gap: 0.5em; flex-wrap: wrap; align-items: center; }
@@ -30,7 +30,7 @@ footerNavLabel: "&#8592; Browse Individual Talks"
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ '/2026-uruguay/pagefind/pagefind-ui.js' | url }}"></script>
+<script src="{{ '/assets/2026-uruguay/pagefind/pagefind-ui.js' | url }}"></script>
 <script>
   window.addEventListener('DOMContentLoaded', function() {
     new PagefindUI({
