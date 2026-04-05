@@ -1,5 +1,5 @@
 ---
-permalink: "/2026-uruguay/glossary/"
+permalink: "/events/2026-uruguay/glossary/"
 layout: false
 eleventyExcludeFromCollections: true
 ---
@@ -14,13 +14,13 @@ eleventyExcludeFromCollections: true
 (function() {
   var nl = (navigator.language || navigator.userLanguage || 'es').toLowerCase();
   var lang = nl.startsWith('ne') ? 'ne' : nl.startsWith('en') ? 'en' : 'es';
-  var dest = '/2026-uruguay/' + lang + '/glossary/';
+  var dest = '/' + lang + '/events/2026-uruguay/glossary/';
   // honour legacy ?lang= param if present
   var p = new URLSearchParams(location.search).get('lang');
-  if (p === 'en' || p === 'es' || p === 'ne') { lang = p; dest = '/2026-uruguay/' + lang + '/glossary/'; }
+  if (p === 'en' || p === 'es' || p === 'ne') { lang = p; dest = '/' + lang + '/events/2026-uruguay/glossary/'; }
   location.replace(dest);
 })();
 </script>
-<noscript><meta http-equiv="refresh" content="0; url=/2026-uruguay/es/glossary/"></noscript>
+<noscript><meta http-equiv="refresh" content="0; url=/es/events/2026-uruguay/glossary/"></noscript>
 </body>
 </html>

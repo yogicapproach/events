@@ -48,7 +48,7 @@
 
   {% block footer %}
   <footer data-pagefind-ignore>
-    <a id="footer-nav" href="{{ footerNavHref | default(siteRoot + '/2026-uruguay/' + (lang | default('es')) + '/') }}">{{ footerNavLabel | safe }}</a>
+    <a id="footer-nav" href="{{ footerNavHref | default('/' + (lang | default('es')) + '/events/2026-uruguay/') }}">{{ footerNavLabel | safe }}</a>
     {# site-credit is also updated by shared.js updateTopbar() — static fallback below #}
     <div id="site-credit" class="site-credit">
       {%- if (lang | default('es')) == "ne" -%}

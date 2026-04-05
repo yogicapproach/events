@@ -1,5 +1,5 @@
 ---
-permalink: /2026-uruguay/search/
+permalink: /events/2026-uruguay/search/
 eleventyExcludeFromCollections: true
 ---
 <!DOCTYPE html>
@@ -12,9 +12,9 @@ eleventyExcludeFromCollections: true
   var lang = nl.startsWith('ne') ? 'ne' : nl.startsWith('en') ? 'en' : 'es';
   var p = new URLSearchParams(location.search).get('lang');
   if (p === 'en' || p === 'es' || p === 'ne') lang = p;
-  location.replace('/events/2026-uruguay/' + lang + '/search/');
+  location.replace('/' + lang + '/events/2026-uruguay/search/');
 })();
 </script>
-<p>Redirecting to search&hellip; <a href="/events/2026-uruguay/es/search/">Go now</a></p>
+<p>Redirecting to search&hellip; <a href="/es/events/2026-uruguay/search/">Go now</a></p>
 </body>
 </html>

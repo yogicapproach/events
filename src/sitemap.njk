@@ -8,33 +8,27 @@ eleventyExcludeFromCollections: true
   {%- for lang in site.langs %}
   {# Synthesis page #}
   <url>
-    <loc>{{ site.baseUrl }}/2026-uruguay/{{ lang }}/</loc>
-    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ site.baseUrl }}/2026-uruguay/{{ lang }}/"/>
+    <loc>{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/</loc>
+    <xhtml:link rel="alternate" hreflang="{{ lang }}" href="{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/"/>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   {# Glossary #}
   <url>
-    <loc>{{ site.baseUrl }}/2026-uruguay/{{ lang }}/glossary/</loc>
+    <loc>{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/glossary/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-  {# Events listing #}
-  <url>
-    <loc>{{ site.baseUrl }}/2026-uruguay/{{ lang }}/events/</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
   {# Search page #}
   <url>
-    <loc>{{ site.baseUrl }}/2026-uruguay/{{ lang }}/search/</loc>
+    <loc>{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/search/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   {# Talk pages #}
   {%- for ev in events %}
   <url>
-    <loc>{{ site.baseUrl }}/2026-uruguay/{{ lang }}/{{ ev.folder }}/</loc>
+    <loc>{{ site.baseUrl }}/{{ lang }}/events/2026-uruguay/{{ ev.folder }}/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.9</priority>
   </url>
