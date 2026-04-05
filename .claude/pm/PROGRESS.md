@@ -5,6 +5,38 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## 2026-04-05 — PM restructure + #63 architecture
+
+- PM files moved from repo root → `.claude/pm/` (git mv); `.claude/tmp/.gitkeep` added; `.gitignore` updated
+- `settings.json` updated: added `Bash(npx:*)` and `Bash(wc:*)`
+- `TODO.md` reformatted: clickable `[#N](url)` issue links + Priority column; Workflow Reminders updated for manual deploy
+- Global `CLAUDE.md` updated: PM path standard, PROGRESS.md append-only rule, Agent output convention, setup steps
+- `project_state.md` memory updated: new paths, #73 closed, #63 approach captured
+- #63 architecture agreed: static `_site/` push to `yogicapproach.github.io`; GH Environments manual deploy gate; Cloudflare regex redirect rule for old URLs; 5-phase plan posted to issue comment
+
+---
+
+## Session: 2026-03-25 — Domain Transfer (#74)
+
+- Initiated domain transfer from NameSilo to Cloudflare Registrar
+- Awaiting 7-day window or early confirmation via NameSilo transfer tab
+- GH issue #74 closed
+
+---
+
+## Session: 2026-03-25 — Cloudflare DNS/CDN (#73)
+
+**Focus:** Switch yogicapproach.com DNS to Cloudflare (Phase 1 of domain migration).
+
+**Completed:**
+- **#73 Cloudflare DNS/CDN** — Added yogicapproach.com to Cloudflare; configured A records (4× GitHub Pages IPs) + CNAME www, all orange-cloud proxied; MX records auto-set to DNS only (correct); switched NameSilo nameservers to Cloudflare; SSL/TLS set to Full mode; site confirmed loading with HTTPS. Closed.
+
+**Issues closed:** #73
+
+**Deferred:** #74 (domain transfer to Cloudflare Registrar) — separate task, already queued
+
+---
+
 ## Session: 2026-03-25 — Theme Toggle (#77)
 
 **Focus:** Manual dark/light mode toggle button (session-only, no localStorage).
