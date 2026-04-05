@@ -1,13 +1,31 @@
 # Pending Task — yogicapproach/events
 
 Written: 2026-04-05 — always updated on main only
-Last commit on main: feb5e36
+Last commit on main: see `git log --oneline -1`
 
 ---
 
 ## Active Work
 
-None.
+### #63 Phase 2 — GitHub Actions deploy workflow
+
+**Branch:** `feat/63-phase2-deploy-workflow`
+**Started:** 2026-04-05
+
+**Goal:** Create `.github/workflows/deploy.yml` — `workflow_dispatch` trigger, install → build → targeted sync `_site/` to `yogicapproach/yogicapproach.github.io`, write `last-deployed` git tag.
+
+**Sub-tasks:**
+- [ ] Create `.github/workflows/deploy.yml` with workflow_dispatch trigger
+- [ ] Install → build step (npm ci + npm run build)
+- [ ] Pagefind index step (npm run index or equivalent)
+- [ ] Targeted sync: push `_site/` contents to `yogicapproach.github.io` repo (targeted, not full overwrite)
+- [ ] Write `last-deployed` git tag on success
+- [ ] Verify workflow runs manually via GH Actions UI
+
+**Key constraints:**
+- PENDING-TASK.md stays on main only — never commit this file on the feature branch
+- Targeted sync: only push new/changed files under the 2026-uruguay event tree; do not wipe other content in yogicapproach.github.io
+- Phase 3 (GH Environment gate) is a follow-on — deploy.yml may reference `production` environment even if not yet configured
 
 ---
 

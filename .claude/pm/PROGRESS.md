@@ -5,6 +5,15 @@ Repo: https://github.com/yogicapproach/events
 
 ---
 
+## 2026-04-05 — #63 Phase 1: URL restructure (lang at root)
+
+- Completed full Eleventy permalink restructure: `/events/2026-uruguay/{lang}/...` → `/{lang}/events/2026-uruguay/...`
+- Changed: .eleventy.js (siteRoot, pathPrefix, regex, resources.json destDir), site.json (baseUrl), talks.njk, 9× lang index/glossary/search, 4× redirect pages, sitemap.njk, llms.njk, base.njk, listing.njk, static/404.html
+- Clean build verified; local test confirmed at new URLs including redirect
+- Merged `feat/63-phase1-url-restructure` → main (22 files, 156 ins / 164 del)
+
+---
+
 ## 2026-04-05 — PM restructure + #63 architecture
 
 - PM files moved from repo root → `.claude/pm/` (git mv); `.claude/tmp/.gitkeep` added; `.gitignore` updated
