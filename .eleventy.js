@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 module.exports = function (eleventyConfig) {
-  eleventyConfig.addGlobalData("siteRoot", "/events");
+  eleventyConfig.addGlobalData("siteRoot", "");
 
   // ── Markdown renderer ────────────────────────────────────────────────────
   const md = markdownIt({
@@ -88,9 +88,9 @@ module.exports = function (eleventyConfig) {
       const srcPath = path.join(__dirname, "docs", "events", ev.folder, "resources.json");
       if (!fs.existsSync(srcPath)) continue;
 
-      // Write resources.json to each lang path under 2026-uruguay/
+      // Write resources.json to each lang path under /{lang}/events/2026-uruguay/
       for (const lang of LANGS) {
-        const destDir = path.join(dir.output, "2026-uruguay", lang, ev.folder);
+        const destDir = path.join(dir.output, lang, "events", "2026-uruguay", ev.folder);
         fs.mkdirSync(destDir, { recursive: true });
         fs.copyFileSync(srcPath, path.join(destDir, "resources.json"));
       }
@@ -121,10 +121,10 @@ module.exports = function (eleventyConfig) {
       let html = md.render(content);
       if (lang) {
         html = html
-          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/events/2026-uruguay/${lang}/$1/"`)
-          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/events/2026-uruguay/${lang}/$1/"`)
-          .replace(/href="(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?"/g, `href="/events/2026-uruguay/${lang}/glossary/"`)
-          .replace(/href='(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?'/g, `href="/events/2026-uruguay/${lang}/glossary/"`);
+          .replace(/href="events\/([\w-]+)\/\?lang=[a-z]+"/g,  `href="/${lang}/events/2026-uruguay/$1/"`)
+          .replace(/href='events\/([\w-]+)\/\?lang=[a-z]+'/g,  `href="/${lang}/events/2026-uruguay/$1/"`)
+          .replace(/href="(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?"/g, `href="/${lang}/events/2026-uruguay/glossary/"`)
+          .replace(/href='(?:\.\.\/\.\.\/)?glossary\.html(?:\?lang=[a-z]+)?'/g, `href="/${lang}/events/2026-uruguay/glossary/"`);
       }
       return html;
     } catch (e) {
@@ -177,6 +177,6 @@ module.exports = function (eleventyConfig) {
     templateFormats: ["njk", "html", "md"],
     markdownTemplateEngine: "njk",
     htmlTemplateEngine:     "njk",
-    pathPrefix: "/events/"
+    pathPrefix: "/"
   };
 };

@@ -1,33 +1,33 @@
 ---
 layout: layouts/base.njk
 lang: en
-permalink: /2026-uruguay/en/glossary/
+permalink: /en/events/2026-uruguay/glossary/
 title: "Glossary of Terms"
 heading: "Glossary of Terms"
 subtitle: "Satchidananda — Uruguay, February 2026"
 description: "Definitions of yoga and Sanskrit terms from Satchidananda's talks — Uruguay, February 2026"
-ogUrl: /2026-uruguay/en/glossary/
-footerNavHref: /events/2026-uruguay/en/
+ogUrl: /en/events/2026-uruguay/glossary/
+footerNavHref: /en/events/2026-uruguay/
 footerNavLabel: "&#8592; Back to Synthesis"
 ---
 
 {# ── Other-talks selector ───────────────────────────────────────────────── #}
 <div id="other-talks">
-  <span id="other-talks-label" data-href="{{ siteRoot }}/2026-uruguay/en/">Select <a href="{{ siteRoot }}/2026-uruguay/en/">a talk</a>:</span>
+  <span id="other-talks-label" data-href="/en/events/2026-uruguay/">Select <a href="/en/events/2026-uruguay/">a talk</a>:</span>
   <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
     <option value="">-- Choose --</option>
-    <option value="{{ siteRoot }}/2026-uruguay/en/">Summary of Talks — AI-generated report of main ideas from all the talks</option>
+    <option value="/en/events/2026-uruguay/">Summary of Talks — AI-generated report of main ideas from all the talks</option>
     {% for ev in events %}
-    <option value="{{ siteRoot }}/2026-uruguay/en/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
+    <option value="/en/events/2026-uruguay/{{ ev.folder }}/">{% eventLabel ev, "en" %}</option>
     {% endfor %}
   </select>
 </div>
 
 {# ── Language toggle ─────────────────────────────────────────────────────── #}
 <div class="lang-toggle">
-  <a href="{{ siteRoot }}/2026-uruguay/en/glossary/" class="lang-btn active" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
-  <a href="{{ siteRoot }}/2026-uruguay/es/glossary/" class="lang-btn" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-  <a href="{{ siteRoot }}/2026-uruguay/ne/glossary/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
+  <a href="/en/events/2026-uruguay/glossary/" class="lang-btn active" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
+  <a href="/es/events/2026-uruguay/glossary/" class="lang-btn" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
+  <a href="/ne/events/2026-uruguay/glossary/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
 </div>
 
 <style>

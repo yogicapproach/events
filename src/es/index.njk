@@ -1,34 +1,34 @@
 ---
 layout: layouts/base.njk
 lang: es
-permalink: /2026-uruguay/es/
+permalink: /es/events/2026-uruguay/
 title: "Resumen de Charlas"
 heading: "Explorando los Koshas"
 subtitle: "Satchidananda — Uruguay, febrero 2026"
 description: "Síntesis generada por IA de las charlas de Satchidananda sobre los cinco koshas — Uruguay, febrero 2026"
-ogUrl: /2026-uruguay/es/
-footerNavHref: /events/2026-uruguay/es/
+ogUrl: /es/events/2026-uruguay/
+footerNavHref: /es/events/2026-uruguay/
 footerNavLabel: "&#8592; Ver charlas individuales"
 og_type: article
 ---
 
 {# ── Other-talks selector ───────────────────────────────────────────────── #}
 <div id="other-talks">
-  <span id="other-talks-label" data-href="{{ siteRoot }}/2026-uruguay/es/">Ver <a href="{{ siteRoot }}/2026-uruguay/es/">una charla</a>:</span>
+  <span id="other-talks-label" data-href="/es/events/2026-uruguay/">Ver <a href="/es/events/2026-uruguay/">una charla</a>:</span>
   <select id="talk-select" aria-label="Select a talk" onchange="handleTalkSelect(this)">
     <option value="">-- Elegir --</option>
     {% for ev in events %}
-    <option value="{{ siteRoot }}/2026-uruguay/es/{{ ev.folder }}/">{% eventLabel ev, "es" %}</option>
+    <option value="/es/events/2026-uruguay/{{ ev.folder }}/">{% eventLabel ev, "es" %}</option>
     {% endfor %}
-    <option value="{{ siteRoot }}/2026-uruguay/es/glossary/" data-newtab="true">Glosario de Términos — Definiciones de términos del yoga y sánscrito</option>
+    <option value="/es/events/2026-uruguay/glossary/" data-newtab="true">Glosario de Términos — Definiciones de términos del yoga y sánscrito</option>
   </select>
 </div>
 
 {# ── Language toggle ─────────────────────────────────────────────────────── #}
 <div class="lang-toggle">
-  <a href="{{ siteRoot }}/2026-uruguay/en/" class="lang-btn" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
-  <a href="{{ siteRoot }}/2026-uruguay/es/" class="lang-btn active" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
-  <a href="{{ siteRoot }}/2026-uruguay/ne/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
+  <a href="/en/events/2026-uruguay/" class="lang-btn" role="button" id="btn-en">English<span class="lang-sublabel">Original</span></a>
+  <a href="/es/events/2026-uruguay/" class="lang-btn active" role="button" id="btn-es">Español<span class="lang-sublabel">IA Traducido</span></a>
+  <a href="/ne/events/2026-uruguay/" class="lang-btn" role="button" id="btn-ne">नेपाली<span class="lang-sublabel">AI अनुवादित</span></a>
 </div>
 
 <style>
