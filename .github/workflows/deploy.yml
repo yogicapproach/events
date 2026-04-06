@@ -1,19 +1,19 @@
-name: Deploy to yogicapproach.com
+name: Publish to site-root
 
 on:
   workflow_dispatch:
 
-# Prevent concurrent deploys — if triggered twice, second run waits for first.
+# Never run two publishes concurrently.
 concurrency:
-  group: deploy
+  group: publish
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout events repo
+      - name: Checkout events
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -28,34 +28,26 @@ jobs:
       - name: Build site (Eleventy + Pagefind)
         run: npm run build
 
-      - name: Clone public repo
+      - name: Push _site/ to dist branch
         run: |
-          git clone \
-            https://x-access-token:${{ secrets.DEPLOY_PAT }}@github.com/yogicapproach/yogicapproach.github.io.git \
-            public-repo
-
-      # Additive sync — copies all _site/ contents into the public repo without
-      # deleting any existing files (other repos' content, CNAME, index.html, etc.)
-      - name: Copy build output
-        run: |
-          rsync -av --exclude='.git' _site/ public-repo/
-
-      - name: Commit and push
-        run: |
-          cd public-repo
+          cd _site
+          git init
           git config user.name "yogicapproach-deploy"
           git config user.email "noreply@yogicapproach.com"
           git add -A
-          if git diff --cached --quiet; then
-            echo "No changes — skipping commit."
-            exit 0
-          fi
-          git commit -m "deploy(events): $(date -u +%Y-%m-%dT%H:%M:%SZ) [${GITHUB_SHA::7}]"
-          git push
+          git commit -m "dist: events from ${GITHUB_SHA::7}"
+          git push --force \
+            https://x-access-token:${{ secrets.DEPLOY_PAT }}@github.com/yogicapproach/events.git \
+            HEAD:dist
 
-      # Tag this repo's commit so we can trace which source built what is live
-      - name: Tag source commit as last-deployed
-        run: |
-          TAG="last-deployed-$(date -u +%Y%m%d)"
-          git tag -f "$TAG"
-          git push origin -f "refs/tags/$TAG"
+      - name: Trigger site-root assembly
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DEPLOY_PAT }}
+          repository: yogicapproach/site-root
+          event-type: dist-updated
+          client-payload: >
+            {
+              "repo": "${{ github.repository }}",
+              "sha": "${{ github.sha }}"
+            }

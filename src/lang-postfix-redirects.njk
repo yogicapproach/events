@@ -1,0 +1,22 @@
+---
+pagination:
+  data: lang_postfix_redirects
+  size: 1
+  alias: r
+permalink: "/events/2026-uruguay/{{ r.lang }}/{{ r.page }}"
+layout: false
+eleventyExcludeFromCollections: true
+---
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Redirecting...</title>
+<meta http-equiv="refresh" content="0; url=/{{ r.lang }}/events/2026-uruguay/{{ r.page }}">
+<link rel="canonical" href="/{{ r.lang }}/events/2026-uruguay/{{ r.page }}">
+</head>
+<body>
+<script>location.replace('/{{ r.lang }}/events/2026-uruguay/{{ r.page }}');</script>
+<p><a href="/{{ r.lang }}/events/2026-uruguay/{{ r.page }}">Click here if not redirected.</a></p>
+</body>
+</html>
