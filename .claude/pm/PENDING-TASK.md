@@ -15,17 +15,23 @@ Last commit on main: see `git log --oneline -1`
 **Goal:** Create `.github/workflows/deploy.yml` — `workflow_dispatch` trigger, install → build → targeted sync `_site/` to `yogicapproach/yogicapproach.github.io`, write `last-deployed` git tag.
 
 **Sub-tasks:**
-- [ ] Create `.github/workflows/deploy.yml` with workflow_dispatch trigger
-- [ ] Install → build step (npm ci + npm run build)
-- [ ] Pagefind index step (npm run index or equivalent)
-- [ ] Targeted sync: push `_site/` contents to `yogicapproach.github.io` repo (targeted, not full overwrite)
-- [ ] Write `last-deployed` git tag on success
-- [ ] Verify workflow runs manually via GH Actions UI
+- [x] Create `.github/workflows/deploy.yml` with workflow_dispatch trigger
+- [x] Install → build step (npm ci + npm run build)
+- [x] Pagefind included in npm run build — no separate step needed
+- [x] Additive sync via rsync: push `_site/` contents to `yogicapproach.github.io`
+- [x] Write `last-deployed` git tag on success
+- [ ] Verify workflow runs manually via GH Actions UI (requires PAT secret set first)
 
 **Key constraints:**
 - PENDING-TASK.md stays on main only — never commit this file on the feature branch
-- Targeted sync: only push new/changed files under the 2026-uruguay event tree; do not wipe other content in yogicapproach.github.io
-- Phase 3 (GH Environment gate) is a follow-on — deploy.yml may reference `production` environment even if not yet configured
+- rsync --exclude='.git' ensures CNAME and other root files are never touched
+- Phase 3 (GH Environment gate) is a follow-on
+
+**Future decision (partial language coverage):**
+- When Romanian is added for retreats but not events, a Cloudflare Worker must handle
+  `/ro/events/...` → 301 → `/en/events/...`. The static 404.html JS redirect is
+  insufficient (Google won't follow it). Language-detect stubs must never redirect
+  Romanian browsers to `/ro/` for sections with no Romanian content.
 
 ---
 
